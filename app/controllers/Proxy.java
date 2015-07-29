@@ -23,12 +23,20 @@ public class Proxy extends Controller {
 		
 		for (Map.Entry<String, String[]> entry: colStr.entrySet()) {
 			for(String entryValue: entry.getValue()) {
-				request.setQueryParameter(entry.getKey(), entryValue);
+				request = request.setQueryParameter(entry.getKey(), entryValue);
 			}
 		}
 		
 		Promise<WSResponse> responsePromise = request.get();
-		Promise<Result> resultPromise = responsePromise.map (response -> ok(response.asByteArray()).as(response.getHeader(CONTENT_TYPE)));
+		Promise<Result> resultPromise = responsePromise.map (response -> {
+			Integer statusCode = response.getStatus();
+			
+			if(statusCode >= 500 && statusCode < 600) {
+				return status(BAD_GATEWAY, response.asByteArray()).as(response.getHeader(CONTENT_TYPE));
+			} else {
+				return status(statusCode, response.asByteArray()).as(response.getHeader(CONTENT_TYPE));
+			}
+		});
 		
 		return resultPromise;
 	}
