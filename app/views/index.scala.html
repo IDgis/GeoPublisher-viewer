@@ -1,4 +1,4 @@
-@(services: List[Service])
+@(services: List[Service], groups: List[Group])
 
 @main("GeoPublisher-viewer", "Viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
 	
@@ -8,11 +8,17 @@
 				<ul id="js-ul-services">
 					@for(service <- services) {
 					<li class="js-service">
-						<span class="js-service-link">
+						<a class="js-service-link">
 							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
 							<span class="js-link-label"
-								data-id="@service.getServiceId()">@service.getServiceNaam()</span>
-						</span>
+								data-service-id="@service.getServiceId()">@service.getServiceNaam()</span>
+						</a>
+						@for(group <- groups) {
+							@if(service.getServiceId() == group.getService().getServiceId()) {
+							<input type="hidden" class="js-insert-groups" data-group-id="@group.getGroupId()" 
+								data-group-name="@group.getGroupName()">
+							}
+						}
 					</li>
 					}
 				</ul>
