@@ -1,4 +1,4 @@
-@(message: String)
+@(services: List[Service])
 
 @main("GeoPublisher-viewer", "Viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
 	
@@ -6,96 +6,15 @@
 		<div id="svr-layer-control">
 			<div class="list-group groupTree" id="js-layers-nl">
 				<ul id="js-ul-services">
+					@for(service <- services) {
 					<li class="js-service">
 						<span class="js-service-link">
 							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">Beveiligd</span>
+							<span class="js-link-label"
+								data-id="@service.getServiceId()">@service.getServiceNaam()</span>
 						</span>
 					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">GEM</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">H2O</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">O2</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B0</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B1</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B2</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B3</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B4</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B5</span>						
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B6</span>						
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B7</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B8</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">OV_B9</span>
-						</span>
-					</li>
-					<li class="js-service">
-						<span class="js-service-link">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label">Raster</span>
-						</span>
-					</li>
+					}
 				</ul>
 			</div>
 		</div>
