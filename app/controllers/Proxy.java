@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -17,7 +18,7 @@ public class Proxy extends Controller {
 	
 	public Promise<Result> proxy(String url) {
 		String completeUrl = "http://staging-services.geodataoverijssel.nl/" + url;
-		WSRequest request = ws.url(completeUrl).setFollowRedirects(true);
+		WSRequest request = ws.url(completeUrl).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
 		
@@ -38,6 +39,14 @@ public class Proxy extends Controller {
 			}
 		});
 		
-		return resultPromise;
+		Promise<Result> recoveredPromise = resultPromise.recover ((Throwable throwable) -> {
+			if (throwable instanceof TimeoutException) {
+				return status (GATEWAY_TIMEOUT, throwable.getMessage ());
+			} else {
+				return status (BAD_GATEWAY, throwable.getMessage ());
+			}
+		});
+		
+		return recoveredPromise;
 	}
 }
