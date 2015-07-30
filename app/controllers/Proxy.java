@@ -5,6 +5,8 @@ import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import play.Logger;
+import play.Logger.ALogger;
 import play.libs.F.Promise;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
@@ -13,6 +15,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Proxy extends Controller {
+	
+	private static final ALogger logger = Logger.of(Proxy.class);
 	
 	@Inject WSClient ws;
 	
@@ -41,8 +45,10 @@ public class Proxy extends Controller {
 		
 		Promise<Result> recoveredPromise = resultPromise.recover ((Throwable throwable) -> {
 			if (throwable instanceof TimeoutException) {
+				logger.error("Timeout when requesting: " + completeUrl, throwable);
 				return status (GATEWAY_TIMEOUT, throwable.getMessage ());
 			} else {
+				logger.error("Error occured when requesting: " + completeUrl, throwable);
 				return status (BAD_GATEWAY, throwable.getMessage ());
 			}
 		});
