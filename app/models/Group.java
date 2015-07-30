@@ -1,18 +1,12 @@
 package models;
 
 public class Group {
-	private Service service;
 	private String groupId;
 	private String groupName;
 	
-	public Group(Service service, String groupId, String groupName) {
-		this.service = service;
+	public Group(String groupId, String groupName) {
 		this.groupId = groupId;
 		this.groupName = groupName;
-	}
-	
-	public Service getService() {
-		return service;
 	}
 	
 	public String getGroupId() {

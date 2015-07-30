@@ -2,18 +2,18 @@ package models;
 
 public class Service {
 	private String serviceId;
-	private String serviceNaam;
+	private String serviceName;
 	
-	public Service(String serviceId, String serviceNaam) {
+	public Service(String serviceId, String serviceName) {
 		this.serviceId = serviceId;	
-		this.serviceNaam = serviceNaam;	
+		this.serviceName = serviceName;	
 	}
 	
 	public String getServiceId() {
 		return serviceId;
 	}
 	
-	public String getServiceNaam() {
-		return serviceNaam;
+	public String getServiceName() {
+		return serviceName;
 	}
 }
