@@ -1,0 +1,19 @@
+@(groups: List[Group], groupId: String)
+
+@for(group <- groups) {
+	@if(group.getGroupId() == groupId) {
+		<ul id="js-ul-layers-@group.getGroupName()">
+			@for(layer <- group.getLayerList()) {
+				<li class="js-layer">
+					<span class="js-layer-link">
+						<label class="checkbox-inline">
+							<input type="checkbox" class="js-layer-check">
+						</label>
+						<span class="js-link-label-checkbox"
+						data-layer-id="@layer.getLayerId()"> @layer.getLayerName()</span>
+					</span>
+				</li>
+			}
+		</ul>
+	}
+}

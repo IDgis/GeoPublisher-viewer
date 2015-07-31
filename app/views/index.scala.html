@@ -1,4 +1,4 @@
-@(services: List[Service], serviceGroups: List[ServiceGroup])
+@(services: List[Service])
 
 @main("GeoPublisher-viewer", "Viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
 	
@@ -13,12 +13,6 @@
 							<span class="js-link-label"
 								data-service-id="@service.getServiceId()">@service.getServiceName()</span>
 						</a>
-						@for(serviceGroup <- serviceGroups) {
-							@if(service.getServiceId() == serviceGroup.getService().getServiceId()) {
-							<input type="hidden" class="js-insert-groups" data-group-id="@serviceGroup.getGroup().getGroupId()" 
-								data-group-name="@serviceGroup.getGroup.getGroupName()">
-							}
-						}
 					</li>
 					}
 				</ul>

@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Layer {
 	private String layerId;
 	private String layerName;
@@ -15,5 +17,5 @@ public class Layer {
 
 	public String getLayerName() {
 		return layerName;
-	}	
+	}
 }

@@ -282,12 +282,16 @@ require([
 				var groupName= domAttr.get(dojo.query(this).children('.js-link-label')[0], 'innerHTML');
 				var className = domAttr.get(this, 'class');
 				
+				var layerList = dojo.query(this);
+				
 				if(className == 'js-group-link') {
 					var ul = domConstruct.create('ul', {'id': 'js-ul-layers-' + groupName});
 					domConstruct.place(ul, this, 'after');
 					
-					
-					for(var i = 1; i < 11; ++i) {
+					for(var i = 0; i < 11; ++i) {
+						
+						var element = dojo.query(layerList)[i];
+						
 						var li = domConstruct.create('li');
 						domAttr.set(li, 'class', 'js-layer');
 						
@@ -302,6 +306,7 @@ require([
 						domStyle.set(inputCheckboxInput, 'position', 'static');
 						
 						var spanLabel = domConstruct.create('span');
+						domAttr.set(spanLabel, 'innerHTML', ' ' + element.dataset.layerName);
 						if(i == 1) {
 							domAttr.set(spanLabel, 'innerHTML', ' Bebouwde kommen in Overijssel');
 							domAttr.set(inputCheckboxInput, 'class', 'js-layer-check bebKomInOvrs');
