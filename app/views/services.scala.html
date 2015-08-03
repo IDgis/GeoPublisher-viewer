@@ -1,16 +1,7 @@
 @(service: Service)
 
 <ul id="js-ul-layers-@service.getServiceName()">
-		<li class="js-layer">
-			<span class="js-layer-link">
-				<label class="checkbox-inline">
-					<input type="checkbox" class="js-layer-check">
-				</label>
-				<span class="js-link-label-checkbox"
-				data-layer-id="@service.getServiceId()"> @service.getServiceName()</span>
-			</span>
-			@for(subLayer <- service.getLayerList()) {				
-				@views.html.layers(subLayer)				
-			}
-		</li>
+	@for(subLayer <- service.getLayerList()) {				
+		@views.html.layers(subLayer)				
+	}
 </ul>

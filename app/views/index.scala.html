@@ -7,11 +7,10 @@
 			<div class="list-group groupTree" id="js-layers-nl">
 				<ul id="js-ul-services">
 					@for(service <- services) {
-					<li class="js-service">
+					<li class="js-service" data-service-id="@service.getServiceId()">
 						<a class="js-service-link">
 							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label"
-								data-service-id="@service.getServiceId()">@service.getServiceName()</span>
+							<span class="js-link-label"> @service.getServiceName()</span>
 						</a>
 					</li>
 					}

@@ -1,16 +1,22 @@
 @(layer: Layer)
 
-<ul id="js-ul-layers-@layer.getLayerName()">
-		<li class="js-layer">
-			<span class="js-layer-link">
-				<label class="checkbox-inline">
-					<input type="checkbox" class="js-layer-check">
-				</label>
-				<span class="js-link-label-checkbox"
-				data-layer-id="@layer.getLayerId()"> @layer.getLayerName()</span>
-			</span>
-			@for(subLayer <- layer.getLayerList()) {				
-				@views.html.layers(subLayer)				
-			}
-		</li>
-</ul>
+
+<li class="js-layer">
+	<span class="js-layer-link">
+		@if(layer.getLayerList().isEmpty()) {
+		<label class="checkbox-inline">
+			<input type="checkbox" class="js-layer-check">
+		</label>
+		} else {
+			<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
+		}
+		
+		<span class="js-link-label-checkbox"
+		data-layer-id="@layer.getLayerId()"> @layer.getLayerName()</span>
+	</span>
+	<ul id="js-ul-layers-@layer.getLayerName()">
+		@for(subLayer <- layer.getLayerList()) {				
+			@views.html.layers(subLayer)
+		}
+	</ul>
+</li>

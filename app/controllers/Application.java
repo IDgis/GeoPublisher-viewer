@@ -107,7 +107,7 @@ public class Application extends Controller {
     	
     	servicesListAll = Arrays.asList(
     		new Service("7854", "OV_B4", layerList5),
-    		new Service("4578", "H2O", layerListAl),
+    		new Service("4578", "H2O", layerList7),
     		new Service("7521", "Beveiligd", layerList6)
     	);
     	
