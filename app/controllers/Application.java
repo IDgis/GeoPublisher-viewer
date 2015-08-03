@@ -1,95 +1,142 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import models.Group;
 import models.Layer;
 import models.Service;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.groups;
 import views.html.index;
 import views.html.layers;
+import views.html.services;
 
 public class Application extends Controller {
-	private List<Service> servicesListAll = new ArrayList<Service>();
-	private List<Group> groupsListAll = new ArrayList<Group>();
-	
-	private List<Layer> layerList1 = new ArrayList<Layer>();
-	private List<Layer> layerList2 = new ArrayList<Layer>();
-	private List<Layer> layerList3 = new ArrayList<Layer>();
-	private List<Layer> layerList4 = new ArrayList<Layer>();
-	
-	private List<Group> groupList1 = new ArrayList<Group>();
-	private List<Group> groupList2 = new ArrayList<Group>();
-	private List<Group> groupList3 = new ArrayList<Group>();
+	private final List<Service> servicesListAll;
+	private Map<String, Service> serviceMap = new HashMap<String, Service>();
+	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
+	private List<Layer> layerListAl;
 	
 	public Application() {
-		Layer layer1 = new Layer("1548", "Bebouwde kommen in Overijssel");
-    	Layer layer2 = new Layer("4548", "Bebouwde kommen rondom Overijssel");
-    	Layer layer3 = new Layer("9521", "Bodemgebruik in Overijssel (1993)");
-    	Layer layer4 = new Layer("3654", "Bodemgebruik in Overijssel (1996)");
-    	Layer layer5 = new Layer("5912", "Gebiedskenmerken stedelijke laag");
-    	Layer layer6 = new Layer("4387", "Grens projectgebied Vecht Regge");
-    	Layer layer7 = new Layer("9513", "Grenzen waterschappen in Overijssel (lijn)");
-    	Layer layer8 = new Layer("7412", "Grenzen waterschappen in Overijssel (vlak)");
-    	Layer layer9 = new Layer("2895", "Nationale parken Weerribben-Wieden en Sallandse Heuvelrug");
-    	Layer layer10 = new Layer("1545", "Projecten in Overijssel");
+		List<Layer> layerList1 = Arrays.asList(
+			new Layer("1548", "Bebouwde kommen in Overijssel", Collections.emptyList()),
+			new Layer("4548", "Bebouwde kommen rondom Overijssel", Collections.emptyList()),
+			new Layer("3654", "Bodemgebruik in Overijssel (1996)", Collections.emptyList())
+		);
+		
+		List<Layer> layerList2 = Arrays.asList(
+			new Layer("2895", "Nationale parken Weerribben-Wieden en Sallandse Heuvelrug", Collections.emptyList()),
+	    	new Layer("9521", "Bodemgebruik in Overijssel (1993)", Collections.emptyList()),
+	    	new Layer("7412", "Grenzen waterschappen in Overijssel (vlak)", Collections.emptyList())
+		);
+		
+		List<Layer> layerList3 = Arrays.asList(
+			new Layer("4387", "Grens projectgebied Vecht Regge", Collections.emptyList()),
+	    	new Layer("5912", "Gebiedskenmerken stedelijke laag", Collections.emptyList())
+		);
+		
+		List<Layer> layerList4 = Arrays.asList(
+			new Layer("9513", "Grenzen waterschappen in Overijssel (lijn)", Collections.emptyList()),
+		    new Layer("1545", "Projecten in Overijssel", Collections.emptyList())
+		);
     	
-    	Group group1 = new Group("7522", "Natuur", null, layerList1);
-    	Group group2 = new Group("8754", "Grenzen", null, layerList2);
-    	Group group3 = new Group("3564", "Gewassen", null, layerList3);
-    	Group group4 = new Group("1554", "Water", groupList2, layerList4);
+		List<Layer> layerList5 = Arrays.asList(
+			new Layer("7522", "Natuur", layerList1),
+	    	new Layer("3564", "Gewassen", layerList3)
+		);
+		
+		List<Layer> layerList6 = Arrays.asList(
+			new Layer("7522", "Natuur", layerList1),
+	    	new Layer("1554", "Water", layerList4)
+		);
+		
+		List<Layer> layerList7 = Arrays.asList(
+			new Layer("8754", "Grenzen", layerList2),
+	    	new Layer("1554", "Water", layerList4)
+		);
     	
-    	layerList1.add(layer1);
-    	layerList1.add(layer2);
-    	layerList1.add(layer4);
-    	layerList2.add(layer9);
-    	layerList2.add(layer3);
-    	layerList2.add(layer8);
-    	layerList3.add(layer6);
-    	layerList3.add(layer5);
-    	layerList4.add(layer7);
-    	layerList4.add(layer10);
+    	List<Layer> layerListAl = Arrays.asList(
+			new Layer("3333", "Algemeen1", layerList5),
+	    	new Layer("2222", "Algemeen2", layerList6),
+	    	new Layer("1111", "Algemeen3", layerList7)	
+    	);
     	
-    	groupList1.add(group1);
-    	groupList1.add(group3);
-    	groupList2.add(group2);
-    	groupList2.add(group3);
-    	groupList3.add(group1);
-    	groupList3.add(group4); 
+    	Collections.sort(layerList1, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
+    	Collections.sort(layerList2, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
+    	Collections.sort(layerList3, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
+    	Collections.sort(layerList4, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
+    	Collections.sort(layerList5, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
+    	Collections.sort(layerList6, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
+    	Collections.sort(layerList7, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
     	
-    	Service service1 = new Service("7854", "OV_B4", groupList1, null);
-    	Service service2 = new Service("4578", "H2O", groupList3, layerList1);
-    	Service service3 = new Service("7521", "Beveiligd", groupList2, null);
+    	for(Layer layer: layerList1) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
     	
-    	/*****/
+    	for(Layer layer: layerList2) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
     	
-    	servicesListAll.add(service1);
-    	servicesListAll.add(service2);
-    	servicesListAll.add(service3);
+    	for(Layer layer: layerList3) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
+    	
+    	for(Layer layer: layerList4) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
+    	
+    	for(Layer layer: layerList5) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
+    	
+    	for(Layer layer: layerList6) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
+    	
+    	for(Layer layer: layerList7) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
+    	
+    	for(Layer layer: layerListAl) { 
+    		layerMap.put(layer.getLayerId(), layer); 
+    	}
+    	
+    	servicesListAll = Arrays.asList(
+    		new Service("7854", "OV_B4", layerList5),
+    		new Service("4578", "H2O", layerListAl),
+    		new Service("7521", "Beveiligd", layerList6)
+    	);
     	
     	Collections.sort(servicesListAll, (Service s1, Service s2) -> s1.getServiceName().compareTo(s2.getServiceName()));
     	
-    	groupsListAll.add(group1);
-    	groupsListAll.add(group2);
-    	groupsListAll.add(group3);
-    	groupsListAll.add(group4);
-    	
-    	Collections.sort(groupsListAll, (Group g1, Group g2) -> g1.getGroupName().compareTo(g2.getGroupName()));
+    	for(Service service: servicesListAll) {
+    		serviceMap.put(service.getServiceId(), service);
+    	}
     }
 	
     public Result index() {
     	return ok(index.render(servicesListAll));
     }
     
-    public Result groups(String serviceId) {
-    	return ok(groups.render(servicesListAll, serviceId));
+    public Result services(String serviceId) {
+    	Service service= serviceMap.get(serviceId);
+    	if(service == null) {
+    		return notFound();
+    	}
+    	
+    	return ok(services.render(service));
     }
     
-    public Result layers(String groupId) {
-    	return ok(layers.render(groupsListAll, groupId));
+    public Result layers(String layerId) {    	
+    	Layer layer = layerMap.get(layerId);
+    	if(layer == null) {
+    		return notFound();
+    	}
+    	
+    	return ok(layers.render(layer));
     }
 }
