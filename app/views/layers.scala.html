@@ -1,22 +1,23 @@
-@(layer: Layer)
+@(layer: Layer, depth: Integer)
 
 
 <li class="js-layer">
 	<span class="js-layer-link">
-		@if(layer.getLayerList().isEmpty()) {
-		<label class="checkbox-inline">
-			<input type="checkbox" class="js-layer-check">
+		<label@if(layer.getLayerList().isEmpty()){ class="checkbox-inline"}>
+			@if(layer.getLayerList().isEmpty()) {
+				<input type="checkbox" class="js-layer-check">
+			} else {
+				<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
+			}
+			<span class="js-link-label-checkbox"
+				data-layer-id="@layer.getLayerId()"> @layer.getLayerName()</span>
 		</label>
-		} else {
-			<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-		}
-		
-		<span class="js-link-label-checkbox"
-		data-layer-id="@layer.getLayerId()"> @layer.getLayerName()</span>
 	</span>
 	<ul id="js-ul-layers-@layer.getLayerName()">
 		@for(subLayer <- layer.getLayerList()) {				
-			@views.html.layers(subLayer)
+			@if(depth > 0) {
+				@views.html.layers(subLayer, depth - 1)
+			}
 		}
 	</ul>
 </li>

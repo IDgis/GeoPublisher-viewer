@@ -1,7 +1,9 @@
-@(service: Service)
+@(service: Service, depth: Integer)
 
 <ul id="js-ul-layers-@service.getServiceName()">
 	@for(subLayer <- service.getLayerList()) {				
-		@views.html.layers(subLayer)				
+		@if(depth > 0) {
+			@views.html.layers(subLayer, depth - 1)
+		}			
 	}
 </ul>

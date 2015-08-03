@@ -1,6 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import java.util.Map;
 
 import models.Layer;
 import models.Service;
+import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
@@ -16,10 +16,11 @@ import views.html.layers;
 import views.html.services;
 
 public class Application extends Controller {
+	private static final int INIT_DEPTH = 1;
+	
 	private final List<Service> servicesListAll;
 	private Map<String, Service> serviceMap = new HashMap<String, Service>();
 	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
-	private List<Layer> layerListAl;
 	
 	public Application() {
 		List<Layer> layerList1 = Arrays.asList(
@@ -128,7 +129,7 @@ public class Application extends Controller {
     		return notFound();
     	}
     	
-    	return ok(services.render(service));
+    	return ok(services.render(service, INIT_DEPTH));
     }
     
     public Result layers(String layerId) {    	
@@ -137,6 +138,13 @@ public class Application extends Controller {
     		return notFound();
     	}
     	
-    	return ok(layers.render(layer));
+    	return ok(layers.render(layer, INIT_DEPTH));
+    }
+    
+    public Result jsRoutes() {
+		return ok (Routes.javascriptRouter ("jsRoutes",
+            controllers.routes.javascript.Application.services(),
+            controllers.routes.javascript.Application.layers()
+        )).as ("text/javascript");
     }
 }

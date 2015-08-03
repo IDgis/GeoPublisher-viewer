@@ -243,11 +243,18 @@ require([
 				var serviceId = domAttr.get(this.parentNode, 'data-service-id');
 				var serviceNode = this.parentNode;
 				
-				xhr('/service/' + serviceId, {
-					handleAs: "html"
-				}).then(function(data){
-					domConstruct.place(data, serviceNode);
-				});
+				if(this.dataset.serviceExpanded === "false") {
+					xhr(jsRoutes.controllers.Application.services(serviceId).url, {
+						handleAs: "html"
+					}).then(function(data){
+						domConstruct.place(data, serviceNode);
+					});
+					this.dataset.serviceExpanded = "true";
+				} else {
+					domConstruct.destroy(query(this).siblings()[0]);
+					this.dataset.serviceExpanded = "false";
+				}
+				
 			});
 			
 			var groupExpand = on(win.doc, '.js-group-link:click', function(e) {
