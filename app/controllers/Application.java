@@ -17,8 +17,6 @@ import views.html.layerscontent;
 import views.html.services;
 
 public class Application extends Controller {
-	private static final int INIT_DEPTH = 1;
-	
 	private final List<Service> servicesListAll;
 	private Map<String, Service> serviceMap = new HashMap<String, Service>();
 	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
@@ -130,7 +128,7 @@ public class Application extends Controller {
     		return notFound();
     	}
     	
-    	return ok(services.render(service, INIT_DEPTH));
+    	return ok(services.render(service));
     }
     
     public Result layers(String layerId) {    	
@@ -139,7 +137,7 @@ public class Application extends Controller {
     		return notFound();
     	}
     	
-    	return ok(layers.render(layer, INIT_DEPTH));
+    	return ok(layers.render(layer));
     }
     
     public Result layersContent(String layerId) {
@@ -148,7 +146,7 @@ public class Application extends Controller {
     		return notFound();
     	}
     	
-    	return ok(layerscontent.render(layer, INIT_DEPTH));
+    	return ok(layerscontent.render(layer));
     }
     
     public Result jsRoutes() {
