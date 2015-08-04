@@ -1,23 +1,34 @@
 package controllers;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import models.Layer;
 import models.Service;
+import nl.idgis.ogc.client.wms.WMSCapabilitiesParser;
+import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
+import nl.idgis.ogc.wms.WMSCapabilities;
+import play.Logger;
 import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import views.html.layers;
 import views.html.layerscontent;
-import views.html.services;
+import views.html.capabilitieswarning;
 
 public class Application extends Controller {
-	private final List<Service> servicesListAll;
+	
+	private @Inject play.Application application;
+	
+	//private final List<Service> servicesListAll;
 	private Map<String, Service> serviceMap = new HashMap<String, Service>();
 	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
 	
@@ -105,7 +116,7 @@ public class Application extends Controller {
     		layerMap.put(layer.getLayerId(), layer); 
     	}
     	
-    	servicesListAll = Arrays.asList(
+    	/*servicesListAll = Arrays.asList(
     		new Service("7854", "OV_B4", layerList5),
     		new Service("4578", "H2O", layerList7),
     		new Service("7521", "Beveiligd", layerList6)
@@ -115,33 +126,68 @@ public class Application extends Controller {
     	
     	for(Service service: servicesListAll) {
     		serviceMap.put(service.getServiceId(), service);
-    	}
+    	}*/
     }
 	
-    public Result index() {
-    	return ok(index.render(servicesListAll));
+    
+    
+    public WMSCapabilities getWMSCapabilities(String serviceId) throws ParseException {
+    	InputStream capabilities = application.resourceAsStream ("wmscapabilities.xml");
+    	
+    	try {
+    		return WMSCapabilitiesParser.parseCapabilities(capabilities);
+    	} catch(ParseException e) {
+    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+    		throw new ParseException ("Error parsing capabilities document", e);
+    	} finally {
+    		try {
+    			capabilities.close();
+    		} catch(IOException io) {
+    			Logger.error("An exception occured during closing of the capabilities stream.");
+    		}
+    	}
     }
     
-    public Result services(String serviceId) {
-    	Service service= serviceMap.get(serviceId);
-    	if(service == null) {
-    		return notFound();
+    public Result getErrorWarning(String capWarning) {
+    	return ok(capabilitieswarning.render(capWarning));
+    }
+    
+    public Result index() {
+    	List<WMSCapabilities.Service> servicesList = null;
+    	WMSCapabilities capabilities = null;
+    	
+    	try {
+    		capabilities = getWMSCapabilities("1234");
+    		servicesList = Arrays.asList(
+    			capabilities.serviceIdentification()
+    	    );
+    	} catch(ParseException e) {
+    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
     	}
     	
-    	return ok(services.render(service));
+    	return ok(index.render(servicesList, capabilities));
     }
     
     public Result layers(String layerId) {    	
-    	Layer layer = layerMap.get(layerId);
+    	WMSCapabilities.Layer layer = null;
+    	WMSCapabilities capabilities = null;
+    	
+    	try {
+    		capabilities = getWMSCapabilities("1234");
+    		layer = capabilities.layer(layerId);
+    	} catch(ParseException e) {
+    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+    	}
+    	
     	if(layer == null) {
     		return notFound();
     	}
     	
-    	return ok(layers.render(layer));
+    	return ok(layers.render(layer, capabilities));
     }
     
     public Result layersContent(String layerId) {
-    	Layer layer = layerMap.get(layerId);
+    	WMSCapabilities.Layer layer = null;
     	if(layer == null) {
     		return notFound();
     	}

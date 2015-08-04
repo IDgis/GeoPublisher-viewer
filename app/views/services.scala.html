@@ -1,7 +1,0 @@
-@(service: Service)
-
-<ul id="js-ul-layers-@service.getServiceName()">
-	@for(subLayer <- service.getLayerList()) {				
-		@views.html.layerscontent(subLayer)		
-	}
-</ul>

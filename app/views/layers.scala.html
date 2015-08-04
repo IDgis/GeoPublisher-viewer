@@ -1,7 +1,9 @@
-@(layer: Layer)
+@import nl.idgis.ogc.wms._
 
-<ul id="js-ul-layers-@layer.getLayerName()">
-	@for(subLayer <- layer.getLayerList()) {				
+@(layer: WMSCapabilities.Layer, capabilities: WMSCapabilities)
+
+<ul id="js-ul-layers-@layer.title()">
+	@for(subLayer <- capabilities.allLayers()) {				
 		@views.html.layerscontent(subLayer)		
 	}
 </ul>
