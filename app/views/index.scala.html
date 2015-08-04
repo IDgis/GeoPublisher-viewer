@@ -8,10 +8,10 @@
 				<ul id="js-ul-services">
 					@for(service <- services) {
 					<li class="js-service" data-service-id="@service.getServiceId()">
-						<a class="js-service-link" data-service-expanded="false">
+						<span class="js-service-link" data-service-expanded="false">
 							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
 							<span class="js-link-label"> @service.getServiceName()</span>
-						</a>
+						</span>
 					</li>
 					}
 				</ul>

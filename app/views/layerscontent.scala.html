@@ -1,0 +1,14 @@
+@(layer: Layer, depth: Integer)
+
+<li class="js-layer" data-layer-id="@layer.getLayerId()">
+	<span class="js-layer-link" data-layer-expanded="false">
+		<label@if(layer.getLayerList().isEmpty()){ class="checkbox-inline"}>
+			@if(layer.getLayerList().isEmpty()) {
+				<input type="checkbox" class="js-layer-check">
+			} else {
+				<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
+			}
+			<span class="js-link-label-checkbox"> @layer.getLayerName()</span>
+		</label>
+	</span>
+</li>

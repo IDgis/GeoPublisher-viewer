@@ -254,11 +254,23 @@ require([
 					domConstruct.destroy(query(this).siblings()[0]);
 					this.dataset.serviceExpanded = "false";
 				}
-				
 			});
 			
-			var groupExpand = on(win.doc, '.js-group-link:click', function(e) {
+			var groupExpand = on(win.doc, '.js-layer-link:click', function(e) {
+				var layerId = domAttr.get(this.parentNode, 'data-layer-id');
+				var layerNode = this.parentNode;
 				
+				if(this.dataset.layerExpanded === "false") {
+					xhr(jsRoutes.controllers.Application.layers(layerId).url, {
+						handleAs: "html"
+					}).then(function(data){
+						domConstruct.place(data, layerNode);
+					});
+					this.dataset.layerExpanded = "true";
+				} else {
+					domConstruct.destroy(query(this).siblings()[0]);
+					this.dataset.layerExpanded = "false";
+				}
 			});
 			
 	       	var layerCheck = on(win.doc, '.js-layer-check:change', function(e) {

@@ -13,6 +13,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import views.html.layers;
+import views.html.layerscontent;
 import views.html.services;
 
 public class Application extends Controller {
@@ -51,13 +52,13 @@ public class Application extends Controller {
 		);
 		
 		List<Layer> layerList6 = Arrays.asList(
-			new Layer("7522", "Natuur", layerList1),
+			new Layer("7523", "Natuur2", layerList1),
 	    	new Layer("1554", "Water", layerList4)
 		);
 		
 		List<Layer> layerList7 = Arrays.asList(
 			new Layer("8754", "Grenzen", layerList2),
-	    	new Layer("1554", "Water", layerList4)
+	    	new Layer("1555", "Water2", layerList5)
 		);
     	
     	List<Layer> layerListAl = Arrays.asList(
@@ -141,10 +142,20 @@ public class Application extends Controller {
     	return ok(layers.render(layer, INIT_DEPTH));
     }
     
+    public Result layersContent(String layerId) {
+    	Layer layer = layerMap.get(layerId);
+    	if(layer == null) {
+    		return notFound();
+    	}
+    	
+    	return ok(layerscontent.render(layer, INIT_DEPTH));
+    }
+    
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
             controllers.routes.javascript.Application.services(),
-            controllers.routes.javascript.Application.layers()
+            controllers.routes.javascript.Application.layers(),
+            controllers.routes.javascript.Application.layersContent()
         )).as ("text/javascript");
     }
 }

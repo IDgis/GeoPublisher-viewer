@@ -3,7 +3,7 @@
 <ul id="js-ul-layers-@service.getServiceName()">
 	@for(subLayer <- service.getLayerList()) {				
 		@if(depth > 0) {
-			@views.html.layers(subLayer, depth - 1)
+			@views.html.layerscontent(subLayer, depth - 1)
 		}			
 	}
 </ul>
