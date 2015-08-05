@@ -240,14 +240,13 @@ require([
 			var svrLayerView = dom.byId('svr-layer-view');
 			var svrLayerControl = dom.byId('svr-layer-control');
 			var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
-				var layerId = "B1_Hulpverleningsregios_in_Overijssel"; //domAttr.get(this.parentNode, 'data-service-id');
-				var layerNode = this.parentNode;
+				var serviceNode = this.parentNode;
 				
 				if(this.dataset.serviceExpanded === "false") {
-					xhr(jsRoutes.controllers.Application.layers(layerId).url, {
+					xhr(jsRoutes.controllers.Application.allLayers().url, {
 						handleAs: "html"
 					}).then(function(data){
-						domConstruct.place(data, layerNode);
+						domConstruct.place(data, serviceNode);
 					});
 					this.dataset.serviceExpanded = "true";
 				} else {
@@ -256,7 +255,7 @@ require([
 				}
 			});
 			
-			var groupExpand = on(win.doc, '.js-layer-link:click', function(e) {
+			var layerExpand = on(win.doc, '.js-layer-link:click', function(e) {
 				var layerId = domAttr.get(this.parentNode, 'data-layer-id');
 				var layerNode = this.parentNode;
 				

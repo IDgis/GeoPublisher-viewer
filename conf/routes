@@ -4,9 +4,8 @@
 
 # Home page
 GET     /												controllers.Application.index()
-GET		/service/:serviceId								controllers.Application.services(serviceId: String)
+GET		/layersall										controllers.Application.allLayers()
 GET		/layer/:layerId									controllers.Application.layers(layerId: String)
-GET		/layercontent/:layerId							controllers.Application.layersContent(layerId: String)
 GET		/routes.js										controllers.Application.jsRoutes()
 
 GET		/proxy/*url										controllers.Proxy.proxy(url: String)

@@ -2,7 +2,9 @@ package controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import models.Layer;
-import models.Service;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
@@ -19,17 +20,14 @@ import play.Logger;
 import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.capabilitieswarning;
 import views.html.index;
 import views.html.layers;
-import views.html.layerscontent;
-import views.html.capabilitieswarning;
 
 public class Application extends Controller {
 	
 	private @Inject play.Application application;
 	
-	//private final List<Service> servicesListAll;
-	private Map<String, Service> serviceMap = new HashMap<String, Service>();
 	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
 	
 	public Application() {
@@ -115,21 +113,7 @@ public class Application extends Controller {
     	for(Layer layer: layerListAl) { 
     		layerMap.put(layer.getLayerId(), layer); 
     	}
-    	
-    	/*servicesListAll = Arrays.asList(
-    		new Service("7854", "OV_B4", layerList5),
-    		new Service("4578", "H2O", layerList7),
-    		new Service("7521", "Beveiligd", layerList6)
-    	);
-    	
-    	Collections.sort(servicesListAll, (Service s1, Service s2) -> s1.getServiceName().compareTo(s2.getServiceName()));
-    	
-    	for(Service service: servicesListAll) {
-    		serviceMap.put(service.getServiceId(), service);
-    	}*/
     }
-	
-    
     
     public WMSCapabilities getWMSCapabilities(String serviceId) throws ParseException {
     	InputStream capabilities = application.resourceAsStream ("wmscapabilities.xml");
@@ -143,7 +127,7 @@ public class Application extends Controller {
     		try {
     			capabilities.close();
     		} catch(IOException io) {
-    			Logger.error("An exception occured during closing of the capabilities stream.");
+    			Logger.error("An exception occured during closing of the capabilities stream.", io);
     		}
     	}
     }
@@ -168,38 +152,43 @@ public class Application extends Controller {
     	return ok(index.render(servicesList, capabilities));
     }
     
-    public Result layers(String layerId) {    	
-    	WMSCapabilities.Layer layer = null;
+    public Result allLayers() {    	
+    	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
     	WMSCapabilities capabilities = null;
     	
     	try {
     		capabilities = getWMSCapabilities("1234");
-    		layer = capabilities.layer(layerId);
+    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.allLayers();
+    		for(WMSCapabilities.Layer layer : collectionLayers) {
+    			layerList.add(layer);
+    		}
+    		layerList.remove(0);
     	} catch(ParseException e) {
     		Logger.error("An exception occured during parsing of a capabilities document: ", e);
     	}
     	
-    	if(layer == null) {
-    		return notFound();
-    	}
-    	
-    	return ok(layers.render(layer, capabilities));
+    	return ok(layers.render(layerList));
     }
     
-    public Result layersContent(String layerId) {
-    	WMSCapabilities.Layer layer = null;
-    	if(layer == null) {
-    		return notFound();
+    public Result layers(String layerId) {    	
+    	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+    	WMSCapabilities capabilities = null;
+    	
+    	try {
+    		capabilities = getWMSCapabilities("1234");
+    		WMSCapabilities.Layer layer = capabilities.layer(layerId);
+    		layerList = layer.layers();
+    	} catch(ParseException e) {
+    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
     	}
     	
-    	return ok(layerscontent.render(layer));
+    	return ok(layers.render(layerList));
     }
     
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
-            controllers.routes.javascript.Application.services(),
-            controllers.routes.javascript.Application.layers(),
-            controllers.routes.javascript.Application.layersContent()
+            controllers.routes.javascript.Application.allLayers(),
+            controllers.routes.javascript.Application.layers()
         )).as ("text/javascript");
     }
 }

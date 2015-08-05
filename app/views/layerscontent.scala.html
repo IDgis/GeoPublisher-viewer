@@ -2,15 +2,19 @@
 
 @(layer: WMSCapabilities.Layer)
 
-<li class="js-layer" data-layer-id="@layer.title()">
-	<span class="js-layer-link" data-layer-expanded="false">
-		<label@if(layer.layers().isEmpty()){ class="checkbox-inline"}>
+<li data-layer-id="@layer.name()">
+	<span @if(!layer.layers().isEmpty){ class="js-layer-link" } data-layer-expanded="false">
+		<label class="@if(layer.layers().isEmpty()){checkbox-inline }label-whitespace">
 			@if(layer.layers().isEmpty()) {
 				<input type="checkbox" class="js-layer-check">
 			} else {
 				<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
 			}
-			<span class="js-link-label-checkbox"> @layer.title()</span>
+			@if(layer.title) {
+				<span class="js-link-label-checkbox"> @layer.title()</span>
+			} else {
+				<span class="js-link-label-checkbox"> @layer.name()</span>
+			}
 		</label>
 	</span>
 </li>

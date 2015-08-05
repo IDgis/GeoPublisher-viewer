@@ -6,10 +6,10 @@
 	
 	<div id="layer-control-container" class="col-lg-3">
 		<div id="svr-layer-control">
-			<div class="list-group groupTree" id="js-layers-nl">
+			<div class="list-group groupTree pull-left" id="js-layers-nl">
 				<ul id="js-ul-services">
 					@for(service <- services) {
-					<li class="js-service" data-service-id="@service.hashCode()">
+					<li data-service-id="@service.title()">
 						<span class="js-service-link" data-service-expanded="false">
 							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
 							<span class="js-link-label"> @service.title()</span>

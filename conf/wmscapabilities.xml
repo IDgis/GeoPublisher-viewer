@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?><WMS_Capabilities version="1.3.0" updateSequence="232923" xmlns="http://www.opengis.net/wms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wms http://staging-services.geodataoverijssel.nl:80/geoserver/schemas/wms/1.3.0/capabilities_1_3_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><WMS_Capabilities version="1.3.0" updateSequence="6670" xmlns="http://www.opengis.net/wms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wms http://acc-staging-services.geodataoverijssel.nl:80/geoserver/schemas/wms/1.3.0/capabilities_1_3_0.xsd">
   <Service>
     <Name>WMS</Name>
-    <Title>B1 - Openbaar bestuur</Title>
+    <Title>B0 - Referentie</Title>
     <Abstract/>
     <KeywordList>
-      <Keyword>provinciale staten</Keyword>
-      <Keyword>gedeputeerde staten</Keyword>
-      <Keyword>kabinetszaken</Keyword>
-      <Keyword>bestuurlijke grenzen</Keyword>
-      <Keyword>financieel toezicht op gemeenten</Keyword>
-      <Keyword>overige zaken</Keyword>
+      <Keyword>luchtfoto's</Keyword>
+      <Keyword>topografie</Keyword>
+      <Keyword>projectgrenzen</Keyword>
+      <Keyword>stedelijk gebied</Keyword>
+      <Keyword>postcodegebieden</Keyword>
+      <Keyword>bladindelingen</Keyword>
+      <Keyword>adressen</Keyword>
+      <Keyword>inspire</Keyword>
     </KeywordList>
     <OnlineResource xlink:type="simple" xlink:href="http://geoserver.sourceforge.net/html/index.php"/>
     <ContactInformation>
@@ -40,10 +42,10 @@
         <DCPType>
           <HTTP>
             <Get>
-              <OnlineResource xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?SERVICE=WMS&amp;"/>
+              <OnlineResource xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?SERVICE=WMS&amp;"/>
             </Get>
             <Post>
-              <OnlineResource xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?SERVICE=WMS&amp;"/>
+              <OnlineResource xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?SERVICE=WMS&amp;"/>
             </Post>
           </HTTP>
         </DCPType>
@@ -68,7 +70,7 @@
         <DCPType>
           <HTTP>
             <Get>
-              <OnlineResource xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?SERVICE=WMS&amp;"/>
+              <OnlineResource xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?SERVICE=WMS&amp;"/>
             </Get>
           </HTTP>
         </DCPType>
@@ -82,7 +84,7 @@
         <DCPType>
           <HTTP>
             <Get>
-              <OnlineResource xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?SERVICE=WMS&amp;"/>
+              <OnlineResource xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?SERVICE=WMS&amp;"/>
             </Get>
           </HTTP>
         </DCPType>
@@ -94,7 +96,7 @@
       <Format>BLANK</Format>
     </Exception>
     <Layer>
-      <Title>B1 - Openbaar bestuur</Title>
+      <Title>B0 - Referentie</Title>
       <Abstract/>
       <!--All supported EPSG projections:-->
       <CRS>AUTO:42001</CRS>
@@ -5026,7 +5028,6 @@
       <CRS>EPSG:68186405</CRS>
       <CRS>EPSG:68206405</CRS>
       <CRS>EPSG:69036405</CRS>
-      <CRS>EPSG:404000</CRS>
       <CRS>EPSG:102113</CRS>
       <CRS>EPSG:42302</CRS>
       <CRS>EPSG:42301</CRS>
@@ -5053,539 +5054,580 @@
       <CRS>EPSG:42305</CRS>
       <CRS>EPSG:42304</CRS>
       <CRS>EPSG:42303</CRS>
+      <CRS>EPSG:404000</CRS>
       <CRS>CRS:84</CRS>
       <EX_GeographicBoundingBox>
-        <westBoundLongitude>3.0255474566246647</westBoundLongitude>
-        <eastBoundLongitude>15.881967505255766</eastBoundLongitude>
-        <southBoundLatitude>47.615727687801346</southBoundLatitude>
-        <northBoundLatitude>55.12937291999399</northBoundLatitude>
+        <westBoundLongitude>3.1798385852036564</westBoundLongitude>
+        <eastBoundLongitude>7.297081044588064</eastBoundLongitude>
+        <southBoundLatitude>50.657810351692625</southBoundLatitude>
+        <northBoundLatitude>53.62568374964272</northBoundLatitude>
       </EX_GeographicBoundingBox>
-      <BoundingBox CRS="CRS:84" minx="3.0255474566246647" miny="47.615727687801346" maxx="15.881967505255766" maxy="55.12937291999399"/>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Gebiedsindeling_op_grond_van_de_wet_gemeenschappelijke_regelingen_lijn</Name>
-        <Title>Gebiedsindeling op grond van de wet gemeenschappelijke regelingen lijn</Title>
-        <Abstract>Gebiedsindeling op grond van de wet gemeenschappelijke regelingen (WGR) Bij besluit van de provinciale staten van Overijssel op 13 oktober 1993 nr. 24 Dit bestand is tot stand gekomen door de betreffende gemeenten te selecteren uit het bestand gemned_arc&#13;
+      <BoundingBox CRS="CRS:84" minx="3.1798385852036564" miny="50.657810351692625" maxx="7.297081044588064" maxy="53.62568374964272"/>
+      <Layer queryable="1">
+        <Name>Test-Herman-Bart</Name>
+        <Title>testje</Title>
+        <Abstract>een kort verhaal</Abstract>
+        <CRS>EPSG:28992</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.796351813247068</westBoundLongitude>
+          <eastBoundLongitude>7.0983469875784335</eastBoundLongitude>
+          <southBoundLatitude>52.11040734727045</southBoundLatitude>
+          <northBoundLatitude>52.8523069710899</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="EPSG:28992" minx="182947.875" miny="459333.46875" maxx="270218.03125" maxy="540627.8125"/>
+        <Layer queryable="1" opaque="0">
+          <Name>OV_B0:B0_Bebouwde_kommen_in_Overijssel-2</Name>
+          <Title>Bebouwde kommen in Overijssel</Title>
+          <Abstract>Bronbestanden zijn de kernenbestanden uit 2013. Kernbestand is de omtrek van de bebouwde kom van de steden en dorpen in Overijssel (bebouwing). Het betreft gegevens van gebieden binnen de provincie Overijssel. Het is bedoeld als illustratief bestand (niet voor analyse doeleinden). Het heeft geen juridische status. Het bestand wordt op adhoc basis bijgehouden. Dit is een herziene versie van de kernenbestanden 2006. Bestand is gemaakt op basis van luchtfoto's (2011) en Top10NL (BRT 2013). </Abstract>
+          <KeywordList>
+            <Keyword>bebouwingsclusters</Keyword>
+            <Keyword>bebouwde kommen</Keyword>
+            <Keyword>steden</Keyword>
+            <Keyword>dorpen</Keyword>
+          </KeywordList>
+          <CRS>EPSG:28992</CRS>
+          <CRS>CRS:84</CRS>
+          <EX_GeographicBoundingBox>
+            <westBoundLongitude>5.827697712873207</westBoundLongitude>
+            <eastBoundLongitude>7.075513752701946</eastBoundLongitude>
+            <southBoundLatitude>52.136473475164486</southBoundLatitude>
+            <northBoundLatitude>52.83437401406604</northBoundLatitude>
+          </EX_GeographicBoundingBox>
+          <BoundingBox CRS="CRS:84" minx="5.827697712873207" miny="52.136473475164486" maxx="7.075513752701946" maxy="52.83437401406604"/>
+          <BoundingBox CRS="EPSG:28992" minx="185077.296875" miny="462200.1875" maxx="268725.3125" maxy="538644.9375"/>
+          <Style>
+            <Name>polygon</Name>
+            <Title>Default Polygon</Title>
+            <Abstract>A sample style that draws a polygon</Abstract>
+            <LegendURL width="20" height="20">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_in_Overijssel-2"/>
+            </LegendURL>
+          </Style>
+          <Style>
+            <Name>B0_Bebouwde_kommen_in_Overijssel</Name>
+            <Title>B0 Kernen style</Title>
+            <Abstract/>
+            <LegendURL width="20" height="20">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_in_Overijssel-2&amp;style=B0_Bebouwde_kommen_in_Overijssel"/>
+            </LegendURL>
+          </Style>
+          <Style>
+            <Name>B0_Bebouwde_kommen_in_Overijssel_woonplaatsenOV</Name>
+            <Title>WoonplaatsenOV style</Title>
+            <Abstract/>
+            <LegendURL width="22" height="40">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_in_Overijssel-2&amp;style=B0_Bebouwde_kommen_in_Overijssel_woonplaatsenOV"/>
+            </LegendURL>
+          </Style>
+        </Layer>
+        <Layer queryable="1" opaque="0">
+          <Name>OV_B0:B2_Hartlijnen_wegen_NWB</Name>
+          <Title>Hartlijnen wegen NWB</Title>
+          <Abstract>Het nwb-wegen is een digitaal geografisch bestand van nagenoeg alle wegen in nederland. Opgenomen zijn alle wegen die worden beheerd door wegbeheerders als het rijk, provincies, gemeenten en waterschappen, echter alleen voor zover deze zijn voorzien van een straatnaam of nummer. Dus ook losliggende voet- en fietspaden en onverharde wegen zijn, indien voorzien van een straatnaam, in het nwb-wegen opgenomen. Indien een weg gescheiden rijbanen heeft, wat vooral het geval is bij rijkswegen, worden deze als aparte wegvakken in het bestand verwerkt. (in dit bestand zijn alle wegen opgenomen binnen kader_ov)&#13;
 </Abstract>
-        <KeywordList>
-          <Keyword>regelgeving</Keyword>
-          <Keyword>grenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.7193719067894095</westBoundLongitude>
-          <eastBoundLongitude>7.099226535982103</eastBoundLongitude>
-          <southBoundLatitude>52.04573797710733</southBoundLatitude>
-          <northBoundLatitude>52.86020865958432</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.7193719067894095" miny="52.04573797710733" maxx="7.099226535982103" maxy="52.86020865958432"/>
-        <BoundingBox CRS="EPSG:28992" minx="177708.640625" miny="452136.8125" maxx="270257.125" maxy="541479.8125"/>
-        <Style>
-          <Name>B1_WGR_regios_lijn</Name>
-          <Title>B1 WGR regios lijn style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gebiedsindeling_op_grond_van_de_wet_gemeenschappelijke_regelingen_lijn"/>
-          </LegendURL>
-        </Style>
+          <KeywordList>
+            <Keyword>wegbeheer</Keyword>
+            <Keyword>wegen</Keyword>
+            <Keyword>wegennet</Keyword>
+            <Keyword>wegbestemmingen</Keyword>
+          </KeywordList>
+          <CRS>EPSG:28992</CRS>
+          <CRS>CRS:84</CRS>
+          <EX_GeographicBoundingBox>
+            <westBoundLongitude>5.796351813247068</westBoundLongitude>
+            <eastBoundLongitude>7.0983469875784335</eastBoundLongitude>
+            <southBoundLatitude>52.11040734727045</southBoundLatitude>
+            <northBoundLatitude>52.8523069710899</northBoundLatitude>
+          </EX_GeographicBoundingBox>
+          <BoundingBox CRS="CRS:84" minx="5.796351813247068" miny="52.11040734727045" maxx="7.0983469875784335" maxy="52.8523069710899"/>
+          <BoundingBox CRS="EPSG:28992" minx="182947.875" miny="459333.46875" maxx="270218.03125" maxy="540627.8125"/>
+          <Style>
+            <Name>B2_Hartlijnen_wegen_NWB</Name>
+            <Title>B2 Wegen hartlijnen NWB style</Title>
+            <Abstract/>
+            <LegendURL width="20" height="20">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B2_Hartlijnen_wegen_NWB"/>
+            </LegendURL>
+          </Style>
+          <Style>
+            <Name>B2_Hartlijnen_wegen_NWB_AVO</Name>
+            <Title>nwb weg style</Title>
+            <Abstract/>
+            <LegendURL width="31" height="60">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B2_Hartlijnen_wegen_NWB&amp;style=B2_Hartlijnen_wegen_NWB_AVO"/>
+            </LegendURL>
+          </Style>
+          <Style>
+            <Name>B2_Hartlijnen_wegen_NWB_SQL</Name>
+            <Title>Wegen style</Title>
+            <Abstract/>
+            <LegendURL width="22" height="40">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B2_Hartlijnen_wegen_NWB&amp;style=B2_Hartlijnen_wegen_NWB_SQL"/>
+            </LegendURL>
+          </Style>
+        </Layer>
       </Layer>
       <Layer queryable="1" opaque="0">
-        <Name>B1_Gebiedsindeling_op_grond_van_de_wet_gemeenschappelijke_regelingen_vlak</Name>
-        <Title>Gebiedsindeling op grond van de wet gemeenschappelijke regelingen vlak</Title>
-        <Abstract>Gebiedsindeling op grond van de wet gemeenschappelijke regelingen (WGR) Bij besluit van de provinciale staten van Overijssel op 13 oktober 1993 nr. 24 Dit bestand is tot stand gekomen door de betreffende gemeenten te selecteren uit het bestand gemned_polygon&#13;
-</Abstract>
-        <KeywordList>
-          <Keyword>grenzen</Keyword>
-          <Keyword>regelgeving</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.726082032047383</westBoundLongitude>
-          <eastBoundLongitude>7.092272875981602</eastBoundLongitude>
-          <southBoundLatitude>52.04980696869247</southBoundLatitude>
-          <northBoundLatitude>52.856214438702054</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.726082032047383" miny="52.04980696869247" maxx="7.092272875981602" maxy="52.856214438702054"/>
-        <BoundingBox CRS="EPSG:28992" minx="178166.797" miny="452579.094" maxx="269798.938" maxy="541037.5"/>
-        <Style>
-          <Name>B1_WGR_regios_vlak</Name>
-          <Title>B1 WGR regios style</Title>
-          <Abstract/>
-          <LegendURL width="122" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gebiedsindeling_op_grond_van_de_wet_gemeenschappelijke_regelingen_vlak"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Gemeentegrenzen_Overijssel_lijn</Name>
-        <Title>Gemeentegrenzen Overijssel lijn</Title>
-        <Abstract>de bestuurlijk vastgestelde gemeentegrenzen van de provincie overijssel. De gemeentegrenzen zijn afgeleid uit kadastrale grenzen De laatste wijziging die in dit bestand is opgenomen betreft een grenscorrectie tussen de gemeenten Borne en Hengelo. Deze wijziging is vastgesteld bij besluit van Gedeputeerde staten van Overijssel op 9 december 2010, kenmerk 2010/0213330</Abstract>
-        <KeywordList>
-          <Keyword>gemeenten</Keyword>
-          <Keyword>grenzen</Keyword>
-          <Keyword>gemeentegrenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.768322432704219</westBoundLongitude>
-          <eastBoundLongitude>7.098971262731212</eastBoundLongitude>
-          <southBoundLatitude>52.11029476373851</southBoundLatitude>
-          <northBoundLatitude>52.85968560392937</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.768322432704219" miny="52.11029476373851" maxx="7.098971262731212" maxy="52.85968560392937"/>
-        <BoundingBox CRS="EPSG:28992" minx="181028.296875" miny="459321.46875" maxx="270240.90625" maxy="541438.25"/>
-        <Style>
-          <Name>B1_gemeentegrenzen_lijn</Name>
-          <Title>B1 Gemeentegrenzen Overijssel lijn style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_lijn"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_provinciegrens_lijn_blauw</Name>
-          <Title>Provinciegrens style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_lijn&amp;style=B1_provinciegrens_lijn_blauw"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_lijn_provinciegrenzen</Name>
-          <Title>GemgrensOV style</Title>
-          <Abstract/>
-          <LegendURL width="122" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_lijn&amp;style=B1_gemeentegrenzen_lijn_provinciegrenzen"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_provinciegrens_lijn</Name>
-          <Title>GemgrensOV style</Title>
-          <Abstract/>
-          <LegendURL width="122" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_lijn&amp;style=B1_provinciegrens_lijn"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Gemeentegrenzen_Overijssel_vlak</Name>
-        <Title>Gemeentegrenzen Overijssel vlak</Title>
-        <Abstract>De bestuurlijk vastgestelde gemeentegrenzen van de provincie overijssel. De gemeentegrenzen zijn afgeleid uit kadastrale grenzen. De laatste wijziging die in dit bestand is opgenomen betreft een grenscorrectie tussen de gemeenten Borne en Hengelo. Deze wijziging is vastgesteld bij besluit van Gedeputeerde staten van Overijssel op 9 december 2010 kenmerk 2010/0213330</Abstract>
-        <KeywordList>
-          <Keyword>gemeentegrenzen</Keyword>
-          <Keyword>grenzen</Keyword>
-          <Keyword>gemeenten</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.774802628634133</westBoundLongitude>
-          <eastBoundLongitude>7.092275031526039</eastBoundLongitude>
-          <southBoundLatitude>52.11403951791716</southBoundLatitude>
-          <northBoundLatitude>52.85601122247255</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.774802628634133" miny="52.11403951791716" maxx="7.092275031526039" maxy="52.85601122247255"/>
-        <BoundingBox CRS="EPSG:28992" minx="181469.938" miny="459728.031" maxx="269799.219" maxy="541031.75"/>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak</Name>
-          <Title>B1 Gemeentegrenzen Overijssel lijn style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_asbest_perc_eigenaren</Name>
-          <Title>Percentagebedrijfseigenaren</Title>
-          <Abstract/>
-          <LegendURL width="65" height="100">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_asbest_perc_eigenaren"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_coropgebieden</Name>
-          <Title>COROPgebied style</Title>
-          <Abstract/>
-          <LegendURL width="151" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_coropgebieden"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_GHB_deelname_gemeenten</Name>
-          <Title>deelname style</Title>
-          <Abstract/>
-          <LegendURL width="46" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_GHB_deelname_gemeenten"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_asbestverdacht_oppervlak</Name>
-          <Title>Asbestverdachtdakoppervlak style</Title>
-          <Abstract/>
-          <LegendURL width="118" height="100">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_asbestverdacht_oppervlak"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_perc_asbestverdacht</Name>
-          <Title>Percentageasbestverdachtt o v totaaldakoppervlak style</Title>
-          <Abstract/>
-          <LegendURL width="65" height="100">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_perc_asbestverdacht"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_asbestvoorlopergemeenten</Name>
-          <Title>asbest gemeenten inventarisatie style</Title>
-          <Abstract/>
-          <LegendURL width="149" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_asbestvoorlopergemeenten"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_OMG_bevoegdheid</Name>
-          <Title>Bevoegdheid style</Title>
-          <Abstract/>
-          <LegendURL width="226" height="40">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_OMG_bevoegdheid"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_asbest_status_controle_gemeenten</Name>
-          <Title>gem_controle_asbestinventarisatie</Title>
-          <Abstract/>
-          <LegendURL width="222" height="80">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_asbest_status_controle_gemeenten"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_BRE_wit</Name>
-          <Title>Gemeentegrenzen style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_BRE_wit"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_gemeentegrenzen_vlak_AVO_toeristische_regios</Name>
-          <Title>Toeristische regio's style</Title>
-          <Abstract/>
-          <LegendURL width="214" height="120">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Gemeentegrenzen_Overijssel_vlak&amp;style=B1_gemeentegrenzen_vlak_AVO_toeristische_regios"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Grenzen_Duitsland</Name>
-        <Title>Grenzen_Duitsland</Title>
-        <Abstract>Grenzen Duitsland (2008) ----- Een Landkreis (Spreek uit: Landkrais, Nederlands: Landkreits of district) is een regionale bestuurseenheid in de Bondsrepubliek Duitsland. Het betreft een gemeenteverbond en rechtspersoon (van publiekrecht), één bestuurlijk niveau boven de gemeente. (bron: Wikipedia) ----- Een Regierungsbezirk (in Saksen Direktionsbezirk) is een bestuurlijke regio in Duitsland, een onderbestuurslaag van enkele deelstaten en is onderverdeeld in districten (de Landkreis en de stedelijke Kreisfreie Stadt). (bron: Wikipedia) ----- De deelstaten van Duitsland (Duits: Länder of Bundesländer) zijn de zestien deelstaten van de Bondsrepubliek Duitsland. Ze hebben eigen grondwetten, parlementen en regeringen. Anders dan in niet-federalistische landen hebben de deelstaten in Duitsland vele bevoegdheden en hebben ook invloed op de federale bestuurslaag: de Bondsraad, die de deelstaatregeringen vertegenwoordigt, beslist mee over veel federale wetten. Er is geen stuk van Duitsland dat niet bij een deelstaat hoort; ieder stuk van het grondgebied van de Bondsrepubliek maakt deel uit van een van de deelstaten. Met Bundesgebiet (federaal gebied) wordt geheel Duitsland aangeduid en niet een deelstaatloos gebied dat direct door de federale overheid wordt bestuurd (anders dan bijvoorbeeld in de Verenigde Staten met hun United States territories, zoals sommige eilanden). De grenzen van een deelstaat kunnen alleen via een plebisciet worden veranderd. Noordrijn-Westfalen telt de meeste inwoners, qua oppervlakte is Beieren het grootst. (bron: Wikipedia)&#13;
-</Abstract>
-        <KeywordList>
-          <Keyword>duitsland</Keyword>
-          <Keyword>grenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.794997747957239</westBoundLongitude>
-          <eastBoundLongitude>15.881967505255766</eastBoundLongitude>
-          <southBoundLatitude>47.615727687801346</southBoundLatitude>
-          <northBoundLatitude>55.12937291999399</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.794997747957239" miny="47.615727687801346" maxx="15.881967505255766" maxy="55.12937291999399"/>
-        <BoundingBox CRS="EPSG:28992" minx="185403.1875" miny="-1542.24145507812" maxx="830312.125" maxy="794148.125"/>
-        <Style>
-          <Name>B1_grenzen_duitsland</Name>
-          <Title>B1 grenzen duitsland polygon style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Grenzen_Duitsland"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Grenzen_van_alle_Nederlandse_gemeenten_en_provincies</Name>
-        <Title>Grenzen van alle Nederlandse gemeenten en provincies</Title>
-        <Abstract>Overzicht van de bestuurlijke indeling van Nederland in gemeenten en provincies. Gegevens zijn gebaseerd op de dataset Bestuurlijke Grenzen, welke afgeleid is uit de Basisregistratie Kadaster (BRK). Per 1 januari 2015 telt Nederland 393 gemeenten.&#13;
-</Abstract>
-        <KeywordList>
-          <Keyword>landsgrenzen</Keyword>
-          <Keyword>grenzen</Keyword>
-          <Keyword>provinciegrenzen</Keyword>
-          <Keyword>gemeentegrenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>3.1853277111116625</westBoundLongitude>
-          <eastBoundLongitude>7.266065140279044</eastBoundLongitude>
-          <southBoundLatitude>50.719118036401014</southBoundLatitude>
-          <northBoundLatitude>53.59713034062401</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="3.1853277111116625" miny="50.719118036401014" maxx="7.266065140279044" maxy="53.59713034062401"/>
-        <BoundingBox CRS="EPSG:28992" minx="9087.150390625" miny="305271.03125" maxx="279364.09375" maxy="623451.4375"/>
-        <Style>
-          <Name>B1_gemeentegrenzen_Nederland</Name>
-          <Title>GemgrensNL style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Grenzen_van_alle_Nederlandse_gemeenten_en_provincies"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Grenzen_van_alle_Nederlandse_gemeenten_lijn</Name>
-        <Title>Grenzen van alle Nederlandse gemeenten lijn</Title>
+        <Name>B0_6_cijferig_postcodebestand</Name>
+        <Title>6_cijferig_postcodebestand</Title>
         <Abstract/>
-        <KeywordList/>
+        <KeywordList>
+          <Keyword>Grenzen</Keyword>
+          <Keyword>postcode</Keyword>
+        </KeywordList>
         <CRS>EPSG:28992</CRS>
         <CRS>CRS:84</CRS>
         <EX_GeographicBoundingBox>
-          <westBoundLongitude>3.0255474566246647</westBoundLongitude>
-          <eastBoundLongitude>7.298062607295866</eastBoundLongitude>
-          <southBoundLatitude>50.654415961123576</southBoundLatitude>
-          <northBoundLatitude>53.625539564077755</northBoundLatitude>
+          <westBoundLongitude>3.2447996425231374</westBoundLongitude>
+          <eastBoundLongitude>7.255236638659235</eastBoundLongitude>
+          <southBoundLatitude>50.72409519674934</southBoundLatitude>
+          <northBoundLatitude>53.50696373013408</northBoundLatitude>
         </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="3.0255474566246647" miny="50.654415961123576" maxx="7.298062607295866" maxy="53.625539564077755"/>
-        <BoundingBox CRS="EPSG:28992" minx="-1400.0" miny="298375.0" maxx="281400.0" maxy="626625.0"/>
+        <BoundingBox CRS="CRS:84" minx="3.2447996425231374" miny="50.72409519674934" maxx="7.255236638659235" maxy="53.50696373013408"/>
+        <BoundingBox CRS="EPSG:28992" minx="12729.5771484375" miny="305723.5625" maxx="278907.40625" maxy="613412.25"/>
         <Style>
-          <Name>line</Name>
-          <Title>Default Line</Title>
-          <Abstract>A sample style that draws a line</Abstract>
-          <LegendURL width="20" height="20">
+          <Name>B0_6_cijferig_postcodebestand</Name>
+          <Title>B0 pcc6 polygon style</Title>
+          <Abstract/>
+          <LegendURL width="22" height="40">
             <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Grenzen_van_alle_Nederlandse_gemeenten_lijn"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_6_cijferig_postcodebestand"/>
           </LegendURL>
         </Style>
+        <MinScaleDenominator>1000.0</MinScaleDenominator>
+        <MaxScaleDenominator>50000.0</MaxScaleDenominator>
       </Layer>
       <Layer queryable="1" opaque="0">
-        <Name>B1_Hulpverleningsregios_in_Overijssel</Name>
-        <Title/>
-        <Abstract>Een bestand waarin de grenzen en een onderverdeling van de hulpverleningsregio's (politie, brandweer, ambulancevervoer) in Overijssel zijn opgenomen.&#13;
+        <Name>B0_Adresfuncties_en_populatie_in_Overijssel</Name>
+        <Title>Adresfuncties en populatie in Overijssel</Title>
+        <Abstract>Het bestand Adresfuncties beschrijft per adres de functie (wonen, werken, gemengd of onbekend) en de populatie. De populatie op een adres met een woonfunctie wordt bepaald door het aantal personen per postcode uit het bestand "Geo-Marktprofiel" van Bisnode te delen door het aantal adressen met een woonfunctie (bepaald met "Type Adres") in de betreffende postcode. De populatie op een adres met een werkfunctie is het aantal banen uit het bestand 'Type bedrijven' van LISA. Bij adressen met zowel een woonfunctie als een werkfunctie worden beide waarden bij elkaar opgeteld. Adresfuncties, Adresfuncties Plus en Adrespopulatie zijn in dit bestand als veld toegevoegd aan het coördinatenbestand Bridgis Adreslocaties. In dit landsdekkende bestand zijn alle adressen in Nederland in principe gekoppeld aan een bouwvlak in TOP10NL.&#13;
 </Abstract>
         <KeywordList>
-          <Keyword>politie</Keyword>
-          <Keyword>ambulances</Keyword>
-          <Keyword>brandweer</Keyword>
+          <Keyword>adressen</Keyword>
         </KeywordList>
         <CRS>EPSG:28992</CRS>
         <CRS>CRS:84</CRS>
         <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.774802989247075</westBoundLongitude>
-          <eastBoundLongitude>7.092272875981602</eastBoundLongitude>
-          <southBoundLatitude>52.11397668218171</southBoundLatitude>
-          <northBoundLatitude>52.85606289095576</northBoundLatitude>
+          <westBoundLongitude>5.825977308492152</westBoundLongitude>
+          <eastBoundLongitude>7.079649203132606</eastBoundLongitude>
+          <southBoundLatitude>52.11142623738497</southBoundLatitude>
+          <northBoundLatitude>52.846408954910345</northBoundLatitude>
         </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.774802989247075" miny="52.11397668218171" maxx="7.092272875981602" maxy="52.85606289095576"/>
-        <BoundingBox CRS="EPSG:28992" minx="181470.0" miny="459721.031" maxx="269798.938" maxy="541037.5"/>
+        <BoundingBox CRS="CRS:84" minx="5.825977308492152" miny="52.11142623738497" maxx="7.079649203132606" maxy="52.846408954910345"/>
+        <BoundingBox CRS="EPSG:28992" minx="184976.328125" miny="459418.15625" maxx="268972.8125" maxy="539983.5625"/>
         <Style>
-          <Name>B1_Hulpverleningsregios</Name>
-          <Title>B1 Hulpverleningsregios style</Title>
-          <Abstract/>
+          <Name>point</Name>
+          <Title>Default Point</Title>
+          <Abstract>A sample style that draws a point</Abstract>
           <LegendURL width="20" height="20">
             <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Hulpverleningsregios_in_Overijssel"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Adresfuncties_en_populatie_in_Overijssel"/>
           </LegendURL>
         </Style>
       </Layer>
       <Layer queryable="1" opaque="0">
-        <Name>B1_Hulpverleningsregios_in_Overijssel_lijn</Name>
-        <Title>Hulpverleningsregio's in Overijssel lijn</Title>
-        <Abstract>Een lijnenbestand waarin de grenzen en een onderverdeling van de hulpverleningsregio's (politie, brandweer, ambulancevervoer) in Overijssel zijn opgenomen.&#13;
+        <Name>B0_Bebouwde_kommen_in_Overijssel</Name>
+        <Title>Bebouwde kommen in Overijssel</Title>
+        <Abstract>Bronbestanden zijn de kernenbestanden uit 2013. Kernbestand is de omtrek van de bebouwde kom van de steden en dorpen in Overijssel (bebouwing). Het betreft gegevens van gebieden binnen de provincie Overijssel. Het is bedoeld als illustratief bestand (niet voor analyse doeleinden). Het heeft geen juridische status. Het bestand wordt op adhoc basis bijgehouden. Dit is een herziene versie van de kernenbestanden 2006. Bestand is gemaakt op basis van luchtfoto's (2011) en Top10NL (BRT 2013). </Abstract>
+        <KeywordList>
+          <Keyword>bebouwingsclusters</Keyword>
+          <Keyword>bebouwde kommen</Keyword>
+          <Keyword>steden</Keyword>
+          <Keyword>dorpen</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.827697712873207</westBoundLongitude>
+          <eastBoundLongitude>7.075513752701946</eastBoundLongitude>
+          <southBoundLatitude>52.136473475164486</southBoundLatitude>
+          <northBoundLatitude>52.83437401406604</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.827697712873207" miny="52.136473475164486" maxx="7.075513752701946" maxy="52.83437401406604"/>
+        <BoundingBox CRS="EPSG:28992" minx="185077.296875" miny="462200.1875" maxx="268725.3125" maxy="538644.9375"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_in_Overijssel"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_Bebouwde_kommen_in_Overijssel</Name>
+          <Title>B0 Kernen style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_in_Overijssel&amp;style=B0_Bebouwde_kommen_in_Overijssel"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_Bebouwde_kommen_in_Overijssel_woonplaatsenOV</Name>
+          <Title>WoonplaatsenOV style</Title>
+          <Abstract/>
+          <LegendURL width="22" height="40">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_in_Overijssel&amp;style=B0_Bebouwde_kommen_in_Overijssel_woonplaatsenOV"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bebouwde_kommen_rondom_Overijssel</Name>
+        <Title>Bebouwde kommen rondom Overijssel</Title>
+        <Abstract>Bronbestanden zijn de kernenbestanden uit 2013. Kernbestand is de omtrek van de bebouwde kom (bebouwing). Het betreft gegevens van de gebieden rondom de provincie Overijssel. Het zijn de omliggende provincies, Gelderland, Friesland, Flevoland, Drenthe en Duitsland. Het betreft ongeveer een strook van 30km rondom de provincie Overijssel. Dit bestand kan gebruikt worden naast het bestand van kernenbestanden van de provincie Overijssel zelf. Het is bedoeld als illustratief bestand (niet voor analyse doeleinden). Het heeft geen juridische status. Het bestand wordt op adhoc basis bijgehouden. Dit is een herziene versie van de kernenbestanden 2003. Bestand is gemaakt op basis van luchtfoto's (2011) en Top10NL (BRT 2013). </Abstract>
+        <KeywordList>
+          <Keyword>grenzen</Keyword>
+          <Keyword>bebouwde kom</Keyword>
+          <Keyword>bebouwingsclusters</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>4.978205433723919</westBoundLongitude>
+          <eastBoundLongitude>7.291099120780012</eastBoundLongitude>
+          <southBoundLatitude>51.717731679135966</southBoundLatitude>
+          <northBoundLatitude>53.49393800911861</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="4.978205433723919" miny="51.717731679135966" maxx="7.291099120780012" maxy="53.49393800911861"/>
+        <BoundingBox CRS="EPSG:28992" minx="127782.8828125" miny="415897.5625" maxx="281327.40625" maxy="611953.9375"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_rondom_Overijssel"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_Bebouwde_kommen_rondom_Overijssel_woonplNL</Name>
+          <Title>WoonplaatsenNL style</Title>
+          <Abstract/>
+          <LegendURL width="22" height="40">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_rondom_Overijssel&amp;style=B0_Bebouwde_kommen_rondom_Overijssel_woonplNL"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_Bebouwde_kommen_rondom_Overijssel</Name>
+          <Title>B0 Kernen buiten Overijssel style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bebouwde_kommen_rondom_Overijssel&amp;style=B0_Bebouwde_kommen_rondom_Overijssel"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bladindeling_topografische_kaart_1_op_25000</Name>
+        <Title>Bladindeling topografische kaart 1 op 25.000</Title>
+        <Abstract>Bladindeling topografische kaart 1:25000</Abstract>
+        <KeywordList>
+          <Keyword>raster</Keyword>
+          <Keyword>bladindeling</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>3.2229230830528732</westBoundLongitude>
+          <eastBoundLongitude>7.270509546905076</eastBoundLongitude>
+          <southBoundLatitude>50.71424438589602</southBoundLatitude>
+          <northBoundLatitude>53.62538823521167</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="3.2229230830528732" miny="50.71424438589602" maxx="7.270509546905076" maxy="53.62538823521167"/>
+        <BoundingBox CRS="EPSG:28992" minx="11673.75" miny="304656.25" maxx="279576.25" maxy="626593.75"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bladindeling_topografische_kaart_1_op_25000"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bladindeling_topografische_kaart_1_op_50000</Name>
+        <Title>Bladindeling topografische kaart 1 op 50000</Title>
+        <Abstract>Bladindeling topografische kaart 1:50000</Abstract>
+        <KeywordList>
+          <Keyword>bladindeling</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>3.222776757641115</westBoundLongitude>
+          <eastBoundLongitude>7.297081044588064</eastBoundLongitude>
+          <southBoundLatitude>50.657810351692625</southBoundLatitude>
+          <northBoundLatitude>53.62568374964272</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="3.222776757641115" miny="50.657810351692625" maxx="7.297081044588064" maxy="53.62568374964272"/>
+        <BoundingBox CRS="EPSG:28992" minx="11665.0" miny="298375.0" maxx="281335.0" maxy="626625.0"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bladindeling_topografische_kaart_1_op_50000"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bladindeling_topografische_kaarten_1_op10000</Name>
+        <Title>Bladindeling topografische kaarten 1 op 10000</Title>
+        <Abstract>Bladindeling_topografische_kaarten_1:10000</Abstract>
+        <KeywordList>
+          <Keyword>bladindeling</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>3.1798385852036564</westBoundLongitude>
+          <eastBoundLongitude>7.295079244128921</eastBoundLongitude>
+          <southBoundLatitude>50.7137309654126</southBoundLatitude>
+          <northBoundLatitude>53.57571620203327</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="3.1798385852036564" miny="50.7137309654126" maxx="7.295079244128921" maxy="53.57571620203327"/>
+        <BoundingBox CRS="EPSG:28992" minx="8650.0" miny="304683.75" maxx="281350.0" maxy="621066.25"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bladindeling_topografische_kaarten_1_op10000"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bodemgebruik_2000</Name>
+        <Title>Bodemgebruik 2000</Title>
+        <Abstract>Dit bestand geeft inzicht in het gebruik van de bodem in Overijssel. Het functionele bodemgebruik is verdeeld in een aantal hoofgroepen, welke weer zijn onderverdeeld in een aantal afzondelijke categorieen. Het BBG is gebaseerd op de TOP10vector en luchtfoto's waarmee het gebruik van de bodem wordt vastgesteld. Het jaar van opname van de luchtfoto, ruwweg in de periode april - september bepaalt het jaar van inventarisatie. Objecten, die op het tijdstip van verkenning niet aanwezig zijn worden niet in het BBG opgenomen .-</Abstract>
+        <KeywordList>
+          <Keyword>landbouw</Keyword>
+          <Keyword>bodem</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.746030076537175</westBoundLongitude>
+          <eastBoundLongitude>7.105272689579782</eastBoundLongitude>
+          <southBoundLatitude>52.02200618280993</southBoundLatitude>
+          <northBoundLatitude>52.94118598639434</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.746030076537175" miny="52.02200618280993" maxx="7.105272689579782" maxy="52.94118598639434"/>
+        <BoundingBox CRS="EPSG:28992" minx="179550.0" miny="449500.0" maxx="270450.0" maxy="550500.0"/>
+        <Style>
+          <Name>B0_Bodemgebruik_2000</Name>
+          <Title>B0 Bodemgebruik 2000A style</Title>
+          <Abstract/>
+          <LegendURL width="235" height="760">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_2000"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bodemgebruik_2003</Name>
+        <Title>Bodemgebruik 2003</Title>
+        <Abstract>Dit bestand geeft inzicht in het gebruik van de bodem in Overijssel. Het functionele bodemgebruik is verdeeld in een aantal hoofgroepen, welke weer zijn onderverdeeld in een aantal afzondelijke categorieen. Het BBG is gebaseerd op de TOP10vector en luchtfoto's waarmee het gebruik van de bodem wordt vastgesteld. Het jaar van opname van de luchtfoto, ruwweg in de periode april - september bepaalt het jaar van inventarisatie. Objecten, die op het tijdstip van verkenning niet aanwezig zijn worden niet in het BBG opgenomen .-</Abstract>
+        <KeywordList>
+          <Keyword>bodem</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.746030076537175</westBoundLongitude>
+          <eastBoundLongitude>7.105272689579782</eastBoundLongitude>
+          <southBoundLatitude>52.02200618280993</southBoundLatitude>
+          <northBoundLatitude>52.94118598639434</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.746030076537175" miny="52.02200618280993" maxx="7.105272689579782" maxy="52.94118598639434"/>
+        <BoundingBox CRS="EPSG:28992" minx="179550.0" miny="449500.0" maxx="270450.0" maxy="550500.0"/>
+        <Style>
+          <Name>B0_Bodemgebruik_2003</Name>
+          <Title>B0 Bodemgebruik 2003A style</Title>
+          <Abstract/>
+          <LegendURL width="235" height="760">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_2003"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bodemgebruik_2006</Name>
+        <Title>Bodemgebruik_2006</Title>
+        <Abstract>Dit bestand geeft inzicht in het gebruik van de bodem in Overijssel. Het functionele bodemgebruik is verdeeld in een aantal hoofgroepen, welke weer zijn onderverdeeld in een aantal afzondelijke categorieen. Het BBG is gebaseerd op de TOP10vector en luchtfoto's waarmee het gebruik van de bodem wordt vastgesteld. Het jaar van opname van de luchtfoto, ruwweg in de periode april - september bepaalt het jaar van inventarisatie. Objecten, die op het tijdstip van verkenning niet aanwezig zijn worden niet in het BBG opgenomen .-</Abstract>
+        <KeywordList>
+          <Keyword>landbouw</Keyword>
+          <Keyword>bodem</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.745754664059019</westBoundLongitude>
+          <eastBoundLongitude>7.252242036549941</eastBoundLongitude>
+          <southBoundLatitude>52.07653672811799</southBoundLatitude>
+          <northBoundLatitude>52.88446266923483</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.745754664059019" miny="52.07653672811799" maxx="7.252242036549941" maxy="52.88446266923483"/>
+        <BoundingBox CRS="EPSG:28992" minx="179500.0" miny="455812.5" maxx="280500.0" maxy="544187.5"/>
+        <Style>
+          <Name>B0_Bodemgebruik_2006</Name>
+          <Title>B0 Bodemgebruik 2006A style</Title>
+          <Abstract/>
+          <LegendURL width="235" height="760">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_2006"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bodemgebruik_In_Overijssel_1993</Name>
+        <Title>Bodemgebruik In Overijssel 1993</Title>
+        <Abstract>Dit bestand geeft inzicht in het gebruik van de bodem in Overijssel. Het functionele bodemgebruik is verdeeld in een aantal hoofgroepen, welke weer zijn onderverdeeld in een aantal afzondelijke categorieen. Het BBG is gebaseerd op de TOP10vector en luchtfoto's waarmee het gebruik van de bodem wordt vastgesteld. Het jaar van opname van de luchtfoto, ruwweg in de periode april - september bepaalt het jaar van inventarisatie. Objecten, die op het tijdstip van verkenning niet aanwezig zijn worden niet in het BBG opgenomen.</Abstract>
+        <KeywordList>
+          <Keyword>landbouw</Keyword>
+          <Keyword>bodem</Keyword>
+          <Keyword>bodemgebruik</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.746030076537175</westBoundLongitude>
+          <eastBoundLongitude>7.105272689579782</eastBoundLongitude>
+          <southBoundLatitude>52.02200618280993</southBoundLatitude>
+          <northBoundLatitude>52.94118598639434</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.746030076537175" miny="52.02200618280993" maxx="7.105272689579782" maxy="52.94118598639434"/>
+        <BoundingBox CRS="EPSG:28992" minx="179550.0" miny="449500.0" maxx="270450.0" maxy="550500.0"/>
+        <Style>
+          <Name>Bo_bodemgebruik_1993</Name>
+          <Title>B0 Bodemgebruik 1993 style</Title>
+          <Abstract/>
+          <LegendURL width="235" height="760">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_In_Overijssel_1993"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bodemgebruik_Overijssel_1996</Name>
+        <Title>Bodemgebruik_Overijssel_1996</Title>
+        <Abstract>Dit bestand geeft inzicht in het gebruik van de bodem in Overijssel. Het functionele bodemgebruik is verdeeld in een aantal hoofgroepen, welke weer zijn onderverdeeld in een aantal afzondelijke categorieen. Het BBG is gebaseerd op de TOP10vector en luchtfoto's waarmee het gebruik van de bodem wordt vastgesteld. Het jaar van opname van de luchtfoto, ruwweg in de periode april - september bepaalt het jaar van inventarisatie. Objecten, die op het tijdstip van verkenning niet aanwezig zijn worden niet in het BBG opgenomen .-</Abstract>
+        <KeywordList>
+          <Keyword>landbouw</Keyword>
+          <Keyword>bodem</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.746030076537175</westBoundLongitude>
+          <eastBoundLongitude>7.105272689579782</eastBoundLongitude>
+          <southBoundLatitude>52.02200618280993</southBoundLatitude>
+          <northBoundLatitude>52.94118598639434</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.746030076537175" miny="52.02200618280993" maxx="7.105272689579782" maxy="52.94118598639434"/>
+        <BoundingBox CRS="EPSG:28992" minx="179550.0" miny="449500.0" maxx="270450.0" maxy="550500.0"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_Overijssel_1996"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>Bodemgebruik_1996</Name>
+          <Title>B0 Bodemgebruik 1996 style</Title>
+          <Abstract/>
+          <LegendURL width="235" height="760">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_Overijssel_1996&amp;style=Bodemgebruik_1996"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Bodemgebruik_in_2010</Name>
+        <Title>Bodemgebruik in 2010</Title>
+        <Abstract>Het Bestand Bodemgebruik 2010 bevat digitale geometrie van het bodemgebruik in Nederland. Voorbeelden van het bodemgebruik zijn verkeersterreinen, bebouwing, recreatieterreinen en binnen- en buitenwater. De begrenzingen zijn voor een groot deel gebaseerd op de Top10NL (BRT). Bij het interpreteren zijn luchtfoto's leidend. De gegevens zijn ingewonnen in de zomer van 2010. In 2014 is dit het meest actuele bestand van het bodemgebruik. In 2015 wordt het Bestand Bodemgebruik 2012 gepubliceerd. &#13;
 </Abstract>
         <KeywordList>
-          <Keyword>ambulances</Keyword>
-          <Keyword>politie</Keyword>
-          <Keyword>brandweer</Keyword>
+          <Keyword>bodemfunctie</Keyword>
+          <Keyword>bodem</Keyword>
         </KeywordList>
         <CRS>EPSG:28992</CRS>
         <CRS>CRS:84</CRS>
         <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.768322804947304</westBoundLongitude>
-          <eastBoundLongitude>7.09896913324863</eastBoundLongitude>
-          <southBoundLatitude>52.11023136684596</southBoundLatitude>
-          <northBoundLatitude>52.85973783406572</northBoundLatitude>
+          <westBoundLongitude>5.717278914142936</westBoundLongitude>
+          <eastBoundLongitude>7.101354884325975</eastBoundLongitude>
+          <southBoundLatitude>52.09461929141759</southBoundLatitude>
+          <northBoundLatitude>52.86866457649083</northBoundLatitude>
         </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.768322804947304" miny="52.11023136684596" maxx="7.09896913324863" maxy="52.85973783406572"/>
-        <BoundingBox CRS="EPSG:28992" minx="181028.359375" miny="459314.40625" maxx="270240.625" maxy="541444.0625"/>
+        <BoundingBox CRS="CRS:84" minx="5.717278914142936" miny="52.09461929141759" maxx="7.101354884325975" maxy="52.86866457649083"/>
+        <BoundingBox CRS="EPSG:28992" minx="177540.40625" miny="457580.0" maxx="270378.25" maxy="542420.0"/>
         <Style>
-          <Name>B1_Hulpverleningsregios_lijn</Name>
-          <Title>B1 Hulpverleningsregios lijn style</Title>
-          <Abstract/>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
           <LegendURL width="20" height="20">
             <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Hulpverleningsregios_in_Overijssel_lijn"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_in_2010"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_bodemgebruik_2010</Name>
+          <Title>B0 Bodemgebruik 2010A style</Title>
+          <Abstract/>
+          <LegendURL width="235" height="760">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Bodemgebruik_in_2010&amp;style=B0_bodemgebruik_2010"/>
           </LegendURL>
         </Style>
       </Layer>
       <Layer queryable="1" opaque="0">
-        <Name>B1_Indeling_regios_en_recreatiegemeenschap</Name>
-        <Title>Indeling regio's en recreatiegemeenschap</Title>
-        <Abstract>indeling regio's en recreatiegemeenschap</Abstract>
+        <Name>B0_Gebiedskenmerken_Stedelijke_laag</Name>
+        <Title>Gebiedskenmerken Stedelijke laag</Title>
+        <Abstract>Gebiedskenmerken - Stedelijke laag. VERBETERDE VERSIE - NIET FORMEEL VASTGESTELD OMGEVINGSVISIE. In de stedelijke laag is de koppeling van de sociale en fysieke dynamiek van de stedelijke functies aan het verbindende netwerk van wegen, paden, spoorwegen en kanalen een belangrijk ordenend principe. Hier is sprake van een rijk palet: dorpen met centrumfuncties, landstadjes, steden en stedelijke netwerken. Elk met een eigen karakteristieke ruimtelijke, sociale en functionele opbouw en kwaliteiten. Historische centra, binnensteden en landstadjes vormen de functionele en emotionele kernen van de steden en dorpen; beeld: dicht bebouwd, gevarieerd stadsbeeld, relatief fijnmazig web van straten. Bebouwingsschil 1900-1955: gemengde stadwijken en woonwijken direct aansluitend op de historische centra en binnensteden; beeld: eenheid in verscheidenheid / herkenbaar en overzichtelijk stratenpatroon. Woonwijken 1955-nu: planmatig opgezette uitbreidingswijken op basis van een collectief idee en grotere bouwstromen; de functies (wonen, werken,voorzieningencentra) zijn uiteengelegd en de wijken zijn opgedeeld in buurten met een homogeen bebouwingskarakter. Bedrijventerreinen: monofunctionele werkgebieden met een ‘no nonsense’ karakter en vaak krappe openbare ruimtes; volledig gericht op autobereikbaarheid, hermetisch van karakter, los van de woonwijken en het buitengebied. Glastuinbouw.</Abstract>
         <KeywordList>
-          <Keyword>recreatieschappen</Keyword>
+          <Keyword>dorpen</Keyword>
           <Keyword>grenzen</Keyword>
-          <Keyword>recreatie</Keyword>
-          <Keyword>recreatiegebieden</Keyword>
+          <Keyword>stedelijke gebieden</Keyword>
         </KeywordList>
         <CRS>EPSG:28992</CRS>
         <CRS>CRS:84</CRS>
         <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.774802628634133</westBoundLongitude>
-          <eastBoundLongitude>7.092275031526039</eastBoundLongitude>
-          <southBoundLatitude>52.11403951791716</southBoundLatitude>
-          <northBoundLatitude>52.85601122247255</northBoundLatitude>
+          <westBoundLongitude>5.824604113737488</westBoundLongitude>
+          <eastBoundLongitude>7.075529046083766</eastBoundLongitude>
+          <southBoundLatitude>52.136473262974945</southBoundLatitude>
+          <northBoundLatitude>52.83438573742142</northBoundLatitude>
         </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.774802628634133" miny="52.11403951791716" maxx="7.092275031526039" maxy="52.85601122247255"/>
-        <BoundingBox CRS="EPSG:28992" minx="181469.938" miny="459728.031" maxx="269799.219" maxy="541031.75"/>
+        <BoundingBox CRS="CRS:84" minx="5.824604113737488" miny="52.136473262974945" maxx="7.075529046083766" maxy="52.83438573742142"/>
+        <BoundingBox CRS="EPSG:28992" minx="184865.546875" miny="462200.1875" maxx="268726.34375" maxy="538644.9375"/>
         <Style>
-          <Name>B1_indeling_regios_en_recreatiegemeenschap</Name>
-          <Title>B1 Indeling regios en recreatiegemeenschap style</Title>
+          <Name>B0_stedelijke_laag</Name>
+          <Title>SHAPE Stedelijke laag style</Title>
           <Abstract/>
-          <LegendURL width="221" height="60">
+          <LegendURL width="312" height="80">
             <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Indeling_regios_en_recreatiegemeenschap"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_indeling_regios_en_recreatiegemeenschap_Twente</Name>
-          <Title>recregio polygon style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Indeling_regios_en_recreatiegemeenschap&amp;style=B1_indeling_regios_en_recreatiegemeenschap_Twente"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Gebiedskenmerken_Stedelijke_laag"/>
           </LegendURL>
         </Style>
       </Layer>
       <Layer queryable="1" opaque="0">
-        <Name>B1_Provinciale_indeling_van_Nederland</Name>
-        <Title>Provinciale indeling van Nederland</Title>
-        <Abstract>Provinciale indeling van Nederland op basis van topografische grenzen</Abstract>
-        <KeywordList>
-          <Keyword>provinciegrenzen</Keyword>
-          <Keyword>provincies</Keyword>
-          <Keyword>grenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>3.254787670630018</westBoundLongitude>
-          <eastBoundLongitude>7.245098381188149</eastBoundLongitude>
-          <southBoundLatitude>50.734570610481626</southBoundLatitude>
-          <northBoundLatitude>53.55703770037495</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="3.254787670630018" miny="50.734570610481626" maxx="7.245098381188149" maxy="53.55703770037495"/>
-        <BoundingBox CRS="EPSG:28992" minx="13558.4" miny="306866.8" maxx="278090.2" maxy="618985.6"/>
-        <Style>
-          <Name>B1_provinciale_indeling_Nederland</Name>
-          <Title>B1 Provinciale indeling Nederland style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Provinciale_indeling_van_Nederland"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Provinciegrenzen_van_Nederland</Name>
-        <Title>Provinciegrenzen van Nederland</Title>
-        <Abstract>Provinciegrenzen van Nederland&#13;
-</Abstract>
-        <KeywordList>
-          <Keyword>provincies</Keyword>
-          <Keyword>grenzen</Keyword>
-          <Keyword>provinciegrenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>3.2062470321797574</westBoundLongitude>
-          <eastBoundLongitude>7.245258340750991</eastBoundLongitude>
-          <southBoundLatitude>50.73354084422055</southBoundLatitude>
-          <northBoundLatitude>53.58297893801981</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="3.2062470321797574" miny="50.73354084422055" maxx="7.245258340750991" maxy="53.58297893801981"/>
-        <BoundingBox CRS="EPSG:28992" minx="10425.891" miny="306838.813" maxx="278026.094" maxy="621876.313"/>
-        <Style>
-          <Name>B1_provinciegrenzen_Nederland</Name>
-          <Title>B1 Provinciegrenzen Nederland style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Provinciegrenzen_van_Nederland"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_provinciegrenzen_Nederland_zwart</Name>
-          <Title>B1 provned polygon style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Provinciegrenzen_van_Nederland&amp;style=B1_provinciegrenzen_Nederland_zwart"/>
-          </LegendURL>
-        </Style>
-        <Style>
-          <Name>B1_provinciegrenzen_Nederland_blauw</Name>
-          <Title>B1 provned polygon style</Title>
-          <Abstract/>
-          <LegendURL width="20" height="20">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Provinciegrenzen_van_Nederland&amp;style=B1_provinciegrenzen_Nederland_blauw"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Rayongrenzen_eenheid_WK</Name>
-        <Title>Rayongrenzen eenheid WK</Title>
-        <Abstract>Grenzen van de 3 rayons van de eenheid Wegen en Kanalen per 1 april 2012</Abstract>
-        <KeywordList>
-          <Keyword>grenzen</Keyword>
-        </KeywordList>
-        <CRS>EPSG:28992</CRS>
-        <CRS>CRS:84</CRS>
-        <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.774802628634133</westBoundLongitude>
-          <eastBoundLongitude>7.092226692463293</eastBoundLongitude>
-          <southBoundLatitude>52.1140401941574</southBoundLatitude>
-          <northBoundLatitude>52.85601122247255</northBoundLatitude>
-        </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.774802628634133" miny="52.1140401941574" maxx="7.092226692463293" maxy="52.85601122247255"/>
-        <BoundingBox CRS="EPSG:28992" minx="181469.938" miny="459728.031" maxx="269795.961" maxy="541031.75"/>
-        <Style>
-          <Name>B1_grenzen_rayons_eenheid_WK</Name>
-          <Title>B1 Grenzen rayons WK style</Title>
-          <Abstract/>
-          <LegendURL width="152" height="60">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Rayongrenzen_eenheid_WK"/>
-          </LegendURL>
-        </Style>
-      </Layer>
-      <Layer queryable="1" opaque="0">
-        <Name>B1_Rayongrenzen_van_eenheid_Wegen_en_Kanalen_vlak</Name>
-        <Title>Rayongrenzen van eenheid Wegen en Kanalen</Title>
-        <Abstract>Grenzen van de 3 rayons van de eenheid Wegen en Kanalen per 1 april 2012&#13;
+        <Name>B0_Grens_projectgebied_Vecht_Regge</Name>
+        <Title>Grens projectgebied Vecht Regge</Title>
+        <Abstract>Grens projectgebied Vecht-Regge&#13;
 </Abstract>
         <KeywordList>
           <Keyword>grenzen</Keyword>
@@ -5593,20 +5635,290 @@
         <CRS>EPSG:28992</CRS>
         <CRS>CRS:84</CRS>
         <EX_GeographicBoundingBox>
-          <westBoundLongitude>5.774802628634133</westBoundLongitude>
-          <eastBoundLongitude>7.092226692463293</eastBoundLongitude>
-          <southBoundLatitude>52.1140401941574</southBoundLatitude>
-          <northBoundLatitude>52.85601122247255</northBoundLatitude>
+          <westBoundLongitude>6.076347245397081</westBoundLongitude>
+          <eastBoundLongitude>6.729640393773817</eastBoundLongitude>
+          <southBoundLatitude>52.37548246969134</southBoundLatitude>
+          <northBoundLatitude>52.661051796182</northBoundLatitude>
         </EX_GeographicBoundingBox>
-        <BoundingBox CRS="CRS:84" minx="5.774802628634133" miny="52.1140401941574" maxx="7.092226692463293" maxy="52.85601122247255"/>
-        <BoundingBox CRS="EPSG:28992" minx="181469.938" miny="459728.031" maxx="269795.961" maxy="541031.75"/>
+        <BoundingBox CRS="CRS:84" minx="6.076347245397081" miny="52.37548246969134" maxx="6.729640393773817" maxy="52.661051796182"/>
+        <BoundingBox CRS="EPSG:28992" minx="201849.266" miny="488325.938" maxx="245761.109" maxy="519490.031"/>
         <Style>
-          <Name>B1_Grenzen_rayons_wegen_en_kanalen</Name>
-          <Title>B1 Grenzen rayons WK style</Title>
+          <Name>B0_Grens_projectgebied_Vecht_Regge</Name>
+          <Title>B0 Projectgebied Vecht Regge style</Title>
           <Abstract/>
-          <LegendURL width="152" height="60">
+          <LegendURL width="20" height="20">
             <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://staging-services.geodataoverijssel.nl:80/geoserver/OV_B1/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B1_Rayongrenzen_van_eenheid_Wegen_en_Kanalen_vlak"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Grens_projectgebied_Vecht_Regge"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Grenzen_waterschappen_in_Overijssel_lijn</Name>
+        <Title>Grenzen waterschappen in Overijssel lijn</Title>
+        <Abstract>Begrenzingen waterschappen in Overijssel en de aangrenzende waterschappen. De begrenzingen zijn zoveel mogelijk gebaseerd op kadastrale grenzen. De laatste wijziging betreft de samenvoeging van de waterschappen ‘Regge en Dinkel’ en ‘Velt en Vecht’ tot één waterschap genaamd: Waterschap Vechtstromen. &#13;
+</Abstract>
+        <KeywordList>
+          <Keyword>grenzen</Keyword>
+          <Keyword>water</Keyword>
+          <Keyword>waterschappen</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>4.921301325448032</westBoundLongitude>
+          <eastBoundLongitude>7.129112095641211</eastBoundLongitude>
+          <southBoundLatitude>51.811528565016744</southBoundLatitude>
+          <northBoundLatitude>53.51009670165181</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="4.921301325448032" miny="51.811528565016744" maxx="7.129112095641211" maxy="53.51009670165181"/>
+        <BoundingBox CRS="EPSG:28992" minx="124017.6015625" miny="426076.59375" maxx="270524.53125" maxy="613755.5"/>
+        <Style>
+          <Name>B0_grenzen_waterschappen</Name>
+          <Title>B0 Grenzen waterschappen lijn style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Grenzen_waterschappen_in_Overijssel_lijn"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Grenzen_waterschappen_in_Overijssel_vlak</Name>
+        <Title>Grenzen waterschappen in Overijssel vlak</Title>
+        <Abstract>Begrenzingen waterschappen in Overijssel en de aangrenzende waterschappen. Hierin zijn ook de provinciegrenzen te onderscheiden. De begrenzingen zijn zoveel mogelijk gebaseerd op kadastrale grenzen. De laatste wijziging betreft de samenvoeging van de waterschappen ‘Regge en Dinkel’ en ‘Velt en Vecht’ tot één waterschap genaamd: Waterschap Vechtstromen per 1 jan. 2014 .&#13;
+</Abstract>
+        <KeywordList>
+          <Keyword>grenzen</Keyword>
+          <Keyword>waterschappen</Keyword>
+          <Keyword>water</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>4.932321372975424</westBoundLongitude>
+          <eastBoundLongitude>7.1178505981758065</eastBoundLongitude>
+          <southBoundLatitude>51.8200265541831</southBoundLatitude>
+          <northBoundLatitude>53.501744465236705</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="4.932321372975424" miny="51.8200265541831" maxx="7.1178505981758065" maxy="53.501744465236705"/>
+        <BoundingBox CRS="EPSG:28992" minx="124742.888" miny="427005.699" maxx="269799.23" maxy="612826.329"/>
+        <Style>
+          <Name>B0_grenzen_waterschappen_vlak</Name>
+          <Title>B0 watschap polygon style</Title>
+          <Abstract/>
+          <LegendURL width="190" height="140">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Grenzen_waterschappen_in_Overijssel_vlak"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Grenzen_waterschappen_in_Overijssel_vlak&amp;style=polygon"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Indeling_km_hokken_1000x1000m</Name>
+        <Title>Indeling_km_hokken_1000x1000m</Title>
+        <Abstract>Indeling in km-hokken (1000 x 1000 m.) De kilometerhokken in dit bestand zijn weergegeven binnen de rd-coordinaten 180000x450000 en 279000x550000 &#13;
+</Abstract>
+        <KeywordList>
+          <Keyword>topografische indeling</Keyword>
+          <Keyword>bladindeling</Keyword>
+          <Keyword>kmhokken</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.745374308185394</westBoundLongitude>
+          <eastBoundLongitude>7.239727105813537</eastBoundLongitude>
+          <southBoundLatitude>52.020049450059254</southBoundLatitude>
+          <northBoundLatitude>52.941188031867696</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.745374308185394" miny="52.020049450059254" maxx="7.239727105813537" maxy="52.941188031867696"/>
+        <BoundingBox CRS="EPSG:28992" minx="179505.0" miny="449500.0" maxx="279495.0" maxy="550500.0"/>
+        <Style>
+          <Name>polygon</Name>
+          <Title>Default Polygon</Title>
+          <Abstract>A sample style that draws a polygon</Abstract>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Indeling_km_hokken_1000x1000m"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Nationale_parken_Weerribben_Wieden_en_Sallandse_Heuvelrug</Name>
+        <Title>Nationale parken Weerribben - Wieden en Sallandse Heuvelrug</Title>
+        <Abstract>Nationale parken. De Nationale parken Weerribben-Wieden en Sallandse Heuvelrug. Natuur- en bosgebieden met internationaal zeldzame of unieke en nationaal kenmerkende natuurkwaliteiten en in samenhang daarmee bijzondere landschappelijke en recreatieve kwaliteiten. De Nationale parken kunnen ook een belangrijke toeristisch-recreatieve betekenis hebben. Voor beide parken is een Beheers- en inrichtingsplan vastgesteld waarin de maatregelen zijn benoemd die de komende periode zullen worden uitgevoerd. Met deze maatregelen zal de kwaliteit van natuur, landschap en de educatieve betekenis van deze parken verder versterkt worden.</Abstract>
+        <KeywordList>
+          <Keyword>flora</Keyword>
+          <Keyword>natuur, bos en landschap</Keyword>
+          <Keyword>flora en fauna</Keyword>
+          <Keyword>fauna</Keyword>
+          <Keyword>nationale parken</Keyword>
+          <Keyword>natuurwetgeving</Keyword>
+          <Keyword>natuurgebieden</Keyword>
+          <Keyword>natuur en landschap</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.884942491264163</westBoundLongitude>
+          <eastBoundLongitude>6.513494878930472</eastBoundLongitude>
+          <southBoundLatitude>52.28899363762711</southBoundLatitude>
+          <northBoundLatitude>52.81599788859048</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.884942491264163" miny="52.28899363762711" maxx="6.513494878930472" maxy="52.81599788859048"/>
+        <BoundingBox CRS="EPSG:28992" minx="188884.266" miny="478449.75" maxx="230866.25" maxy="536625.063"/>
+        <Style>
+          <Name>B0_nationale_parken</Name>
+          <Title>Nationaalpark style</Title>
+          <Abstract/>
+          <LegendURL width="114" height="40">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Nationale_parken_Weerribben_Wieden_en_Sallandse_Heuvelrug"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1" opaque="0">
+        <Name>B0_Projecten_in_Overijssel</Name>
+        <Title>Projecten in Overijssel</Title>
+        <Abstract>Alle actuele (grote) projecten waar de provincie Overijssel een rol bij speelt. Hetzij als initiatiefnemer hetzij als (mede)financier. Voorwaarden voor opname zijn: - het project moet door een positief GS of PS-besluit in beleid zijn omgezet; - de minimale provinciale bijdrage is 50.000 euro; - het project is geografisch te plaatsen op de kaart; - het project moet passen binnen de communicatiestrategie. Het resultaat is te zien in de projectenkaart (www.waarinoverijssel.nl). Voor specifieke informatie over de projecten zelf wordt middels een link verwezen naar de internetpagina van het project. Van de projecten zijn altijd één of meerdere puntlocatie(s) bekend. Voor enkele projecten zijn vlakken en lijnen als projectgebied beschikbaar. projecten_point bevat alle puntlocaties projecten_arc bevat uitwerkingen van lijnvormige projecten (bijv. infrastructurele projecten) projecten_polygon bevat uitwerkingen van vlakvormige projecten (bijv. Nationaalpark Sallandse Heuvelrug) Om een wildgroei van projecten op de kaart te voorkomen wordt elke aanvraag beoordeeld door een redactie van BAC.&#13;
+</Abstract>
+        <KeywordList>
+          <Keyword>projecten</Keyword>
+          <Keyword>overheid</Keyword>
+        </KeywordList>
+        <CRS>EPSG:28992</CRS>
+        <CRS>CRS:84</CRS>
+        <EX_GeographicBoundingBox>
+          <westBoundLongitude>5.848429626112587</westBoundLongitude>
+          <eastBoundLongitude>7.055481938189492</eastBoundLongitude>
+          <southBoundLatitude>52.13241750475804</southBoundLatitude>
+          <northBoundLatitude>52.816374343807325</northBoundLatitude>
+        </EX_GeographicBoundingBox>
+        <BoundingBox CRS="CRS:84" minx="5.848429626112587" miny="52.13241750475804" maxx="7.055481938189492" maxy="52.816374343807325"/>
+        <BoundingBox CRS="EPSG:28992" minx="186499.40625" miny="461719.0625" maxx="267420.59375" maxy="536650.9375"/>
+        <Style>
+          <Name>B0_projecten</Name>
+          <Title>B0 Locaties projecten style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_natuur</Name>
+          <Title>rk proj natuur style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_natuur"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_buitengebied</Name>
+          <Title>rk proj buitengebied style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_buitengebied"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_water</Name>
+          <Title>rk proj water style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_water"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_recreatie</Name>
+          <Title>rk proj recreatie style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_recreatie"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_mobiliteit</Name>
+          <Title>ProjectenMobiliteit style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_mobiliteit"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_werken</Name>
+          <Title>rk proj werken style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_werken"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_landbouw</Name>
+          <Title>rk proj landbouw style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_landbouw"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_stadendorp</Name>
+          <Title>rk proj stadendorp style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_stadendorp"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_infrastructuur</Name>
+          <Title>rk proj infrastructuur style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_infrastructuur"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_kunst</Name>
+          <Title>rk proj kunst style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_kunst"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_cultuurhistorie</Name>
+          <Title>rk proj cultuurhistorie style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_cultuurhistorie"/>
+          </LegendURL>
+        </Style>
+        <Style>
+          <Name>B0_projecten_wonen</Name>
+          <Title>rk proj wonen style</Title>
+          <Abstract/>
+          <LegendURL width="20" height="20">
+            <Format>image/png</Format>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://acc-staging-services.geodataoverijssel.nl:80/geoserver/OV_B0/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=B0_Projecten_in_Overijssel&amp;style=B0_projecten_wonen"/>
           </LegendURL>
         </Style>
       </Layer>
