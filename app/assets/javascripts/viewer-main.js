@@ -240,10 +240,11 @@ require([
 			var svrLayerView = dom.byId('svr-layer-view');
 			var svrLayerControl = dom.byId('svr-layer-control');
 			var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
+				var serviceId = domAttr.get(this.parentNode, 'data-service-id');
 				var serviceNode = this.parentNode;
 				
 				if(this.dataset.serviceExpanded === "false") {
-					xhr(jsRoutes.controllers.Application.allLayers().url, {
+					xhr(jsRoutes.controllers.Application.allLayers(serviceId).url, {
 						handleAs: "html"
 					}).then(function(data){
 						domConstruct.place(data, serviceNode);
@@ -256,11 +257,12 @@ require([
 			});
 			
 			var layerExpand = on(win.doc, '.js-layer-link:click', function(e) {
+				var serviceId = domAttr.get(query(this).closest(".js-service-id")[0], 'data-service-id');
 				var layerId = domAttr.get(this.parentNode, 'data-layer-id');
 				var layerNode = this.parentNode;
 				
 				if(this.dataset.layerExpanded === "false") {
-					xhr(jsRoutes.controllers.Application.layers(layerId).url, {
+					xhr(jsRoutes.controllers.Application.layers(serviceId, layerId).url, {
 						handleAs: "html"
 					}).then(function(data){
 						domConstruct.place(data, layerNode);

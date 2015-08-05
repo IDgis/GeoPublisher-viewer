@@ -1,16 +1,16 @@
 package models;
 
-import java.util.List;
-
 public class Service {
 	private String serviceId;
 	private String serviceName;
-	private List<Layer> layerList;
+	private String url;
+	private String domain;
 	
-	public Service(String serviceId, String serviceName, List<Layer> layerList) {
+	public Service(String serviceId, String serviceName, String domain, String url) {
 		this.serviceId = serviceId;	
 		this.serviceName = serviceName;
-		this.layerList = layerList;
+		this.url = url;
+		this.domain = domain;
 	}
 	
 	public String getServiceId() {
@@ -21,7 +21,11 @@ public class Service {
 		return serviceName;
 	}
 	
-	public List<Layer> getLayerList() {
-		return layerList;
+	public String getUrl() {
+		return url;
+	}
+	
+	public String getDomain() {
+		return domain;
 	}
 }

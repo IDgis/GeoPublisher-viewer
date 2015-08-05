@@ -13,11 +13,16 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import models.Layer;
+import models.Service;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
+import play.libs.F.Promise;
+import play.libs.ws.WSClient;
+import play.libs.ws.WSRequest;
+import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.capabilitieswarning;
@@ -25,9 +30,9 @@ import views.html.index;
 import views.html.layers;
 
 public class Application extends Controller {
+	private @Inject WSClient ws;
 	
-	private @Inject play.Application application;
-	
+	private List<Service> servicesList;
 	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
 	
 	public Application() {
@@ -113,10 +118,43 @@ public class Application extends Controller {
     	for(Layer layer: layerListAl) { 
     		layerMap.put(layer.getLayerId(), layer); 
     	}
+    	
+    	servicesList = Arrays.asList(
+	    	new Service("B0 - Referentie", "service1", "http://acc-staging-services.geodataoverijssel.nl/", 
+	    			"geoserver/OV_B0/wms?service=WMS&request=GetCapabilities&version=1.3.0"),
+	    	new Service("B3 - Water", "service2", "http://acc-staging-services.geodataoverijssel.nl/", 
+	    			"geoserver/OV_B3/wms?service=WMS&request=GetCapabilities&version=1.3.0"),
+	    	new Service("B6 - Economie en landbouw", "service3", "http://acc-staging-services.geodataoverijssel.nl/", 
+	    			"geoserver/OV_B6/wms?service=WMS&request=GetCapabilities&version=1.3.0"),
+	    	new Service("Stedelijk_gebied", "service4", "http://staging-services.geodataoverijssel.nl/", 
+	    			"geoserver/B04_stedelijk_gebied/wms?service=WMS&request=GetCapabilities&version=1.3.0"),
+	    	new Service("Bestuurlijke grenzen", "service4", "http://staging-services.geodataoverijssel.nl/", 
+	    			"geoserver/B14_bestuurlijke_grenzen/wms?service=WMS&request=GetCapabilities&version=1.3.0")
+	    );
     }
+	
+	public InputStream getWMSCapabilitiesBody(String domain, String url) {
+		String completeUrl = domain + url;
+		WSRequest request = ws.url(completeUrl).setFollowRedirects(true).setRequestTimeout(10000);
+		
+		Map<String, String[]> colStr = request().queryString();
+		
+		for (Map.Entry<String, String[]> entry: colStr.entrySet()) {
+			for(String entryValue: entry.getValue()) {
+				request = request.setQueryParameter(entry.getKey(), entryValue);
+			}
+		}
+		
+		Promise<WSResponse> response = request.get();
+		
+		InputStream inputStream = null;
+		inputStream = response.get(10000).getBodyAsStream();
+		
+		return inputStream;
+	}
     
-    public WMSCapabilities getWMSCapabilities(String serviceId) throws ParseException {
-    	InputStream capabilities = application.resourceAsStream ("wmscapabilities.xml");
+    public WMSCapabilities getWMSCapabilities(String domain, Service service) throws ParseException {
+    	InputStream capabilities = getWMSCapabilitiesBody(domain, service.getUrl());
     	
     	try {
     		return WMSCapabilitiesParser.parseCapabilities(capabilities);
@@ -137,32 +175,36 @@ public class Application extends Controller {
     }
     
     public Result index() {
-    	List<WMSCapabilities.Service> servicesList = null;
-    	WMSCapabilities capabilities = null;
+    	List<WMSCapabilities.Service> wmsServicesList = new ArrayList<>();
     	
     	try {
-    		capabilities = getWMSCapabilities("1234");
-    		servicesList = Arrays.asList(
-    			capabilities.serviceIdentification()
-    	    );
+    		for(Service service : servicesList) {
+    			WMSCapabilities capabilities = null;
+    			capabilities = getWMSCapabilities(service.getDomain(), service);
+    			wmsServicesList.add(capabilities.serviceIdentification());
+    		}
     	} catch(ParseException e) {
     		Logger.error("An exception occured during parsing of a capabilities document: ", e);
     	}
     	
-    	return ok(index.render(servicesList, capabilities));
+    	return ok(index.render(wmsServicesList));
     }
     
-    public Result allLayers() {    	
+	public Result allLayers(String serviceId) {    	
     	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-    	WMSCapabilities capabilities = null;
     	
     	try {
-    		capabilities = getWMSCapabilities("1234");
-    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.allLayers();
-    		for(WMSCapabilities.Layer layer : collectionLayers) {
-    			layerList.add(layer);
+    		for(Service service : servicesList) {
+    			WMSCapabilities capabilities = null;
+    			if(serviceId.equals(service.getServiceId())) {
+    				capabilities = getWMSCapabilities(service.getDomain(), service);
+    				Collection<WMSCapabilities.Layer> collectionLayers = capabilities.allLayers();
+    	    		for(WMSCapabilities.Layer layer : collectionLayers) {
+    	    			layerList.add(layer);
+    	    		}
+    	    		layerList.remove(0);
+    			}
     		}
-    		layerList.remove(0);
     	} catch(ParseException e) {
     		Logger.error("An exception occured during parsing of a capabilities document: ", e);
     	}
@@ -170,14 +212,18 @@ public class Application extends Controller {
     	return ok(layers.render(layerList));
     }
     
-    public Result layers(String layerId) {    	
+    public Result layers(String serviceId, String layerId) {    	
     	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-    	WMSCapabilities capabilities = null;
     	
     	try {
-    		capabilities = getWMSCapabilities("1234");
-    		WMSCapabilities.Layer layer = capabilities.layer(layerId);
-    		layerList = layer.layers();
+    		for(Service service : servicesList) {
+    			WMSCapabilities capabilities = null;
+    			if(serviceId.equals(service.getServiceId())) {
+    				capabilities = getWMSCapabilities(service.getDomain(), service);
+    				WMSCapabilities.Layer layer = capabilities.layer(layerId);
+    	    		layerList = layer.layers();
+    			}
+    		}
     	} catch(ParseException e) {
     		Logger.error("An exception occured during parsing of a capabilities document: ", e);
     	}
