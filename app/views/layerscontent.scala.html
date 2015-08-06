@@ -1,19 +1,23 @@
 @import nl.idgis.ogc.wms._
 
-@(layer: WMSCapabilities.Layer)
+@(layer: WMSCapabilities.Layer, service: Service)
 
 <li data-layer-id="@layer.name()">
 	<span @if(!layer.layers().isEmpty){ class="js-layer-link" } data-layer-expanded="false">
 		<label@if(layer.layers().isEmpty()){ class="checkbox-inline" }>
 			@if(layer.layers().isEmpty()) {
-				<input type="checkbox" class="js-layer-check">
+				<input type="checkbox" class="js-layer-check"
+					data-layer-name="@layer.name()"
+					data-layer-endpoint="@service.getEndpoint()"
+					data-layer-version="@service.getVersion()"
+					data-layer-index="">
 			} else {
 				<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
 			}
 			@if(layer.title) {
-				<span> @layer.title()</span>
+				<span class="js-link-label"> @layer.title()</span>
 			} else {
-				<span> @layer.name()</span>
+				<span class="js-link-label"> @layer.name()</span>
 			}
 		</label>
 	</span>

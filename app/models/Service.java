@@ -3,14 +3,14 @@ package models;
 public class Service {
 	private String serviceId;
 	private String serviceName;
-	private String url;
-	private String domain;
+	private String endpoint;
+	private String version;
 	
-	public Service(String serviceId, String serviceName, String domain, String url) {
+	public Service(String serviceId, String serviceName, String endpoint, String version) {
 		this.serviceId = serviceId;	
 		this.serviceName = serviceName;
-		this.url = url;
-		this.domain = domain;
+		this.endpoint= endpoint;
+		this.version = version;
 	}
 	
 	public String getServiceId() {
@@ -21,11 +21,11 @@ public class Service {
 		return serviceName;
 	}
 	
-	public String getUrl() {
-		return url;
+	public String getEndpoint() {
+		return endpoint;
 	}
 	
-	public String getDomain() {
-		return domain;
+	public String getVersion() {
+		return version;
 	}
 }
