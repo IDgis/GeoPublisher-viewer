@@ -85,22 +85,23 @@ require([
 		map.on('singleclick', function(evt) {
         	domAttr.set(info, 'innerHTML', '');
         	var viewResolution = (view.getResolution());
-        	var sourceArray = [];
+        	var layersArray = map.getLayers().getArray();
         	
-        	var layerBebKomInOvrs = dojo.query('.bebKomInOvrs')[0];
+        	var layersSourceArray = [];
         	
-        	if(layerBebKomInOvrs) {
-        		if(domAttr.get(layerBebKomInOvrs, 'checked')) {
-        			sourceArray.push(bebKomInOvrsSource);
-        		}
+        	for(i = 1; i < layersArray.length; i++) {
+        		layersArray[i].getSource();
+        		layersSourceArray.push(layersArray[i]);
         	}
         	
-        	for(var i = 0; i < sourceArray.length; ++i) {
-        		var url = sourceArray[i].getGetFeatureInfoUrl(
-		        	evt.coordinate, viewResolution, 'EPSG:3857',
+        	for(i = 1; i < layersSourceArray.length; i++) {
+        		var url = layersSourceArray[i].getGetFeatureInfoUrl(
+		        	evt.coordinate, viewResolution, 'EPSG:28992',
 		        	{'INFO_FORMAT': 'text/html'}
 		        );
         		executeRequest(url);
+        		
+        		console.log(url);
         	}
         	
         	function executeRequest(url) {

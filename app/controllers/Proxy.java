@@ -21,7 +21,7 @@ public class Proxy extends Controller {
 	@Inject WSClient ws;
 	
 	public Promise<Result> proxy(String url) {
-		String completeUrl = "http://staging-services.geodataoverijssel.nl/" + url;
+		String completeUrl = "http://acc-staging-services.geodataoverijssel.nl/" + url;
 		WSRequest request = ws.url(completeUrl).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
