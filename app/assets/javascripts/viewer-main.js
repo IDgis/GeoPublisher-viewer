@@ -162,14 +162,18 @@ require([
 	       			map.addLayer(layerImage);
 	       			domAttr.set(this, 'data-layer-index', map.getLayers().getLength() - 1);
        			} else {
-					map.removeLayer(map.getLayers().removeAt(domAttr.get(this, 'data-layer-index')));
+					var indexElement = domAttr.get(this, 'data-layer-index');
+       				
+       				map.removeLayer(map.getLayers().removeAt(domAttr.get(this, 'data-layer-index')));
 					domAttr.set(this, 'data-layer-index', '');
 					
-					var bla = query('.js-layer-check:checked');
-					for(var i = 0; i < bla.length; ++i) {
-						domAttr.set(bla[i], 'data-layer-index', domAttr.get(bla[i], 'data-layer-index') -1);
+					var checkedInputs = query('.js-layer-check:checked');
+					for(var i = 0; i < checkedInputs.length; i++) {
+						if(domAttr.get(checkedInputs[i], 'data-layer-index') > indexElement) {
+							domAttr.set(checkedInputs[i], 'data-layer-index', domAttr.get(checkedInputs[i], 'data-layer-index') -1);
+						}
 					}
 				}
 			});
-	    };
+		};
 });

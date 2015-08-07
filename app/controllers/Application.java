@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -88,6 +87,7 @@ public class Application extends Controller {
     
 	public Result allLayers(String serviceId) {    	
     	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+    	List<WMSCapabilities.Layer> layerList2 = new ArrayList<>();
     	Service service = null;
     	
     	try {
@@ -96,11 +96,15 @@ public class Application extends Controller {
     			if(serviceId.equals(service2.getServiceId())) {
     				capabilities = getWMSCapabilities(service2);
     				
-    				Collection<WMSCapabilities.Layer> collectionLayers = capabilities.allLayers();
-    	    		for(WMSCapabilities.Layer layer : collectionLayers) {
+    				Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
+    				
+    				for(WMSCapabilities.Layer layer : collectionLayers) {
     	    			layerList.add(layer);
     	    		}
-    	    		layerList.remove(0);
+    	    		
+    	    		for(WMSCapabilities.Layer layer2 : layerList) {
+    	    			layerList2 = layer2.layers();
+    	    		}
     	    		
     	    		layerList = crsCheck(layerList);
     	    		service = service2;
@@ -110,7 +114,7 @@ public class Application extends Controller {
     		return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald.");
     	}
     	
-    	return ok(layers.render(layerList, service));
+    	return ok(layers.render(layerList2, service));
     }
     
     public Result layers(String serviceId, String layerId) {    	
@@ -122,10 +126,8 @@ public class Application extends Controller {
     			WMSCapabilities capabilities = null;
     			if(serviceId.equals(service2.getServiceId())) {
     				capabilities = getWMSCapabilities(service2);
-    				
     				WMSCapabilities.Layer layer = capabilities.layer(layerId);
     				layerList = layer.layers();
-    				
     				layerList = crsCheck(layerList);
     				service = service2;
     			}
@@ -138,9 +140,9 @@ public class Application extends Controller {
     }
     
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
-    	for(WMSCapabilities.Layer layerChild : layerList) {
-    		if(!layerChild.supportsCRS("EPSG:28992")) {
-				layerList.remove(layerChild);
+    	for(WMSCapabilities.Layer layer : layerList) {
+    		if(!layer.supportsCRS("EPSG:28992")) {
+				layerList.remove(layer);
 			}
 		}
     	
