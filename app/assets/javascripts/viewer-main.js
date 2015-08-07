@@ -24,7 +24,7 @@ require([
 		var i;
 		
 		for (i = 0; i < 15; i++) {
-			matrixIds0[i] = crs + ':' + i;
+			matrixIds0[i] = 'EPSG:28992:' + i;
 		}
 		
 		var tileGrid0 = new ol.tilegrid.WMTS({
@@ -38,142 +38,162 @@ require([
 	    	matrixIds1[i] = (i < 10 ? '0' : '') + i;
 	    }
 	    
-	    var rd = ol.proj.get(crs);		
+	    var rd = ol.proj.get('EPSG:28992');		
 	    
 		var view = new ol.View({
 			projection: rd,
-			center: [720000, 6889099],
-			zoom: 9
+			center: [220000, 499000],
+			zoom: 10
 		});
 		
 		var map;
 		var info = dom.byId('info');
 		
-		window.onload = function() {
-	        var map = new ol.Map({
-				view: view,
-				layers: [
-					new ol.layer.Tile({
-						source: new ol.source.MapQuest({layer: 'osm'})
-					}),
-				],
-				target: 'map'
-			});
-	        
-	        function makeHttpObject() {
-				try {return new XMLHttpRequest();}
-				catch (error) {}
-				try {return new ActiveXObject("Msxml2.XMLHTTP");}
-				catch (error) {}
-				try {return new ActiveXObject("Microsoft.XMLHTTP");}
-				catch (error) {}
-				throw new Error("Could not create HTTP request object.");
+		map = new ol.Map({
+			layers: [
+		    	new ol.layer.Tile({
+		    		overlay: false,
+		    		opacity: 0.8,
+		    		extent: extent,
+		        	source : new ol.source.WMTS({
+		        		attributions: [],
+		        		url: 'http://geodata.nationaalgeoregister.nl/wmts',
+		        		layer: 'brtachtergrondkaart',
+		        		matrixSet: 'EPSG:28992',
+		        		format: 'image/png',
+		        		isBaseLayer: true,
+		        		projection: rd,
+		        		tileGrid: tileGrid0,
+		        		style: 'default',
+		        	}),
+		        	visible: true
+		        })
+			],
+			target: 'map',
+			view: view
+		});
+		
+        function makeHttpObject() {
+			try {return new XMLHttpRequest();}
+			catch (error) {}
+			try {return new ActiveXObject("Msxml2.XMLHTTP");}
+			catch (error) {}
+			try {return new ActiveXObject("Microsoft.XMLHTTP");}
+			catch (error) {}
+			throw new Error("Could not create HTTP request object.");
+		}
+        
+		map.on('singleclick', function(evt) {
+        	domAttr.set(info, 'innerHTML', '');
+        	var viewResolution = (view.getResolution());
+        	var sourceArray = [];
+        	
+        	var layerBebKomInOvrs = dojo.query('.bebKomInOvrs')[0];
+        	
+        	if(layerBebKomInOvrs) {
+        		if(domAttr.get(layerBebKomInOvrs, 'checked')) {
+        			sourceArray.push(bebKomInOvrsSource);
+        		}
+        	}
+        	
+        	for(var i = 0; i < sourceArray.length; ++i) {
+        		var url = sourceArray[i].getGetFeatureInfoUrl(
+		        	evt.coordinate, viewResolution, 'EPSG:3857',
+		        	{'INFO_FORMAT': 'text/html'}
+		        );
+        		executeRequest(url);
+        	}
+        	
+        	function executeRequest(url) {
+        		var request = makeHttpObject();
+        		request.open("GET", url, true);
+				request.send(null);
+				request.onreadystatechange = function() {
+					if (request.readyState == 4) {
+						var previousHTML = domAttr.get(info, 'innerHTML');
+						domAttr.set(info, 'innerHTML', previousHTML + request.responseText);
+					}
+				};
+        	}
+		});
+        
+		var viewsContainer = dom.byId('views-container');
+		var svrLayerView = dom.byId('svr-layer-view');
+		var svrLayerControl = dom.byId('svr-layer-control');
+		
+		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
+			var serviceId = domAttr.get(this.parentNode, 'data-service-id');
+			var serviceNode = this.parentNode;
+			
+			if(this.dataset.serviceStatus === "none") {
+				xhr(jsRoutes.controllers.Application.allLayers(serviceId).url, {
+					handleAs: "html"
+				}).then(function(data){
+					domConstruct.place(data, serviceNode);
+				});
+				this.dataset.serviceStatus = "created";
+			} else if(this.dataset.serviceStatus == "created") {
+				domStyle.set(query(this).siblings()[0], 'display', 'none');
+				this.dataset.serviceStatus = "hidden";
+			} else {
+				domStyle.set(query(this).siblings()[0], 'display', 'block');
+				this.dataset.serviceStatus = "created";
 			}
-	        
-			map.on('singleclick', function(evt) {
-	        	domAttr.set(info, 'innerHTML', '');
-	        	var viewResolution = (view.getResolution());
-	        	var sourceArray = [];
-	        	
-	        	var layerBebKomInOvrs = dojo.query('.bebKomInOvrs')[0];
-	        	
-	        	if(layerBebKomInOvrs) {
-	        		if(domAttr.get(layerBebKomInOvrs, 'checked')) {
-	        			sourceArray.push(bebKomInOvrsSource);
-	        		}
-	        	}
-	        	
-	        	for(var i = 0; i < sourceArray.length; ++i) {
-	        		var url = sourceArray[i].getGetFeatureInfoUrl(
-			        	evt.coordinate, viewResolution, 'EPSG:3857',
-			        	{'INFO_FORMAT': 'text/html'}
-			        );
-	        		executeRequest(url);
-	        	}
-	        	
-	        	function executeRequest(url) {
-	        		var request = makeHttpObject();
-	        		request.open("GET", url, true);
-					request.send(null);
-					request.onreadystatechange = function() {
-						if (request.readyState == 4) {
-							var previousHTML = domAttr.get(info, 'innerHTML');
-							domAttr.set(info, 'innerHTML', previousHTML + request.responseText);
-						}
-					};
-	        	}
-			});
-	        
-			var viewsContainer = dom.byId('views-container');
-			var svrLayerView = dom.byId('svr-layer-view');
-			var svrLayerControl = dom.byId('svr-layer-control');
+		});
+		
+		var layerExpand = on(win.doc, '.js-layer-link:click', function(e) {
+			var serviceId = domAttr.get(query(this).closest(".js-service-id")[0], 'data-service-id');
+			var layerId = domAttr.get(this.parentNode, 'data-layer-id');
+			var layerNode = this.parentNode;
 			
-			var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
-				var serviceId = domAttr.get(this.parentNode, 'data-service-id');
-				var serviceNode = this.parentNode;
-				
-				if(this.dataset.serviceExpanded === "false") {
-					xhr(jsRoutes.controllers.Application.allLayers(serviceId).url, {
-						handleAs: "html"
-					}).then(function(data){
-						domConstruct.place(data, serviceNode);
-					});
-					this.dataset.serviceExpanded = "true";
-				} else {
-					domConstruct.destroy(query(this).siblings()[0]);
-					this.dataset.serviceExpanded = "false";
-				}
-			});
+			if(this.dataset.layerStatus === "none") {
+				xhr(jsRoutes.controllers.Application.layers(serviceId, layerId).url, {
+					handleAs: "html"
+				}).then(function(data){
+					domConstruct.place(data, layerNode);
+				});
+				this.dataset.layerStatus = "created";
+			} else if(this.dataset.layerStatus === "created") {
+				domStyle.set(query(this).siblings()[0], 'display', 'none');
+				this.dataset.layerStatus = "hidden";
+			} else {
+				domStyle.set(query(this).siblings()[0], 'display', 'block');
+				this.dataset.layerStatus = "created";
+			}
+		});
+		
+		var testEndpoint = 'http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms';
+		var testLayer = 'B0_Bebouwde_kommen_in_Overijssel';
+		var testVersion = '1.1.0';
+		
+		var layerCheck = on(win.doc, '.js-layer-check:change', function(e) {
+			var layerName = domAttr.get(this, 'data-layer-name');
+			var layerEndpoint = domAttr.get(this, 'data-layer-endpoint');
+			var layerVersion = domAttr.get(this, 'data-layer-version');
 			
-			var layerExpand = on(win.doc, '.js-layer-link:click', function(e) {
-				var serviceId = domAttr.get(query(this).closest(".js-service-id")[0], 'data-service-id');
-				var layerId = domAttr.get(this.parentNode, 'data-layer-id');
-				var layerNode = this.parentNode;
+       		if(domAttr.get(this, 'checked')) {
+       			map.addLayer(
+       				new ol.layer.Image({
+       					source: new ol.source.ImageWMS({
+       			    		url: layerEndpoint,
+       			    		params: {'LAYERS': layerName, 'VERSION': layerVersion, 'CRS': 'EPSG:28992'},
+       			    		serverType: 'geoserver'
+       			    	})
+       			    })
+       			);
+       			domAttr.set(this, 'data-layer-index', map.getLayers().getLength() - 1);
+   			} else {
+				var indexElement = domAttr.get(this, 'data-layer-index');
+   				
+   				map.removeLayer(map.getLayers().removeAt(domAttr.get(this, 'data-layer-index')));
+				domAttr.set(this, 'data-layer-index', '');
 				
-				if(this.dataset.layerExpanded === "false") {
-					xhr(jsRoutes.controllers.Application.layers(serviceId, layerId).url, {
-						handleAs: "html"
-					}).then(function(data){
-						domConstruct.place(data, layerNode);
-					});
-					this.dataset.layerExpanded = "true";
-				} else {
-					domConstruct.destroy(query(this).siblings()[0]);
-					this.dataset.layerExpanded = "false";
-				}
-			});
-			
-			var layerCheck = on(win.doc, '.js-layer-check:change', function(e) {
-				var layerName = domAttr.get(this, 'data-layer-name');
-				var layerEndpoint = domAttr.get(this, 'data-layer-endpoint');
-				var layerVersion = domAttr.get(this, 'data-layer-version');
-	       		
-				layerEndpoint = layerEndpoint.slice(0, -1);
-				
-	       		var layerImage = new ol.layer.Image({
-		       		source: new ol.source.ImageWMS({
-		    			url: layerEndpoint,
-		    			params: {'LAYERS': layerName, 'VERSION': layerVersion, 'CRS': crs},
-		    			serverType: serverType
-		    		})
-		    	});
-	       		
-	       		if(domAttr.get(this, 'checked')) {
-	       			map.addLayer(layerImage);
-	       			domAttr.set(this, 'data-layer-index', map.getLayers().getLength() - 1);
-       			} else {
-					var indexElement = domAttr.get(this, 'data-layer-index');
-       				
-       				map.removeLayer(map.getLayers().removeAt(domAttr.get(this, 'data-layer-index')));
-					domAttr.set(this, 'data-layer-index', '');
-					
-					var checkedInputs = query('.js-layer-check:checked');
-					for(var i = 0; i < checkedInputs.length; i++) {
-						if(domAttr.get(checkedInputs[i], 'data-layer-index') > indexElement) {
-							domAttr.set(checkedInputs[i], 'data-layer-index', domAttr.get(checkedInputs[i], 'data-layer-index') -1);
-						}
+				var checkedInputs = query('.js-layer-check:checked');
+				for(var i = 0; i < checkedInputs.length; i++) {
+					if(domAttr.get(checkedInputs[i], 'data-layer-index') > indexElement) {
+						domAttr.set(checkedInputs[i], 'data-layer-index', domAttr.get(checkedInputs[i], 'data-layer-index') -1);
 					}
 				}
-			});
-		};
+			}
+		});
 });

@@ -33,11 +33,11 @@ public class Application extends Controller {
 	
 	public Application() {
 		servicesList = Arrays.asList(
-	    	new Service("1234", "B0 - Referentie", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.3.0"), 
-	    	new Service("2345", "B3 - Water", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B3/wms?", "1.3.0"),
-	    	new Service("3456", "B6 - Economie en landbouw", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B6/wms?", "1.3.0"),
-	    	new Service("4567", "Stedelijk_gebied", "http://staging-services.geodataoverijssel.nl/geoserver/B04_stedelijk_gebied/wms?", "1.3.0"),
-	    	new Service("5678", "Bestuurlijke grenzen", "http://staging-services.geodataoverijssel.nl/geoserver/B14_bestuurlijke_grenzen/wms?", "1.3.0")
+	    	new Service("1234", "B0 - Referentie", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.1.0"), 
+	    	new Service("2345", "B3 - Water", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B3/wms?", "1.1.0"),
+	    	new Service("3456", "B6 - Economie en landbouw", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B6/wms?", "1.1.0"),
+	    	new Service("4567", "Stedelijk_gebied", "http://staging-services.geodataoverijssel.nl/geoserver/B04_stedelijk_gebied/wms?", "1.1.0"),
+	    	new Service("5678", "Bestuurlijke grenzen", "http://staging-services.geodataoverijssel.nl/geoserver/B14_bestuurlijke_grenzen/wms?", "1.1.0")
 	    );
     }
 	
