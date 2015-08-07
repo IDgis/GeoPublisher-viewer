@@ -17,6 +17,7 @@ import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
 import play.libs.F.Promise;
+import play.libs.F.PromiseTimeoutException;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
@@ -52,12 +53,15 @@ public class Application extends Controller {
 			}
 		}
 		
-		Promise<WSResponse> response = request.get();
-		
-		InputStream inputStream = null;
-		inputStream = response.get(10000).getBodyAsStream();
-		
-		return inputStream;
+		try {
+			Promise<WSResponse> response = request.get();
+			InputStream inputStream = null;
+			inputStream = response.get(10000).getBodyAsStream();
+			
+			return inputStream;
+		} catch(PromiseTimeoutException pte) {
+			throw pte;
+		}		
 	}
     
     public WMSCapabilities getWMSCapabilities(Service service) throws ParseException {
@@ -94,7 +98,11 @@ public class Application extends Controller {
     		for(Service service2 : servicesList) {
     			WMSCapabilities capabilities = null;
     			if(serviceId.equals(service2.getServiceId())) {
-    				capabilities = getWMSCapabilities(service2);
+    				try {
+    					capabilities = getWMSCapabilities(service2);
+    				} catch(PromiseTimeoutException pte) {
+    					return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
+    				}
     				
     				Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
     				
@@ -125,7 +133,12 @@ public class Application extends Controller {
     		for(Service service2 : servicesList) {
     			WMSCapabilities capabilities = null;
     			if(serviceId.equals(service2.getServiceId())) {
-    				capabilities = getWMSCapabilities(service2);
+    				try {
+    					capabilities = getWMSCapabilities(service2);
+    				} catch(PromiseTimeoutException pte) {
+    					return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
+    				}
+    				
     				WMSCapabilities.Layer layer = capabilities.layer(layerId);
     				layerList = layer.layers();
     				layerList = crsCheck(layerList);

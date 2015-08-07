@@ -24,7 +24,7 @@ require([
 		var i;
 		
 		for (i = 0; i < 15; i++) {
-			matrixIds0[i] = 'EPSG:28992:' + i;
+			matrixIds0[i] = crs + ':' + i;
 		}
 		
 		var tileGrid0 = new ol.tilegrid.WMTS({
@@ -38,7 +38,7 @@ require([
 	    	matrixIds1[i] = (i < 10 ? '0' : '') + i;
 	    }
 	    
-	    var rd = ol.proj.get('EPSG:28992');		
+	    var rd = ol.proj.get(crs);		
 	    
 		var view = new ol.View({
 			projection: rd,
@@ -59,9 +59,8 @@ require([
 		        		attributions: [],
 		        		url: 'http://geodata.nationaalgeoregister.nl/wmts',
 		        		layer: 'brtachtergrondkaart',
-		        		matrixSet: 'EPSG:28992',
+		        		matrixSet: crs,
 		        		format: 'image/png',
-		        		isBaseLayer: true,
 		        		projection: rd,
 		        		tileGrid: tileGrid0,
 		        		style: 'default',
@@ -117,10 +116,6 @@ require([
         	}
 		});
         
-		var viewsContainer = dom.byId('views-container');
-		var svrLayerView = dom.byId('svr-layer-view');
-		var svrLayerControl = dom.byId('svr-layer-control');
-		
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
 			var serviceId = domAttr.get(this.parentNode, 'data-service-id');
 			var serviceNode = this.parentNode;
@@ -162,10 +157,6 @@ require([
 			}
 		});
 		
-		var testEndpoint = 'http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms';
-		var testLayer = 'B0_Bebouwde_kommen_in_Overijssel';
-		var testVersion = '1.1.0';
-		
 		var layerCheck = on(win.doc, '.js-layer-check:change', function(e) {
 			var layerName = domAttr.get(this, 'data-layer-name');
 			var layerEndpoint = domAttr.get(this, 'data-layer-endpoint');
@@ -176,8 +167,8 @@ require([
        				new ol.layer.Image({
        					source: new ol.source.ImageWMS({
        			    		url: layerEndpoint,
-       			    		params: {'LAYERS': layerName, 'VERSION': layerVersion, 'CRS': 'EPSG:28992'},
-       			    		serverType: 'geoserver'
+       			    		params: {'LAYERS': layerName, 'VERSION': layerVersion, 'CRS': crs},
+       			    		serverType: serverType
        			    	})
        			    })
        			);
