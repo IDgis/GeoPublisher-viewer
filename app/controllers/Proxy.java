@@ -21,8 +21,7 @@ public class Proxy extends Controller {
 	@Inject WSClient ws;
 	
 	public Promise<Result> proxy(String url) {
-		String completeUrl = "http://acc-staging-services.geodataoverijssel.nl/" + url;
-		WSRequest request = ws.url(completeUrl).setFollowRedirects(true).setRequestTimeout(10000);
+		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
 		
@@ -45,10 +44,10 @@ public class Proxy extends Controller {
 		
 		Promise<Result> recoveredPromise = resultPromise.recover ((Throwable throwable) -> {
 			if (throwable instanceof TimeoutException) {
-				logger.error("Timeout when requesting: " + completeUrl, throwable);
+				logger.error("Timeout when requesting: " + url, throwable);
 				return status (GATEWAY_TIMEOUT, throwable.getMessage ());
 			} else {
-				logger.error("Error occured when requesting: " + completeUrl, throwable);
+				logger.error("Error occured when requesting: " + url, throwable);
 				return status (BAD_GATEWAY, throwable.getMessage ());
 			}
 		});

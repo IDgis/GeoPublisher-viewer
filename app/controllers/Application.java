@@ -165,7 +165,8 @@ public class Application extends Controller {
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
             controllers.routes.javascript.Application.allLayers(),
-            controllers.routes.javascript.Application.layers()
+            controllers.routes.javascript.Application.layers(),
+            controllers.routes.javascript.Proxy.proxy()
         )).as ("text/javascript");
     }
 }

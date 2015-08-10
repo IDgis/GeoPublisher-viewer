@@ -1,4 +1,5 @@
 /* jshint -W099 */
+/* jshint -W083 */
 require([
 	'dojo/dom',
 	'dojo/io-query',
@@ -22,6 +23,7 @@ require([
 		var matrixIds0 = [];
 		
 		var i;
+		var j;
 		
 		for (i = 0; i < 15; i++) {
 			matrixIds0[i] = crs + ':' + i;
@@ -72,48 +74,37 @@ require([
 			view: view
 		});
 		
-        function makeHttpObject() {
-			try {return new XMLHttpRequest();}
-			catch (error) {}
-			try {return new ActiveXObject("Msxml2.XMLHTTP");}
-			catch (error) {}
-			try {return new ActiveXObject("Microsoft.XMLHTTP");}
-			catch (error) {}
-			throw new Error("Could not create HTTP request object.");
-		}
-        
 		map.on('singleclick', function(evt) {
         	domAttr.set(info, 'innerHTML', '');
-        	var viewResolution = (view.getResolution());
+        	var viewResolution = (map.getView().getResolution());
         	var layersArray = map.getLayers().getArray();
+        	var serviceArray = query('.js-layer-check[type=checkbox]:checked').closest('.js-service-id');
         	
-        	var layersSourceArray = [];
-        	
-        	for(i = 1; i < layersArray.length; i++) {
-        		layersArray[i].getSource();
-        		layersSourceArray.push(layersArray[i]);
-        	}
-        	
-        	for(i = 1; i < layersSourceArray.length; i++) {
-        		var url = layersSourceArray[i].getGetFeatureInfoUrl(
-		        	evt.coordinate, viewResolution, 'EPSG:28992',
-		        	{'INFO_FORMAT': 'text/html'}
-		        );
-        		executeRequest(url);
+        	for(i = 0; i < serviceArray.length; i++) {
+        		var checkedElementen = query(serviceArray[i]).query('.js-layer-check[type=checkbox]:checked');
+        		var layerString = '';
         		
-        		console.log(url);
-        	}
-        	
-        	function executeRequest(url) {
-        		var request = makeHttpObject();
-        		request.open("GET", url, true);
-				request.send(null);
-				request.onreadystatechange = function() {
-					if (request.readyState == 4) {
-						var previousHTML = domAttr.get(info, 'innerHTML');
-						domAttr.set(info, 'innerHTML', previousHTML + request.responseText);
-					}
-				};
+        		for(j = 0; j < checkedElementen.length; j++) {
+        			if(j === 0) {
+        				layerString = layerString.concat(checkedElementen[j].dataset.layerName);
+        			} else {
+        				layerString = layerString.concat(',', checkedElementen[j].dataset.layerName);
+        			}
+        		}
+        		
+        		var sourceLayer = new ol.source.ImageWMS({
+    	    		url: checkedElementen[0].dataset.layerEndpoint,
+    	    		params: {'LAYERS': layerString, 'VERSION': checkedElementen[0].dataset.layerVersion, 'CRS': crs},
+    	    		serverType: serverType
+    	    	});
+        		
+        		var url = sourceLayer.getGetFeatureInfoUrl(evt.coordinate, viewResolution, map.getView().getProjection(), {'INFO_FORMAT': 'text/html'});
+        		
+        		xhr(jsRoutes.controllers.Proxy.proxy(url).url, {
+					handleAs: "html"
+				}).then(function(data) {
+					domConstruct.place(data, info);
+				});
         	}
 		});
         
