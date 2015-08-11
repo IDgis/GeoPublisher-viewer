@@ -40,12 +40,15 @@ require([
 	    	matrixIds1[i] = (i < 10 ? '0' : '') + i;
 	    }
 	    
-	    var rd = ol.proj.get(crs);		
+	    var projection = new ol.proj.Projection({
+	    	code: 'EPSG:28992',
+	    	extent: [646.36, 358975.28, 276050.82, 636456.31]
+	    });
 	    
-		var view = new ol.View({
-			projection: rd,
+	    var view = new ol.View({
+			projection: projection,
 			center: [220000, 499000],
-			zoom: 10
+			zoom: 3
 		});
 		
 		var map;
@@ -63,7 +66,6 @@ require([
 		        		layer: 'brtachtergrondkaart',
 		        		matrixSet: crs,
 		        		format: 'image/png',
-		        		projection: rd,
 		        		tileGrid: tileGrid0,
 		        		style: 'default',
 		        	}),
@@ -94,7 +96,7 @@ require([
         		
         		var sourceLayer = new ol.source.ImageWMS({
     	    		url: checkedElementen[0].dataset.layerEndpoint,
-    	    		params: {'LAYERS': layerString, 'VERSION': checkedElementen[0].dataset.layerVersion, 'CRS': crs},
+    	    		params: {'LAYERS': layerString, 'VERSION': checkedElementen[0].dataset.layerVersion, 'FEATURE_COUNT': '50'},
     	    		serverType: serverType
     	    	});
         		
@@ -154,15 +156,21 @@ require([
 			var layerEndpoint = domAttr.get(this, 'data-layer-endpoint');
 			var layerVersion = domAttr.get(this, 'data-layer-version');
 			
-       		if(domAttr.get(this, 'checked')) {
+			var layerToAdd = new ol.source.ImageWMS({
+		    		url: layerEndpoint,
+		    		params: {'LAYERS': layerName, 'VERSION': layerVersion, 'CRS': 'EPSG:28922'},
+		    		serverType: serverType
+		    });
+			
+			if(domAttr.get(this, 'checked')) {
        			map.addLayer(
-       				new ol.layer.Image({
-       					source: new ol.source.ImageWMS({
-       			    		url: layerEndpoint,
-       			    		params: {'LAYERS': layerName, 'VERSION': layerVersion, 'CRS': crs},
-       			    		serverType: serverType
-       			    	})
-       			    })
+       					new ol.layer.Image({
+       						source: new ol.source.ImageWMS({
+       				    		url: layerEndpoint,
+       				    		params: {'LAYERS': layerName, 'VERSION': '1.3.0'},
+       				    		serverType: serverType
+       						})
+       					})	
        			);
        			domAttr.set(this, 'data-layer-index', map.getLayers().getLength() - 1);
    			} else {
