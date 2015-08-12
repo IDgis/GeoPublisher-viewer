@@ -5,8 +5,8 @@ label {font-weight:normal;}
 #layer-control-container {height:100%;padding:0;}
 #views-container {height:100%;padding:0 0 0 15px;}
 
-#svr-layer-view {border:1px solid #ccc;height:80%;background-size:cover;}
-#svr-layer-control {height:80%;width:100%;background-color:#F7F7F7;border:1px solid #C4C3C4;overflow-y:auto;overflow-x:auto;}
+#svr-layer-view {border:1px solid #ccc;height:95%;background-size:cover;}
+#svr-layer-control {height:95%;width:100%;background-color:#F7F7F7;border:1px solid #C4C3C4;overflow-y:auto;overflow-x:auto;}
 #svr-layer-control .list-group {margin-top:5px;}
 #map {width:100%;height:100%;}
 
@@ -20,11 +20,11 @@ label {font-weight:normal;}
 .checkbox-inline {padding-left:31px;}
 .error-warning {margin:20px;}
 
-#info {padding-left:0;padding-right:0;}
+#info {padding-left:0;padding-right:0;overflow:auto;}
 #featureInfo {height:100px;}
 
 html,body {margin: 0;padding: 0;width: 100%;height: 100%;}
-body {padding-top: 100px;}
+body {padding-top: 100px;font-family:Verdana;}
 
 #wrapper {width: 100%;height:100%;}
 #page-wrapper {height:100%;background-color: #fff;}
@@ -61,3 +61,39 @@ body {padding-top: 100px;}
  
 /*Remove connectors after last child*/
 .groupTree li:last-child::before {height:7px;}
+
+table.featureInfo {
+	border:1px solid #ddd;
+	border-collapse:collapse;
+	margin-bottom:20px;
+	padding:.2em .7em;
+	font-size:12px;
+}
+
+table.featureInfo td, table.featureInfo th {
+	border:1px solid #ddd;
+	border-collapse:collapse;
+	margin:0;
+	padding:.2em .7em;
+	font-size:12px;
+}
+
+table.featureInfo th {
+	font-weight:bold;
+	background:#D6F9FE;
+}
+
+table.featureInfo td {
+	background:#fff;
+}
+
+table.featureInfo tr.odd td{
+	background:#F4FEFE;
+}
+
+table.featureInfo caption{
+	text-align:left;
+	font-weight:bold;
+	padding:.2em 0;
+	color:#000;
+}

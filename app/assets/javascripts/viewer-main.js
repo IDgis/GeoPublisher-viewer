@@ -42,13 +42,13 @@ require([
 	    
 	    var projection = new ol.proj.Projection({
 	    	code: 'EPSG:28992',
-	    	extent: [646.36, 358975.28, 276050.82, 636456.31]
+	    	extent: [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999]
 	    });
 	    
 	    var view = new ol.View({
 			projection: projection,
 			center: [220000, 499000],
-			zoom: 3
+			zoom: 5
 		});
 		
 		var map;
@@ -108,6 +108,9 @@ require([
 					domConstruct.place(data, info);
 				});
         	}
+        	
+        	var featureInfoExist = query('.featureInfo')[0];
+        	console.log(featureInfoExist);
 		});
         
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
@@ -116,7 +119,7 @@ require([
 			
 			if(this.dataset.serviceStatus === "none") {
 				xhr(jsRoutes.controllers.Application.allLayers(serviceId).url, {
-					handleAs: "html"
+					handleAs: "text"
 				}).then(function(data){
 					domConstruct.place(data, serviceNode);
 				});
