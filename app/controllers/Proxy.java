@@ -20,11 +20,11 @@ public class Proxy extends Controller {
 	
 	@Inject WSClient ws;
 	
-	public Promise<Result> proxy(String url, String encoding) {
+	public Promise<Result> proxy(String url) {
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
-		
+
 		for (Map.Entry<String, String[]> entry: colStr.entrySet()) {
 			for(String entryValue: entry.getValue()) {
 				request = request.setQueryParameter(entry.getKey(), entryValue);
@@ -39,7 +39,8 @@ public class Proxy extends Controller {
 			if(statusCode >= 500 && statusCode < 600) {
 				return status(BAD_GATEWAY, response.asByteArray()).as(response.getHeader(CONTENT_TYPE));
 			} else {
-				final String body = new String(response.asByteArray(), encoding);
+				String encodeValue = colStr.get("encoding")[0];
+				final String body = new String(response.asByteArray(), encodeValue);
 						
 				StringBuilder strBuilder = new StringBuilder(body);
 				String strStyle = strBuilder.substring(body.indexOf("<style"), body.indexOf("</style>") + 8);
@@ -50,8 +51,6 @@ public class Proxy extends Controller {
 				return status(statusCode, body.replace(strStyle, "").replace(strTitle, "").replace("<br/>", ""), "UTF-8");
 			}
 		});
-		
-		
 		
 		Promise<Result> recoveredPromise = resultPromise.recover ((Throwable throwable) -> {
 			if (throwable instanceof TimeoutException) {

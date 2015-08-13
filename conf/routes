@@ -8,7 +8,7 @@ GET		/layersall/:serviceId							controllers.Application.allLayers(serviceId: St
 GET		/layer/:serviceId/:layerId						controllers.Application.layers(serviceId: String, layerId: String)
 GET		/routes.js										controllers.Application.jsRoutes()
 
-GET		/proxy/*url										controllers.Proxy.proxy(url: String, encoding ?= "UTF-8")
+GET		/proxy/*url										controllers.Proxy.proxy(url: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               					controllers.Assets.versioned(path="/public", file: Asset)

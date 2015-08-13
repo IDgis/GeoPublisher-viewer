@@ -100,7 +100,9 @@ require([
     	    		serverType: serverType
     	    	});
         		
+        		var encodingValue = 'UTF-8';
         		var url = sourceLayer.getGetFeatureInfoUrl(evt.coordinate, viewResolution, map.getView().getProjection(), {'INFO_FORMAT': 'text/html'});
+        		url += '&' + 'encoding' + '=' + encodingValue;
         		
         		xhr(jsRoutes.controllers.Proxy.proxy(url).url, {
 					handleAs: "html"
@@ -110,7 +112,6 @@ require([
         	}
         	
         	var featureInfoExist = query('.featureInfo')[0];
-        	console.log(featureInfoExist);
 		});
         
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
