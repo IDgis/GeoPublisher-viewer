@@ -5,6 +5,11 @@ import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import play.Logger;
 import play.Logger.ALogger;
 import play.libs.F.Promise;
@@ -41,14 +46,16 @@ public class Proxy extends Controller {
 			} else {
 				String encodeValue = colStr.get("encoding")[0];
 				final String body = new String(response.asByteArray(), encodeValue);
-						
-				StringBuilder strBuilder = new StringBuilder(body);
-				String strStyle = strBuilder.substring(body.indexOf("<style"), body.indexOf("</style>") + 8);
-				String strTitle = strBuilder.substring(body.indexOf("<head"), body.indexOf("</head>") + 7);
+				
+				Document doc = Jsoup.parse(body);
+				Element bodyNew = doc.body();
+				
+				Elements br = bodyNew.getElementsByTag("br");
+				br.remove();
 				
 				response().setContentType("text/html; charset=utf-8");
 				
-				return status(statusCode, body.replace(strStyle, "").replace(strTitle, "").replace("<br/>", ""), "UTF-8");
+				return status(statusCode, bodyNew.html(), "UTF-8");
 			}
 		});
 		
