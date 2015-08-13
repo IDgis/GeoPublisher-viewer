@@ -22,6 +22,9 @@ require([
 		var extent = [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999];
 		var matrixIds0 = [];
 		
+		var divView = dom.byId('svr-layer-view');
+		var divInfo = dom.byId('info');
+		
 		var i;
 		var j;
 		
@@ -77,7 +80,7 @@ require([
 		});
 		
 		map.on('singleclick', function(evt) {
-        	domAttr.set(info, 'innerHTML', '');
+			domAttr.set(info, 'innerHTML', '');
         	var viewResolution = (map.getView().getResolution());
         	var layersArray = map.getLayers().getArray();
         	var serviceArray = query('.js-layer-check[type=checkbox]:checked').closest('.js-service-id');
@@ -108,10 +111,25 @@ require([
 					handleAs: "html"
 				}).then(function(data) {
 					domConstruct.place(data, info);
+					
+					if(query('table.featureInfo')[0]) {
+						domStyle.set(divView, 'height', '60%');
+						domStyle.set(divView, 'margin-bottom', '15px');
+						domStyle.set(divInfo, 'height', '35%');
+						domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
+						
+						
+					} else {
+						domStyle.set(divView, 'height', '95%');
+						domStyle.set(divView, 'margin-bottom', '0px');
+						domStyle.set(divInfo, 'height', '0%');
+					}
+					
+					map.updateSize();
 				});
         	}
         	
-        	var featureInfoExist = query('.featureInfo')[0];
+        	
 		});
         
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {

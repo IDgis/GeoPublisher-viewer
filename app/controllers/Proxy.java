@@ -7,8 +7,6 @@ import javax.inject.Inject;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import play.Logger;
 import play.Logger.ALogger;
@@ -48,14 +46,15 @@ public class Proxy extends Controller {
 				final String body = new String(response.asByteArray(), encodeValue);
 				
 				Document doc = Jsoup.parse(body);
-				Element bodyNew = doc.body();
-				
-				Elements br = bodyNew.getElementsByTag("br");
-				br.remove();
+				doc.body().getElementsByTag("br").remove();
 				
 				response().setContentType("text/html; charset=utf-8");
 				
-				return status(statusCode, bodyNew.html(), "UTF-8");
+				if(doc.body().html().isEmpty()) {
+					return status(statusCode, "<div></div>", "UTF-8");
+				} else {
+					return status(statusCode, doc.body().html(), "UTF-8");
+				}
 			}
 		});
 		
