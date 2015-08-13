@@ -1,9 +1,9 @@
 @import nl.idgis.ogc.wms._
 
-@(layerList: List[WMSCapabilities.Layer])
+@(layerList: List[WMSCapabilities.Layer], service: Service)
 
 <ul class="js-ul-layers">
 	@for(subLayer <- layerList) {				
-		@views.html.layerscontent(subLayer)		
+		@views.html.layerscontent(subLayer, service)
 	}
 </ul>

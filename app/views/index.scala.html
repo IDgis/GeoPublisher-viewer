@@ -1,6 +1,4 @@
-@import nl.idgis.ogc.wms._
-
-@(services: List[WMSCapabilities.Service], capabilities: WMSCapabilities)
+@(services: List[Service])
 
 @main("GeoPublisher-viewer", "Viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
 	
@@ -9,10 +7,10 @@
 			<div class="list-group groupTree pull-left" id="js-layers-nl">
 				<ul id="js-ul-services">
 					@for(service <- services) {
-					<li data-service-id="@service.title()">
-						<span class="js-service-link" data-service-expanded="false">
+					<li class="js-service-id" data-service-id="@service.getServiceId()">
+						<span class="js-service-link" data-service-status="none">
 							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label"> @service.title()</span>
+							<span class="js-link-label"> @service.getServiceName()</span>
 						</span>
 					</li>
 					}

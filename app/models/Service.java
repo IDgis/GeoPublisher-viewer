@@ -1,16 +1,16 @@
 package models;
 
-import java.util.List;
-
 public class Service {
 	private String serviceId;
 	private String serviceName;
-	private List<Layer> layerList;
+	private String endpoint;
+	private String version;
 	
-	public Service(String serviceId, String serviceName, List<Layer> layerList) {
+	public Service(String serviceId, String serviceName, String endpoint, String version) {
 		this.serviceId = serviceId;	
 		this.serviceName = serviceName;
-		this.layerList = layerList;
+		this.endpoint= endpoint;
+		this.version = version;
 	}
 	
 	public String getServiceId() {
@@ -21,7 +21,11 @@ public class Service {
 		return serviceName;
 	}
 	
-	public List<Layer> getLayerList() {
-		return layerList;
+	public String getEndpoint() {
+		return endpoint;
+	}
+	
+	public String getVersion() {
+		return version;
 	}
 }

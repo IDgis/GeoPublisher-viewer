@@ -5,19 +5,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import models.Layer;
+import models.Service;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
+import play.libs.F.Promise;
+import play.libs.F.PromiseTimeoutException;
+import play.libs.ws.WSClient;
+import play.libs.ws.WSRequest;
+import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.capabilitieswarning;
@@ -25,104 +28,51 @@ import views.html.index;
 import views.html.layers;
 
 public class Application extends Controller {
+	private @Inject WSClient ws;
 	
-	private @Inject play.Application application;
-	
-	private Map<String, Layer> layerMap = new HashMap<String, Layer>();
+	private List<Service> servicesList;
 	
 	public Application() {
-		List<Layer> layerList1 = Arrays.asList(
-			new Layer("1548", "Bebouwde kommen in Overijssel", Collections.emptyList()),
-			new Layer("4548", "Bebouwde kommen rondom Overijssel", Collections.emptyList()),
-			new Layer("3654", "Bodemgebruik in Overijssel (1996)", Collections.emptyList())
-		);
-		
-		List<Layer> layerList2 = Arrays.asList(
-			new Layer("2895", "Nationale parken Weerribben-Wieden en Sallandse Heuvelrug", Collections.emptyList()),
-	    	new Layer("9521", "Bodemgebruik in Overijssel (1993)", Collections.emptyList()),
-	    	new Layer("7412", "Grenzen waterschappen in Overijssel (vlak)", Collections.emptyList())
-		);
-		
-		List<Layer> layerList3 = Arrays.asList(
-			new Layer("4387", "Grens projectgebied Vecht Regge", Collections.emptyList()),
-	    	new Layer("5912", "Gebiedskenmerken stedelijke laag", Collections.emptyList())
-		);
-		
-		List<Layer> layerList4 = Arrays.asList(
-			new Layer("9513", "Grenzen waterschappen in Overijssel (lijn)", Collections.emptyList()),
-		    new Layer("1545", "Projecten in Overijssel", Collections.emptyList())
-		);
-    	
-		List<Layer> layerList5 = Arrays.asList(
-			new Layer("7522", "Natuur", layerList1),
-	    	new Layer("3564", "Gewassen", layerList3)
-		);
-		
-		List<Layer> layerList6 = Arrays.asList(
-			new Layer("7523", "Natuur2", layerList1),
-	    	new Layer("1554", "Water", layerList4)
-		);
-		
-		List<Layer> layerList7 = Arrays.asList(
-			new Layer("8754", "Grenzen", layerList2),
-	    	new Layer("1555", "Water2", layerList5)
-		);
-    	
-    	List<Layer> layerListAl = Arrays.asList(
-			new Layer("3333", "Algemeen1", layerList5),
-	    	new Layer("2222", "Algemeen2", layerList6),
-	    	new Layer("1111", "Algemeen3", layerList7)	
-    	);
-    	
-    	Collections.sort(layerList1, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	Collections.sort(layerList2, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	Collections.sort(layerList3, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	Collections.sort(layerList4, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	Collections.sort(layerList5, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	Collections.sort(layerList6, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	Collections.sort(layerList7, (Layer l1, Layer l2) -> l1.getLayerName().compareTo(l2.getLayerName()));
-    	
-    	for(Layer layer: layerList1) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerList2) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerList3) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerList4) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerList5) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerList6) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerList7) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
-    	
-    	for(Layer layer: layerListAl) { 
-    		layerMap.put(layer.getLayerId(), layer); 
-    	}
+		servicesList = Arrays.asList(
+	    	new Service("1234", "B0 - Referentie", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.3.0"), 
+	    	new Service("2345", "B3 - Water", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B3/wms?", "1.3.0"),
+	    	new Service("3456", "B6 - Economie en landbouw", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B6/wms?", "1.3.0"),
+	    	new Service("4567", "Stedelijk_gebied", "http://staging-services.geodataoverijssel.nl/geoserver/B04_stedelijk_gebied/wms?", "1.3.0"),
+	    	new Service("5678", "Bestuurlijke grenzen", "http://staging-services.geodataoverijssel.nl/geoserver/B14_bestuurlijke_grenzen/wms?", "1.3.0"),
+	    	new Service("6789", "B4 - Natuur en milieu", "http://staging-services.geodataoverijssel.nl/geoserver/OV_B4/wms?", "1.3.0")
+	    );
     }
+	
+	public InputStream getWMSCapabilitiesBody(String url) {
+		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
+		
+		Map<String, String[]> colStr = request().queryString();
+		
+		for (Map.Entry<String, String[]> entry: colStr.entrySet()) {
+			for(String entryValue: entry.getValue()) {
+				request = request.setQueryParameter(entry.getKey(), entryValue);
+			}
+		}
+		
+		try {
+			Promise<WSResponse> response = request.get();
+			InputStream inputStream = null;
+			inputStream = response.get(10000).getBodyAsStream();
+			
+			return inputStream;
+		} catch(PromiseTimeoutException pte) {
+			throw pte;
+		}		
+	}
     
-    public WMSCapabilities getWMSCapabilities(String serviceId) throws ParseException {
-    	InputStream capabilities = application.resourceAsStream ("wmscapabilities.xml");
+    public WMSCapabilities getWMSCapabilities(Service service) throws ParseException {
+    	InputStream capabilities = getWMSCapabilitiesBody(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
     	
     	try {
     		return WMSCapabilitiesParser.parseCapabilities(capabilities);
     	} catch(ParseException e) {
     		Logger.error("An exception occured during parsing of a capabilities document: ", e);
-    		throw new ParseException ("Error parsing capabilities document", e);
+    		throw e;
     	} finally {
     		try {
     			capabilities.close();
@@ -137,58 +87,87 @@ public class Application extends Controller {
     }
     
     public Result index() {
-    	List<WMSCapabilities.Service> servicesList = null;
-    	WMSCapabilities capabilities = null;
-    	
-    	try {
-    		capabilities = getWMSCapabilities("1234");
-    		servicesList = Arrays.asList(
-    			capabilities.serviceIdentification()
-    	    );
-    	} catch(ParseException e) {
-    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
-    	}
-    	
-    	return ok(index.render(servicesList, capabilities));
+    	return ok(index.render(servicesList));
     }
     
-    public Result allLayers() {    	
+	public Result allLayers(String serviceId) {    	
     	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-    	WMSCapabilities capabilities = null;
+    	List<WMSCapabilities.Layer> layerList2 = new ArrayList<>();
+    	Service service = null;
     	
     	try {
-    		capabilities = getWMSCapabilities("1234");
-    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.allLayers();
-    		for(WMSCapabilities.Layer layer : collectionLayers) {
-    			layerList.add(layer);
+    		for(Service service2 : servicesList) {
+    			WMSCapabilities capabilities = null;
+    			if(serviceId.equals(service2.getServiceId())) {
+    				try {
+    					capabilities = getWMSCapabilities(service2);
+    				} catch(PromiseTimeoutException pte) {
+    					return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
+    				}
+    				
+    				Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
+    				
+    				for(WMSCapabilities.Layer layer : collectionLayers) {
+    	    			layerList.add(layer);
+    	    		}
+    	    		
+    	    		for(WMSCapabilities.Layer layer2 : layerList) {
+    	    			layerList2 = layer2.layers();
+    	    		}
+    	    		
+    	    		layerList = crsCheck(layerList);
+    	    		service = service2;
+    			}
     		}
-    		layerList.remove(0);
     	} catch(ParseException e) {
-    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+    		return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald.");
     	}
     	
-    	return ok(layers.render(layerList));
+    	return ok(layers.render(layerList2, service));
     }
     
-    public Result layers(String layerId) {    	
+    public Result layers(String serviceId, String layerId) {    	
     	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-    	WMSCapabilities capabilities = null;
+    	Service service = null;
     	
     	try {
-    		capabilities = getWMSCapabilities("1234");
-    		WMSCapabilities.Layer layer = capabilities.layer(layerId);
-    		layerList = layer.layers();
+    		for(Service service2 : servicesList) {
+    			WMSCapabilities capabilities = null;
+    			if(serviceId.equals(service2.getServiceId())) {
+    				try {
+    					capabilities = getWMSCapabilities(service2);
+    				} catch(PromiseTimeoutException pte) {
+    					return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
+    				}
+    				
+    				WMSCapabilities.Layer layer = capabilities.layer(layerId);
+    				layerList = layer.layers();
+    				layerList = crsCheck(layerList);
+    				service = service2;
+    			}
+    		}
     	} catch(ParseException e) {
-    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+    		return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald.");
     	}
     	
-    	return ok(layers.render(layerList));
+    	return ok(layers.render(layerList, service));
+    }
+    
+    public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
+    	for(WMSCapabilities.Layer layer : layerList) {
+    		if(!layer.supportsCRS("EPSG:28992")) {
+				layerList.remove(layer);
+			}
+		}
+    	
+    	return layerList;
     }
     
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
             controllers.routes.javascript.Application.allLayers(),
-            controllers.routes.javascript.Application.layers()
+            controllers.routes.javascript.Application.layers(),
+            controllers.routes.javascript.Proxy.proxy()
         )).as ("text/javascript");
     }
 }
