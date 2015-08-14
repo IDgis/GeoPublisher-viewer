@@ -11,18 +11,25 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
 import models.Service;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
+import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.F.PromiseTimeoutException;
+import play.libs.ws.WSAuthScheme;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
+import play.mvc.Http.RequestBody;
+import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
 import views.html.capabilitieswarning;
 import views.html.index;
@@ -30,19 +37,32 @@ import views.html.layers;
 
 public class Application extends Controller {
 	private @Inject WSClient ws;
+	private @Inject WSClient ws2;
 	
-	private List<Service> servicesList;
-	
-	public Application() {
-		servicesList = Arrays.asList(
-	    	new Service("1234", "B0 - Referentie", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.3.0"), 
-	    	new Service("2345", "B3 - Water", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B3/wms?", "1.3.0"),
-	    	new Service("3456", "B6 - Economie en landbouw", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B6/wms?", "1.3.0"),
-	    	new Service("4567", "Stedelijk_gebied", "http://staging-services.geodataoverijssel.nl/geoserver/B04_stedelijk_gebied/wms?", "1.3.0"),
-	    	new Service("5678", "Bestuurlijke grenzen", "http://staging-services.geodataoverijssel.nl/geoserver/B14_bestuurlijke_grenzen/wms?", "1.3.0"),
-	    	new Service("6789", "B4 - Natuur en milieu", "http://staging-services.geodataoverijssel.nl/geoserver/OV_B4/wms?", "1.3.0")
-	    );
-    }
+	public Promise<List<Service>> getServicesList() {
+		String url = "http://staging-services.geodataoverijssel.nl/geoserver/" + "rest/workspaces.xml";
+		
+		WSRequest request = ws2.url(url).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
+		return request.get().map(response -> {
+			Document body = response.asXml();
+			
+			body.getElementsByTagName("workspace");
+			
+			List<Service> servicesList = Arrays.asList(
+			    	new Service("1234", "B0 - Referentie", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.3.0"), 
+			    	new Service("2345", "B3 - Water", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B3/wms?", "1.3.0"),
+			    	new Service("3456", "B6 - Economie en landbouw", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B6/wms?", "1.3.0"),
+			    	new Service("4567", "Stedelijk_gebied", "http://staging-services.geodataoverijssel.nl/geoserver/B04_stedelijk_gebied/wms?", "1.3.0"),
+			    	new Service("5678", "Bestuurlijke grenzen", "http://staging-services.geodataoverijssel.nl/geoserver/B14_bestuurlijke_grenzen/wms?", "1.3.0"),
+			    	new Service("6789", "B4 - Natuur en milieu", "http://staging-services.geodataoverijssel.nl/geoserver/OV_B4/wms?", "1.3.0"));
+			
+			Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareTo(s2.getServiceName()));
+			
+			return servicesList;			
+
+			// todo: parsing
+		});
+	}
 	
 	public InputStream getWMSCapabilitiesBody(String url) {
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
@@ -87,9 +107,8 @@ public class Application extends Controller {
     	return ok(capabilitieswarning.render(capWarning));
     }
     
-    public Result index() {
-    	Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareTo(s2.getServiceName()));
-    	return ok(index.render(servicesList));
+    public Promise<Result> index() {
+    	return getServicesList().map(servicesList -> ok(index.render(servicesList)));
     }
     
 	public Result allLayers(String serviceId) {    	
