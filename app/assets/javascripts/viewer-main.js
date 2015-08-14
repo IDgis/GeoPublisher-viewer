@@ -23,7 +23,7 @@ require([
 		var matrixIds0 = [];
 		
 		var divView = dom.byId('svr-layer-view');
-		var divInfo = dom.byId('info');
+		var divInfo = dom.byId('info-container');
 		
 		var i;
 		var j;
@@ -117,8 +117,6 @@ require([
 						domStyle.set(divView, 'margin-bottom', '15px');
 						domStyle.set(divInfo, 'height', '35%');
 						domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
-						
-						
 					} else {
 						domStyle.set(divView, 'height', '95%');
 						domStyle.set(divView, 'margin-bottom', '0px');
