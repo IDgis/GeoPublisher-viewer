@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
 import models.Service;
 import nl.idgis.ogc.client.wms.WMSCapabilitiesParser;
@@ -20,7 +19,6 @@ import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
-import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.F.PromiseTimeoutException;
 import play.libs.ws.WSAuthScheme;
@@ -28,21 +26,16 @@ import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
-import play.mvc.Http.RequestBody;
-import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
-import views.html.capabilitieswarning;
-import views.html.index;
-import views.html.layers;
+import views.html.*;
 
 public class Application extends Controller {
 	private @Inject WSClient ws;
-	private @Inject WSClient ws2;
 	
 	public Promise<List<Service>> getServicesList() {
 		String url = "http://staging-services.geodataoverijssel.nl/geoserver/" + "rest/workspaces.xml";
 		
-		WSRequest request = ws2.url(url).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
+		WSRequest request = ws.url(url).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
 		return request.get().map(response -> {
 			Document body = response.asXml();
 			
@@ -64,7 +57,7 @@ public class Application extends Controller {
 		});
 	}
 	
-	public InputStream getWMSCapabilitiesBody(String url) {
+	public Promise<InputStream> getWMSCapabilitiesBody(String url) {
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
@@ -77,101 +70,92 @@ public class Application extends Controller {
 		
 		try {
 			Promise<WSResponse> response = request.get();
-			InputStream inputStream = null;
-			inputStream = response.get(10000).getBodyAsStream();
-			
-			return inputStream;
+			return response.map(response2 -> {
+				return response2.getBodyAsStream();
+			});
 		} catch(PromiseTimeoutException pte) {
 			throw pte;
 		}		
 	}
     
-    public WMSCapabilities getWMSCapabilities(Service service) throws ParseException {
-    	InputStream capabilities = getWMSCapabilitiesBody(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
+    public Promise<WMSCapabilities> getWMSCapabilities(Service service) {
+    	Promise<InputStream> capabilities = getWMSCapabilitiesBody(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
     	
-    	try {
-    		return WMSCapabilitiesParser.parseCapabilities(capabilities);
-    	} catch(ParseException e) {
-    		Logger.error("An exception occured during parsing of a capabilities document: ", e);
-    		throw e;
-    	} finally {
+    	return capabilities.map(capabilitiesBody -> {
     		try {
-    			capabilities.close();
-    		} catch(IOException io) {
-    			Logger.error("An exception occured during closing of the capabilities stream.", io);
-    		}
-    	}
-    }
-    
-    public Result getErrorWarning(String capWarning) {
-    	return ok(capabilitieswarning.render(capWarning));
+        		return WMSCapabilitiesParser.parseCapabilities(capabilitiesBody);
+        	} catch(ParseException e) {
+        		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+        		throw e;
+        	} finally {
+        		try {
+        			capabilitiesBody.close();
+        		} catch(IOException io) {
+        			Logger.error("An exception occured during closing of the capabilities stream.", io);
+        		}
+        	}
+    	});
     }
     
     public Promise<Result> index() {
     	return getServicesList().map(servicesList -> ok(index.render(servicesList)));
     }
     
-	public Result allLayers(String serviceId) {    	
-    	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-    	List<WMSCapabilities.Layer> layerList2 = new ArrayList<>();
-    	Service service = null;
-    	
-    	try {
-    		for(Service service2 : servicesList) {
-    			WMSCapabilities capabilities = null;
-    			if(serviceId.equals(service2.getServiceId())) {
-    				try {
-    					capabilities = getWMSCapabilities(service2);
-    				} catch(PromiseTimeoutException pte) {
-    					return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
-    				}
-    				
-    				Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
-    				
-    				for(WMSCapabilities.Layer layer : collectionLayers) {
-    	    			layerList.add(layer);
-    	    		}
-    	    		
-    	    		for(WMSCapabilities.Layer layer2 : layerList) {
-    	    			layerList2 = layer2.layers();
-    	    		}
-    	    		
-    	    		layerList = crsCheck(layerList);
-    	    		service = service2;
+	public Promise<Result> allLayers(String serviceId) {
+		return getServicesList().flatMap(servicesList -> {
+    		for(Service service : servicesList) {
+    			if(serviceId.equals(service.getServiceId())) {					
+					return getWMSCapabilities(service).map(capabilities -> {
+						Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
+						
+						List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+						for(WMSCapabilities.Layer layer : collectionLayers) {
+        	    			layerList.addAll(layer.layers());
+        	    		}
+						
+						layerList = crsCheck(layerList);
+						
+						return (Result)ok(layers.render(layerList, service));
+					});
     			}
     		}
-    	} catch(ParseException e) {
-    		return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald.");
-    	}
-    	
-    	return ok(layers.render(layerList2, service));
+    		
+    		return Promise.pure(notFound());
+    	}).recover(this::getErrorWarning);
     }
-    
-    public Result layers(String serviceId, String layerId) {    	
-    	List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-    	Service service = null;
-    	
-    	try {
-    		for(Service service2 : servicesList) {
-    			WMSCapabilities capabilities = null;
-    			if(serviceId.equals(service2.getServiceId())) {
-    				try {
-    					capabilities = getWMSCapabilities(service2);
-    				} catch(PromiseTimeoutException pte) {
-    					return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
-    				}
-    				
-    				WMSCapabilities.Layer layer = capabilities.layer(layerId);
-    				layerList = layer.layers();
-    				layerList = crsCheck(layerList);
-    				service = service2;
+
+	public Promise<Result> layers(String serviceId, String layerId) {
+    	return getServicesList().flatMap(servicesList -> {
+    		for(Service service : servicesList) {
+    			if(serviceId.equals(service.getServiceId())) {
+    				return getWMSCapabilities(service).map(capabilities -> {
+    					WMSCapabilities.Layer layer = capabilities.layer(layerId);
+    					
+    					List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+						layerList = layer.layers();
+						layerList = crsCheck(layerList);
+						
+						return (Result)ok(layers.render(layerList, service));
+					});
     			}
     		}
-    	} catch(ParseException e) {
-    		return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald.");
-    	}
-    	
-    	return ok(layers.render(layerList, service));
+    		
+    		return Promise.pure(notFound());
+    	}).recover(this::getErrorWarning);
+    }
+	
+	private Result getErrorWarning(Throwable t) throws Throwable {
+		if(t instanceof ParseException) {
+			return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald."); 
+		} else if(t instanceof PromiseTimeoutException){
+			return getErrorWarning("Het laden van de lagen op dit niveau heeft te lang geduurd.");
+		} else {
+			throw t;
+		}
+	}
+	
+	public Result getErrorWarning(String capWarning) {
+    	return ok(capabilitieswarning.render(capWarning));
     }
     
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
