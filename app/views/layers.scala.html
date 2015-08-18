@@ -1,6 +1,4 @@
-@import nl.idgis.ogc.wms._
-
-@(layerList: List[WMSCapabilities.Layer], service: Service)
+@(layerList: List[nl.idgis.ogc.wms.WMSCapabilities.Layer], service: Service)
 
 <ul class="js-ul-layers">
 	@for(subLayer <- layerList) {				

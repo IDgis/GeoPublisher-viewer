@@ -24,13 +24,12 @@ import play.libs.F.PromiseTimeoutException;
 import play.libs.ws.WSAuthScheme;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
-import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.capabilitieswarning;
+import views.html.emptylayermessage;
 import views.html.index;
 import views.html.layers;
-import views.html.emptylayermessage;
 
 public class Application extends Controller {
 	private @Inject WSClient ws;
@@ -84,14 +83,9 @@ public class Application extends Controller {
 			}
 		}
 		
-		try {
-			Promise<WSResponse> response = request.get();
-			return response.map(response2 -> {
-				return response2.getBodyAsStream();
-			});
-		} catch(PromiseTimeoutException pte) {
-			throw pte;
-		}		
+		return request.get().map(response -> {
+			return response.getBodyAsStream();
+		});
 	}
     
     public Promise<WMSCapabilities> getWMSCapabilities(Service service) {

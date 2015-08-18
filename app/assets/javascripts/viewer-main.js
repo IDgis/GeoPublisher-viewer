@@ -1,5 +1,4 @@
 /* jshint -W099 */
-/* jshint -W083 */
 require([
 	'dojo/dom',
 	'dojo/io-query',
@@ -10,10 +9,11 @@ require([
 	'dojo/dom-construct',
 	'dojo/dom-style',
 	'dojo/request/xhr',
+	'dojo/_base/array',
 
 	'dojo/NodeList-traverse',
 	'dojo/domReady!'
-	], function(dom, ioQuery, on, win, query, domAttr, domConstruct, domStyle, xhr) {
+	], function(dom, ioQuery, on, win, query, domAttr, domConstruct, domStyle, xhr, array) {
 		var crs = 'EPSG:28992';
 		var serverType = 'geoserver';
 		
@@ -85,17 +85,19 @@ require([
         	var layersArray = map.getLayers().getArray();
         	var serviceArray = query('.js-layer-check[type=checkbox]:checked').closest('.js-service-id');
         	
-        	for(i = 0; i < serviceArray.length; i++) {
-        		var checkedElementen = query(serviceArray[i]).query('.js-layer-check[type=checkbox]:checked');
+        	array.forEach(serviceArray, function(service) {
+        		var checkedElementen = query(service).query('.js-layer-check[type=checkbox]:checked');
         		var layerString = '';
         		
-        		for(j = 0; j < checkedElementen.length; j++) {
+        		array.forEach(checkedElementen, function(checkedElement) {
+        			
+        			
         			if(j === 0) {
         				layerString = layerString.concat(checkedElementen[j].dataset.layerName);
         			} else {
         				layerString = layerString.concat(',', checkedElementen[j].dataset.layerName);
         			}
-        		}
+        		});
         		
         		var sourceLayer = new ol.source.ImageWMS({
     	    		url: checkedElementen[0].dataset.layerEndpoint,
@@ -125,7 +127,7 @@ require([
 					
 					map.updateSize();
 				});
-        	}
+        	});
 		});
         
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
