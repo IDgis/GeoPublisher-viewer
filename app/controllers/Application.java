@@ -30,6 +30,7 @@ import play.mvc.Result;
 import views.html.capabilitieswarning;
 import views.html.index;
 import views.html.layers;
+import views.html.emptylayermessage;
 
 public class Application extends Controller {
 	private @Inject WSClient ws;
@@ -130,7 +131,11 @@ public class Application extends Controller {
 						
 						layerList = crsCheck(layerList);
 						
-						return (Result)ok(layers.render(layerList, service));
+						if(layerList.isEmpty()) {
+							return getEmptyLayerMessage("Geen lagen");
+						} else {
+							return (Result)ok(layers.render(layerList, service));
+						}
 					});
     			}
     		}
@@ -150,7 +155,11 @@ public class Application extends Controller {
 						layerList = layer.layers();
 						layerList = crsCheck(layerList);
 						
-						return (Result)ok(layers.render(layerList, service));
+						if(layerList.isEmpty()) {
+							return getEmptyLayerMessage("Geen lagen");
+						} else {
+							return (Result)ok(layers.render(layerList, service));
+						}
 					});
     			}
     		}
@@ -171,6 +180,10 @@ public class Application extends Controller {
 	
 	public Result getErrorWarning(String capWarning) {
     	return ok(capabilitieswarning.render(capWarning));
+    }
+	
+	public Result getEmptyLayerMessage(String message) {
+    	return ok(emptylayermessage.render(message));
     }
     
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {

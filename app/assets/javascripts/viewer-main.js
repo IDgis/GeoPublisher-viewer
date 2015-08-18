@@ -126,8 +126,6 @@ require([
 					map.updateSize();
 				});
         	}
-        	
-        	
 		});
         
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
@@ -136,7 +134,7 @@ require([
 			
 			if(this.dataset.serviceStatus === "none") {
 				xhr(jsRoutes.controllers.Application.allLayers(serviceId).url, {
-					handleAs: "text"
+					handleAs: "html"
 				}).then(function(data){
 					domConstruct.place(data, serviceNode);
 				});
