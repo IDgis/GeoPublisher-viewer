@@ -39,33 +39,34 @@ public class Application extends Controller {
 		String workspacesSummary = url + "rest/workspaces.xml";
 		String version = "1.3.0";
 		
-		WSRequest request = ws.url(workspacesSummary).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
-		return request.get().flatMap(response -> {
-			Document body = response.asXml();
-			NodeList names = body.getElementsByTagName("name");
+		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
+		return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
+			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
+			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
 			
 			List<Promise<Service>> unsortedServicesList = new ArrayList<>();
 			for(int i = 0; i < names.getLength(); i++) {
 				String name = names.item(i).getTextContent();
 				String workspaceSettings = url + "rest/services/wms/workspaces/" + name + "/settings.xml";
 				
-				WSRequest request2 = ws.url(workspaceSettings).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
-				unsortedServicesList.add(request2.get().map(response2 -> {
-					Document body2 = response2.asXml();
-					NodeList titles = body2.getElementsByTagName("title");
+				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
+				unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
+					Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
+					NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
 					
-					if(titles.getLength() > 0) {
-						String title = titles.item(0).getTextContent();
-
-						return new Service(name, title, url + name + "/wms?", version);
-					} else {					
-						return new Service(name, name, url + name + "/wms?", version);
+					for(int j = 0; j < titles.getLength(); j++) {
+						if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
+							String title = titles.item(0).getTextContent();
+							return new Service(name, title, url + name + "/wms?", version);
+						}
 					}
+					
+					return new Service(name, name, url + name + "/wms?", version);
 				}));
 			}
 			
 			return Promise.sequence(unsortedServicesList).map(servicesList -> {
-				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareTo(s2.getServiceName()));
+				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareToIgnoreCase(s2.getServiceName()));
 				
 				return servicesList;
 			});
@@ -95,13 +96,13 @@ public class Application extends Controller {
     		try {
         		return WMSCapabilitiesParser.parseCapabilities(capabilitiesBody);
         	} catch(ParseException e) {
-        		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+        		Logger.error("An exception occured during parsing of the capabilities document from service " + service.getServiceId() + ": ", e);
         		throw e;
         	} finally {
         		try {
         			capabilitiesBody.close();
         		} catch(IOException io) {
-        			Logger.error("An exception occured during closing of the capabilities stream.", io);
+        			Logger.error("An exception occured during closing of the capabilities stream from service " + service.getServiceId() + ": ", io);
         		}
         	}
     	});
