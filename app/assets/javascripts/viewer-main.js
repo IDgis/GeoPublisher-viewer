@@ -116,7 +116,7 @@ require([
         		var url = sourceLayer.getGetFeatureInfoUrl(evt.coordinate, viewResolution, map.getView().getProjection(), {'INFO_FORMAT': 'text/html'});
         		url += '&' + 'encoding' + '=' + encodingValue;
         		
-        		xhr(jsRoutes.controllers.Proxy.proxy(url).url, {
+        		xhr(jsRoutes.controllers.GetFeatureInfoProxy.proxy(url).url, {
 					handleAs: "html"
 				}).then(function(data) {
 					domConstruct.place(data, info);
@@ -124,10 +124,10 @@ require([
 					if(query('table.featureInfo')[0]) {
 						domStyle.set(divView, 'height', '60%');
 						domStyle.set(divView, 'margin-bottom', '15px');
-						domStyle.set(divInfo, 'height', '35%');
+						domStyle.set(divInfo, 'height', '40%');
 						domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
 					} else {
-						domStyle.set(divView, 'height', '95%');
+						domStyle.set(divView, 'height', '100%');
 						domStyle.set(divView, 'margin-bottom', '0px');
 						domStyle.set(divInfo, 'height', '0%');
 					}

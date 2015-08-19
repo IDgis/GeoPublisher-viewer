@@ -17,9 +17,9 @@ import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class Proxy extends Controller {
+public class GetFeatureInfoProxy extends Controller {
 	
-	private static final ALogger logger = Logger.of(Proxy.class);
+	private static final ALogger logger = Logger.of(GetFeatureInfoProxy.class);
 	
 	@Inject WSClient ws;
 	
