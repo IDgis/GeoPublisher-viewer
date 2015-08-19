@@ -1,6 +1,4 @@
-@import nl.idgis.ogc.wms._
-
-@(layer: WMSCapabilities.Layer, service: Service)
+@(layer: nl.idgis.ogc.wms.WMSCapabilities.Layer, service: Service)
 
 <li data-layer-id="@layer.name()">
 	<span @if(!layer.layers().isEmpty){ class="js-layer-link" } data-layer-status="none">
