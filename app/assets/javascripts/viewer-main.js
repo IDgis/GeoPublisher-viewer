@@ -17,7 +17,18 @@ require([
 		var crs = 'EPSG:28992';
 		var serverType = 'geoserver';
 		
-		var divView = dom.byId('svr-layer-view');
+		var divLayerControlCnt = dom.byId('layer-control-container');
+		var divViewCnt = dom.byId('viewer-container');
+		
+		var setLayerControlCntHeight = domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
+		var setViewCntHeight = domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+		
+		var setCntsHeight = on(window, 'resize', function(evt) {
+			domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
+			domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+		});
+		
+		var divView = dom.byId('srv-layer-view');
 		var divInfo = dom.byId('info-container');
 		var info = dom.byId('info');
 		var map;
@@ -54,8 +65,6 @@ require([
 			center: [220000, 499000],
 			zoom: 5
 		});
-		
-		
 		
 		map = new ol.Map({
 			layers: [
