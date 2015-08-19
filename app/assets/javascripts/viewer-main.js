@@ -17,15 +17,18 @@ require([
 		var crs = 'EPSG:28992';
 		var serverType = 'geoserver';
 		
+		var wrapper = dom.byId('wrapper');
 		var divLayerControlCnt = dom.byId('layer-control-container');
 		var divViewCnt = dom.byId('viewer-container');
 		
+		var setWrapperHeight = domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
 		var setLayerControlCntHeight = domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
 		var setViewCntHeight = domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
 		
 		var setCntsHeight = on(window, 'resize', function(evt) {
 			domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
 			domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+			domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
 		});
 		
 		var divView = dom.byId('srv-layer-view');
