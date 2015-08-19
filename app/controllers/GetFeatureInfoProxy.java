@@ -16,6 +16,7 @@ import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.emptyfeatureinfomessage;
 
 public class GetFeatureInfoProxy extends Controller {
 	
@@ -51,7 +52,7 @@ public class GetFeatureInfoProxy extends Controller {
 				response().setContentType("text/html; charset=utf-8");
 				
 				if(doc.body().html().isEmpty()) {
-					return status(statusCode, "<div></div>", "UTF-8");
+					return getEmptyFeatureInfo("Niets gevonden.");
 				} else {
 					return status(statusCode, doc.body().html(), "UTF-8");
 				}
@@ -70,4 +71,8 @@ public class GetFeatureInfoProxy extends Controller {
 		
 		return recoveredPromise;
 	}
+	
+	public Result getEmptyFeatureInfo(String message) {
+    	return ok(emptyfeatureinfomessage.render(message));
+    }
 }

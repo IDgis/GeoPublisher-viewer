@@ -97,6 +97,18 @@ require([
         	var layersArray = map.getLayers().getArray();
         	var serviceArray = query('.js-layer-check[type=checkbox]:checked').closest('.js-service-id');
         	
+        	domStyle.set(divInfo, 'display', 'block');
+			domStyle.set(divView, 'height', '75%');
+			domStyle.set(divView, 'margin-bottom', '15px');
+			domStyle.set(divInfo, 'height', '25%');
+			domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
+			
+			map.updateSize();
+        	
+			if(serviceArray.length === 0) {
+				domConstruct.place('<span><strong>Niets gevonden.</strong></span>', info);
+			}
+			
         	array.forEach(serviceArray, function(service) {
         		var checkedElementen = query(service).query('.js-layer-check[type=checkbox]:checked');
         		var layerString = '';
@@ -124,20 +136,12 @@ require([
 				}).then(function(data) {
 					domConstruct.place(data, info);
 					
-					if(query('table.featureInfo')[0]) {
-						domStyle.set(divInfo, 'display', 'block');
-						domStyle.set(divView, 'height', '75%');
-						domStyle.set(divView, 'margin-bottom', '15px');
-						domStyle.set(divInfo, 'height', '25%');
-						domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
-					} else {
-						domStyle.set(divInfo, 'display', 'none');
-						domStyle.set(divView, 'height', '100%');
-						domStyle.set(divView, 'margin-bottom', '0px');
-						domStyle.set(divInfo, 'height', '0%');
-					}
+					//domStyle.set(divInfo, 'display', 'none');
+					//domStyle.set(divView, 'height', '100%');
+					//domStyle.set(divView, 'margin-bottom', '0px');
+					//domStyle.set(divInfo, 'height', '0%');
 					
-					map.updateSize();
+					
 				});
         	});
 		});
