@@ -125,11 +125,13 @@ require([
 					domConstruct.place(data, info);
 					
 					if(query('table.featureInfo')[0]) {
-						domStyle.set(divView, 'height', '60%');
+						domStyle.set(divInfo, 'display', 'block');
+						domStyle.set(divView, 'height', '75%');
 						domStyle.set(divView, 'margin-bottom', '15px');
-						domStyle.set(divInfo, 'height', '40%');
+						domStyle.set(divInfo, 'height', '25%');
 						domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
 					} else {
+						domStyle.set(divInfo, 'display', 'none');
 						domStyle.set(divView, 'height', '100%');
 						domStyle.set(divView, 'margin-bottom', '0px');
 						domStyle.set(divInfo, 'height', '0%');
