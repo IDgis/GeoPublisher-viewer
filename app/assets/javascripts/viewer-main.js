@@ -143,19 +143,23 @@ require([
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
 			var serviceId = domAttr.get(this.parentNode, 'data-service-id');
 			var serviceNode = this.parentNode;
+			var serviceIconNode = query(this).query('.js-link-icon')[0];
 			
 			if(this.dataset.serviceStatus === "none") {
 				xhr(jsRoutes.controllers.Application.allLayers(serviceId).url, {
 					handleAs: "html"
 				}).then(function(data){
 					domConstruct.place(data, serviceNode);
+					domAttr.set(serviceIconNode, 'class', 'glyphicon glyphicon-minus-sign js-link-icon');
 				});
 				this.dataset.serviceStatus = "created";
 			} else if(this.dataset.serviceStatus == "created") {
 				domStyle.set(query(this).siblings()[0], 'display', 'none');
+				domAttr.set(serviceIconNode, 'class', 'glyphicon glyphicon-plus-sign js-link-icon');
 				this.dataset.serviceStatus = "hidden";
 			} else {
 				domStyle.set(query(this).siblings()[0], 'display', 'block');
+				domAttr.set(serviceIconNode, 'class', 'glyphicon glyphicon-minus-sign js-link-icon');
 				this.dataset.serviceStatus = "created";
 			}
 		});
@@ -164,19 +168,23 @@ require([
 			var serviceId = domAttr.get(query(this).closest(".js-service-id")[0], 'data-service-id');
 			var layerId = domAttr.get(this.parentNode, 'data-layer-id');
 			var layerNode = this.parentNode;
+			var layerIconNode = query(this).query('.js-link-icon')[0];
 			
 			if(this.dataset.layerStatus === "none") {
 				xhr(jsRoutes.controllers.Application.layers(serviceId, layerId).url, {
 					handleAs: "html"
 				}).then(function(data){
 					domConstruct.place(data, layerNode);
+					domAttr.set(layerIconNode, 'class', 'glyphicon glyphicon-minus-sign js-link-icon');
 				});
 				this.dataset.layerStatus = "created";
 			} else if(this.dataset.layerStatus === "created") {
 				domStyle.set(query(this).siblings()[0], 'display', 'none');
+				domAttr.set(layerIconNode, 'class', 'glyphicon glyphicon-plus-sign js-link-icon');
 				this.dataset.layerStatus = "hidden";
 			} else {
 				domStyle.set(query(this).siblings()[0], 'display', 'block');
+				domAttr.set(layerIconNode, 'class', 'glyphicon glyphicon-minus-sign js-link-icon');
 				this.dataset.layerStatus = "created";
 			}
 		});
