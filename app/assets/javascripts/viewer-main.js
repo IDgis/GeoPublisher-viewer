@@ -17,20 +17,20 @@ require([
 		var crs = 'EPSG:28992';
 		var serverType = 'geoserver';
 		
+		var divView = dom.byId('svr-layer-view');
+		var divInfo = dom.byId('info-container');
+		var info = dom.byId('info');
+		var map;
+		
 		var origin = [-285401.920, 903401.920];
 		var resolutions = [3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42, 0.21];
 		var extent = [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999];
+		
 		var matrixIds0 = [];
-		
-		var divView = dom.byId('svr-layer-view');
-		var divInfo = dom.byId('info-container');
-		
-		var i;
-		var j;
-		
-		for (i = 0; i < 15; i++) {
-			matrixIds0[i] = crs + ':' + i;
-		}
+		matrixIds0 = array.map(resolutions, function(resolution) {
+			var indexResolution = resolutions.indexOf(resolution);
+			return crs + ':' + indexResolution;
+		});
 		
 		var tileGrid0 = new ol.tilegrid.WMTS({
 			origin: origin,
@@ -39,9 +39,10 @@ require([
 		});
 		
 	    var matrixIds1 = [];
-	    for (i = 0; i < 15; i++) {
-	    	matrixIds1[i] = (i < 10 ? '0' : '') + i;
-	    }
+	    matrixIds1 = array.map(resolutions, function(resolution) {
+			var indexResolution = resolutions.indexOf(resolution);
+			return (indexResolution < 10 ? '0' : '') + indexResolution;
+		});
 	    
 	    var projection = new ol.proj.Projection({
 	    	code: 'EPSG:28992',
@@ -54,8 +55,7 @@ require([
 			zoom: 5
 		});
 		
-		var map;
-		var info = dom.byId('info');
+		
 		
 		map = new ol.Map({
 			layers: [
@@ -90,12 +90,10 @@ require([
         		var layerString = '';
         		
         		array.forEach(checkedElementen, function(checkedElement) {
-        			
-        			
-        			if(j === 0) {
-        				layerString = layerString.concat(checkedElementen[j].dataset.layerName);
+        			if(checkedElementen.indexOf(checkedElement) === 0) {
+        				layerString = layerString.concat(checkedElement.dataset.layerName);
         			} else {
-        				layerString = layerString.concat(',', checkedElementen[j].dataset.layerName);
+        				layerString = layerString.concat(',', checkedElement.dataset.layerName);
         			}
         		});
         		
@@ -200,11 +198,12 @@ require([
 				domAttr.set(this, 'data-layer-index', '');
 				
 				var checkedInputs = query('.js-layer-check:checked');
-				for(var i = 0; i < checkedInputs.length; i++) {
-					if(domAttr.get(checkedInputs[i], 'data-layer-index') > indexElement) {
-						domAttr.set(checkedInputs[i], 'data-layer-index', domAttr.get(checkedInputs[i], 'data-layer-index') -1);
+				
+				array.forEach(checkedInputs, function(checkedInput) {
+					if(domAttr.get(checkedInput, 'data-layer-index') > indexElement) {
+						domAttr.set(checkedInput, 'data-layer-index', domAttr.get(checkedInput, 'data-layer-index') -1);
 					}
-				}
+				});
 			}
 		});
 });
