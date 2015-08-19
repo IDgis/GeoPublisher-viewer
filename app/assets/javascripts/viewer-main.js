@@ -20,6 +20,10 @@ require([
 		var wrapper = dom.byId('wrapper');
 		var divLayerControlCnt = dom.byId('layer-control-container');
 		var divViewCnt = dom.byId('viewer-container');
+		var divView = dom.byId('srv-layer-view');
+		var divInfo = dom.byId('info-container');
+		var info = dom.byId('info');
+		var map;
 		
 		var setWrapperHeight = domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
 		var setLayerControlCntHeight = domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
@@ -27,14 +31,21 @@ require([
 		
 		var setCntsHeight = on(window, 'resize', function(evt) {
 			domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
-			domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
 			domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
+			
+			if(domStyle.get(divInfo, 'display') === 'none') {
+				domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+			} else {
+				domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+				
+				domStyle.set(divView, 'height', '75%');
+				domStyle.set(divView, 'margin-bottom', '15px');
+				domStyle.set(divInfo, 'height', '25%');
+				domStyle.set(divInfo, 'height', domStyle.get(divInfo, 'height')-15 + 'px');
+				
+				map.updateSize();
+			}
 		});
-		
-		var divView = dom.byId('srv-layer-view');
-		var divInfo = dom.byId('info-container');
-		var info = dom.byId('info');
-		var map;
 		
 		var origin = [-285401.920, 903401.920];
 		var resolutions = [3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42, 0.21];
