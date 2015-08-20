@@ -21,16 +21,22 @@ require([
 		var divLayerControlCnt = dom.byId('layer-control-container');
 		var divViewCnt = dom.byId('viewer-container');
 		var divView = dom.byId('srv-layer-view');
+		var divControl = dom.byId('srv-layer-control');
 		var divInfo = dom.byId('info-container');
 		var info = dom.byId('info');
+		var uncheck = dom.byId('uncheck-all');
 		var map;
 		
 		var setWrapperHeight = domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
-		var setLayerControlCntHeight = domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
+		var setControlCntHeight = domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
 		var setViewCntHeight = domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+		var setControlHeight = domStyle.set(divControl, 'height', domStyle.get(divControl, 'height')-domStyle.get(uncheck, 'height') + 'px');
 		
+		var uncheckHeight = domStyle.get(uncheck, 'height');
 		var setCntsHeight = on(window, 'resize', function(evt) {
 			domStyle.set(divLayerControlCnt, 'height', window.innerHeight-130 + 'px');
+			domStyle.set(divControl, 'height', '100%');
+			domStyle.set(divControl, 'height', domStyle.get(divControl, 'height')-uncheckHeight + 'px');
 			domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
 			
 			if(domStyle.get(divInfo, 'display') === 'none') {
@@ -80,23 +86,25 @@ require([
 			zoom: 5
 		});
 		
+	    var achtergrond = new ol.layer.Tile({
+    		overlay: false,
+    		opacity: 0.8,
+    		extent: extent,
+        	source : new ol.source.WMTS({
+        		attributions: [],
+        		url: 'http://geodata.nationaalgeoregister.nl/wmts',
+        		layer: 'brtachtergrondkaart',
+        		matrixSet: crs,
+        		format: 'image/png',
+        		tileGrid: tileGrid0,
+        		style: 'default',
+        	}),
+        	visible: true
+        });
+	    
 		map = new ol.Map({
 			layers: [
-		    	new ol.layer.Tile({
-		    		overlay: false,
-		    		opacity: 0.8,
-		    		extent: extent,
-		        	source : new ol.source.WMTS({
-		        		attributions: [],
-		        		url: 'http://geodata.nationaalgeoregister.nl/wmts',
-		        		layer: 'brtachtergrondkaart',
-		        		matrixSet: crs,
-		        		format: 'image/png',
-		        		tileGrid: tileGrid0,
-		        		style: 'default',
-		        	}),
-		        	visible: true
-		        })
+		    	achtergrond
 			],
 			target: 'map',
 			view: view
@@ -231,16 +239,27 @@ require([
    			} else {
 				var indexElement = domAttr.get(this, 'data-layer-index');
    				
-   				map.removeLayer(map.getLayers().removeAt(domAttr.get(this, 'data-layer-index')));
+   				map.removeLayer(map.getLayers().removeAt(indexElement));
 				domAttr.set(this, 'data-layer-index', '');
 				
 				var checkedInputs = query('.js-layer-check:checked');
-				
 				array.forEach(checkedInputs, function(checkedInput) {
 					if(domAttr.get(checkedInput, 'data-layer-index') > indexElement) {
-						domAttr.set(checkedInput, 'data-layer-index', domAttr.get(checkedInput, 'data-layer-index') -1);
+						domAttr.set(checkedInput, 'data-layer-index', domAttr.get(checkedInput, 'data-layer-index') - 1);
 					}
 				});
 			}
+		});
+		
+		var uncheckAllNode = dom.byId('uncheck-all');
+		var uncheckAll = on(uncheckAllNode, 'click', function(e) {
+			map.getLayers().clear();
+			map.addLayer(achtergrond);
+			
+			var checkedInputs = query('.js-layer-check:checked');
+			array.forEach(checkedInputs, function(checkedInput) {
+				domAttr.set(checkedInput, 'data-layer-index', '');
+				domAttr.set(checkedInput, 'checked', false);
+			});
 		});
 });
