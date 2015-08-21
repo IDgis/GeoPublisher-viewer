@@ -110,11 +110,16 @@ require([
 			view: view
 		});
 		
+		var closeFeatureInfoNode = dom.byId('map-full-view');
 		map.on('singleclick', function(evt) {
 			domAttr.set(info, 'innerHTML', '');
         	var viewResolution = (map.getView().getResolution());
         	var layersArray = map.getLayers().getArray();
         	var serviceArray = query('.js-layer-check[type=checkbox]:checked').closest('.js-service-id');
+        	var featureInfoTable = false;
+        	var counter = 0;
+        	
+        	domAttr.set(closeFeatureInfoNode, 'class', 'btn btn-default btn-xs');
         	
         	domStyle.set(divInfo, 'display', 'block');
 			domStyle.set(divView, 'height', '75%');
@@ -128,7 +133,7 @@ require([
 				domConstruct.place('<span><strong>Niets gevonden.</strong></span>', info);
 			}
 			
-        	array.forEach(serviceArray, function(service) {
+			array.forEach(serviceArray, function(service) {
         		var checkedElementen = query(service).query('.js-layer-check[type=checkbox]:checked');
         		var layerString = '';
         		
@@ -153,16 +158,28 @@ require([
         		xhr(jsRoutes.controllers.GetFeatureInfoProxy.proxy(url).url, {
 					handleAs: "html"
 				}).then(function(data) {
-					domConstruct.place(data, info);
+					var nfBoolean = data.indexOf('data-empty-feature-info="true"') > -1;
+					counter++;
 					
-					//domStyle.set(divInfo, 'display', 'none');
-					//domStyle.set(divView, 'height', '100%');
-					//domStyle.set(divView, 'margin-bottom', '0px');
-					//domStyle.set(divInfo, 'height', '0%');
-					
-					
+					if(!nfBoolean) {
+						domConstruct.place(data, info);
+						featureInfoTable = true;
+					} else if(counter === serviceArray.length && featureInfoTable === false) {
+						domConstruct.place(data, info);
+					}
 				});
         	});
+		});
+		
+		
+		var closeFeatureInfo = on(closeFeatureInfoNode, 'click', function(e) {
+			domAttr.set(closeFeatureInfoNode, 'class', 'btn btn-default btn-xs disabled');
+			domStyle.set(divInfo, 'display', 'none');
+			domStyle.set(divView, 'height', '100%');
+			domStyle.set(divView, 'margin-bottom', '0px');
+			domStyle.set(divInfo, 'height', '0%');
+			
+			map.updateSize();
 		});
         
 		var serviceExpand = on(win.doc, '.js-service-link:click', function(e) {
