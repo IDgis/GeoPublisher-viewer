@@ -85,7 +85,7 @@ require([
 			center: [220000, 499000],
 			zoom: 5
 		});
-		
+	    
 	    var achtergrond = new ol.layer.Tile({
     		overlay: false,
     		opacity: 0.8,
@@ -101,6 +101,31 @@ require([
         	}),
         	visible: true
         });
+	    
+	    var iconStyle = new ol.style.Style({
+            image: new ol.style.Icon(({
+                anchor: [0.5, 46],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                opacity: 0.75,
+                src: 'https://evernote.com/media/img/getting_started/skitch/android/android-location_icon.png'
+            }))
+        });
+	    
+	    var iconGeometry = new ol.geom.Point([220000, 499000]);
+        var iconFeature = new ol.Feature({
+            geometry: iconGeometry
+        });
+	    
+	    var vectorSource = new ol.source.Vector({
+            features: [iconFeature]
+        });
+
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource
+        });
+        
+        iconFeature.setStyle(iconStyle);
 	    
 		map = new ol.Map({
 			layers: [
@@ -118,6 +143,9 @@ require([
         	var serviceArray = query('.js-layer-check[type=checkbox]:checked').closest('.js-service-id');
         	var featureInfoTable = false;
         	var counter = 0;
+        	
+        	map.addLayer(vectorLayer);
+        	iconGeometry.setCoordinates(evt.coordinate);
         	
         	domAttr.set(closeFeatureInfoNode, 'class', 'btn btn-default btn-xs');
         	
