@@ -17,10 +17,12 @@ label {font-weight:normal;}
 .service-expand {border:none;}
 .service-expand:hover {background-color:transparent;}
 
+#js-layers-nl {margin-bottom:0;}
+.js-service-link {display:table;}
 .js-service-link, .js-layer-link {margin-left:10px;color:#000000;}
 .js-service-link:hover, .js-layer-link:hover {color:#000000;text-decoration:none;}
-.js-link-label {cursor: pointer;}
-.js-link-icon {position:relative;top:2px;}
+.js-link-label {cursor: pointer;display:table-cell;padding-left:10px;}
+.js-link-icon {position:relative;top:2px;display:table-cell;}
 .checkbox-inline {padding-left:31px;}
 .error-warning, .information-warning {margin:20px;}
 
@@ -43,10 +45,10 @@ label {font-weight:normal;}
 .groupTree {position:relative;left:-6px;}
 #js-ul-services {padding-left:0;padding-right:5px;}
 
-.groupTree li {margin:0px 0px;list-style-type:none;position:relative;left:-8px;padding:0 5px 0 15px;}
-.groupTree li::before {content:'';position:absolute;top:3px;width:1px;height:100%;right:auto;left:-1px;
+.groupTree li {margin:0px 0px;list-style-type:none;position:relative;left:-8px;padding:0 5px 0 18px;}
+.groupTree li::before {content:'';position:absolute;top:3px;width:1px;height:100%;right:auto;left:3px;
 	border-left:1px solid #ccc;bottom:50px;}
-.groupTree li::after {content:'';position:absolute;top:10px;width:14px;height:20px;right:auto;left:-1px;
+.groupTree li::after {content:'';position:absolute;top:10px;width:14px;height:20px;right:auto;left:3px;
     border-top:1px solid #ccc;}
 
 /*Remove connectors before root*/
