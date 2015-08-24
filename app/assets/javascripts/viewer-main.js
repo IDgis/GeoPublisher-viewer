@@ -104,11 +104,11 @@ require([
 	    
 	    var iconStyle = new ol.style.Style({
             image: new ol.style.Icon(({
-                anchor: [0.5, 46],
+                anchor: [0.5, 32],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
                 opacity: 0.75,
-                src: 'https://evernote.com/media/img/getting_started/skitch/android/android-location_icon.png'
+                src: '/assets/images/location.svg'
             }))
         });
 	    
