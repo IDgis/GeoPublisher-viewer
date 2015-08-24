@@ -149,7 +149,7 @@ public class Application extends Controller {
     }
     
     /**
-     * Fetch the immediate layers of a service.
+     * Fetches the immediate layers of a service.
      * 
      * @param serviceId - the service id from the service whose immediate layers to fetch.
      * @return the promise of the result of the HTML response.
@@ -182,7 +182,7 @@ public class Application extends Controller {
     }
 	
 	/**
-	 * Fetch the immediate layers of a layer.
+	 * Fetches the immediate layers of a layer.
 	 * 
 	 * @param serviceId - the service id from the service to select.
 	 * @param layerId - the layer id from the layer whose immediate layers to fetch.

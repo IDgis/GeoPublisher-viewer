@@ -30,7 +30,7 @@ public class Service {
 	/**
 	 * Fetches the id of the service.
 	 * 
-	 * @return the string of the service id.
+	 * @return the string of the id of the service.
 	 */
 	public String getServiceId() {
 		return serviceId;
@@ -39,7 +39,7 @@ public class Service {
 	/**
 	 * Fetches the name of the service.
 	 * 
-	 * @return the string of the service name.
+	 * @return the string of the name of the service.
 	 */
 	public String getServiceName() {
 		return serviceName;
@@ -48,7 +48,7 @@ public class Service {
 	/**
 	 * Fetches the endpoint of the service.
 	 * 
-	 * @return the string of the service endpoint.
+	 * @return the string of the endpoint of the service.
 	 */
 	public String getEndpoint() {
 		return endpoint;
