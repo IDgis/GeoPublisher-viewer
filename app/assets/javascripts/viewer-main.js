@@ -93,7 +93,7 @@ require([
         	source : new ol.source.WMTS({
         		attributions: [],
         		url: 'http://geodata.nationaalgeoregister.nl/wmts',
-        		layer: 'brtachtergrondkaart',
+        		layer: 'brtachtergrondkaartpastel',
         		matrixSet: crs,
         		format: 'image/png',
         		tileGrid: tileGrid0,
