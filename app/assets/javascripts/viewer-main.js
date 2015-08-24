@@ -136,6 +136,7 @@ require([
 		});
 		
 		var closeFeatureInfoNode = dom.byId('map-full-view');
+		var firstClick = 0;
 		map.on('singleclick', function(evt) {
 			domAttr.set(info, 'innerHTML', '');
         	var viewResolution = (map.getView().getResolution());
@@ -144,8 +145,12 @@ require([
         	var featureInfoTable = false;
         	var counter = 0;
         	
+        	if(firstClick !== 0) {
+        		map.removeLayer(vectorLayer);
+        	}
         	map.addLayer(vectorLayer);
         	iconGeometry.setCoordinates(evt.coordinate);
+        	firstClick++;
         	
         	domAttr.set(closeFeatureInfoNode, 'class', 'btn btn-default btn-xs');
         	
