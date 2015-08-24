@@ -19,6 +19,7 @@ import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
+import play.Configuration;
 import play.libs.F.Promise;
 import play.libs.F.PromiseTimeoutException;
 import play.libs.ws.WSAuthScheme;
@@ -31,15 +32,26 @@ import views.html.emptylayermessage;
 import views.html.index;
 import views.html.layers;
 
+/**
+ * The main controller of the application.
+ * 
+ * @author Sandro
+ *
+ */
 public class Application extends Controller {
 	private @Inject WSClient ws;
+	private @Inject Configuration conf;
 	
 	public Promise<List<Service>> getServicesList() {
-		String url = "http://staging-services.geodataoverijssel.nl/geoserver/";
+		String environment = conf.getString("viewer.environmenturl");
+		String username = conf.getString("viewer.username");
+		String password = conf.getString("viewer.password");
+		
+		String url = environment;
 		String workspacesSummary = url + "rest/workspaces.xml";
 		String version = "1.3.0";
 		
-		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
+		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth(username, password, WSAuthScheme.BASIC);
 		return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
 			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
 			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
@@ -49,7 +61,7 @@ public class Application extends Controller {
 				String name = names.item(i).getTextContent();
 				String workspaceSettings = url + "rest/services/wms/workspaces/" + name + "/settings.xml";
 				
-				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
+				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth(username, password, WSAuthScheme.BASIC);
 				unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
 					Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
 					NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
@@ -75,7 +87,13 @@ public class Application extends Controller {
 		});
 	}
 	
-	public Promise<InputStream> getWMSCapabilitiesBody(String url) {
+	/**
+	 * Fetches content from an url.
+	 * 
+	 * @param url the url to fetch.
+	 * @return the inputstream.
+	 */
+	public Promise<InputStream> getInputStream(String url) {
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
@@ -92,7 +110,7 @@ public class Application extends Controller {
 	}
     
     public Promise<WMSCapabilities> getWMSCapabilities(Service service) {
-    	Promise<InputStream> capabilities = getWMSCapabilitiesBody(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
+    	Promise<InputStream> capabilities = getInputStream(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
     	
     	return capabilities.map(capabilitiesBody -> {
     		try {
