@@ -42,6 +42,11 @@ public class Application extends Controller {
 	private @Inject WSClient ws;
 	private @Inject Configuration conf;
 	
+	/**
+	 * Fetches the names and titles of the workspaces and make a service for each workspace.
+	 * 
+	 * @return the promise of the list of services.
+	 */
 	public Promise<List<Service>> getServicesList() {
 		String environment = conf.getString("viewer.environmenturl");
 		String username = conf.getString("viewer.username");
@@ -90,7 +95,7 @@ public class Application extends Controller {
 	/**
 	 * Fetches content from an url.
 	 * 
-	 * @param url the url to fetch.
+	 * @param url - the url to fetch.
 	 * @return the inputstream.
 	 */
 	public Promise<InputStream> getInputStream(String url) {
@@ -109,6 +114,12 @@ public class Application extends Controller {
 		});
 	}
     
+	/**
+	 * Parses the WMS capabilities for a service.
+	 * 
+	 * @param service - the service to parse.
+	 * @return the promise of WMSCapabilities.
+	 */
     public Promise<WMSCapabilities> getWMSCapabilities(Service service) {
     	Promise<InputStream> capabilities = getInputStream(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
     	
@@ -128,10 +139,21 @@ public class Application extends Controller {
     	});
     }
     
+    /**
+     * Renders the index page.
+     * 
+     * @return the promise of the result.
+     */
     public Promise<Result> index() {
     	return getServicesList().map(servicesList -> ok(index.render(servicesList)));
     }
     
+    /**
+     * Fetch the immediate layers of a service.
+     * 
+     * @param serviceId - the service id from the service whose immediate layers to fetch.
+     * @return the promise of the result of the HTML response.
+     */
 	public Promise<Result> allLayers(String serviceId) {
 		return getServicesList().flatMap(servicesList -> {
     		for(Service service : servicesList) {
@@ -158,7 +180,14 @@ public class Application extends Controller {
     		return Promise.pure(notFound());
     	}).recover(this::getErrorWarning);
     }
-
+	
+	/**
+	 * Fetch the immediate layers of a layer.
+	 * 
+	 * @param serviceId - the service id from the service to select.
+	 * @param layerId - the layer id from the layer whose immediate layers to fetch.
+	 * @return the promise of the result of the HTML response.
+	 */
 	public Promise<Result> layers(String serviceId, String layerId) {
     	return getServicesList().flatMap(servicesList -> {
     		for(Service service : servicesList) {
@@ -183,6 +212,13 @@ public class Application extends Controller {
     	}).recover(this::getErrorWarning);
     }
 	
+	/**
+	 * Handles parse- and promisetimeoutexceptions.
+	 * 
+	 * @param t - an exception.
+	 * @return the result.
+	 * @throws Throwable an exception.
+	 */
 	private Result getErrorWarning(Throwable t) throws Throwable {
 		if(t instanceof ParseException) {
 			return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald."); 
@@ -193,14 +229,32 @@ public class Application extends Controller {
 		}
 	}
 	
+	/**
+	 * Fetches an error message.
+	 * 
+	 * @param capWarning - the text to show in the error message.
+	 * @return the result.
+	 */
 	public Result getErrorWarning(String capWarning) {
     	return ok(capabilitieswarning.render(capWarning));
     }
 	
+	/**
+	 * Fetches an info message when a root layer is empty.
+	 * 
+	 * @param message - the text to show in the info message.
+	 * @return the result.
+	 */
 	public Result getEmptyLayerMessage(String message) {
     	return ok(emptylayermessage.render(message));
     }
     
+	/**
+	 * Checks if a layer has the CRS of EPSG:28992 and removes the layer if that's not the case.
+	 * 
+	 * @param layerList - the list of layers to check.
+	 * @return the new list of layers after checking.
+	 */
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
     	for(WMSCapabilities.Layer layer : layerList) {
     		if(!layer.supportsCRS("EPSG:28992")) {
@@ -211,6 +265,11 @@ public class Application extends Controller {
     	return layerList;
     }
     
+    /**
+     * Makes specific controller methods available to use in JavaScript.
+     * 
+     * @return the result.
+     */
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
             controllers.routes.javascript.Application.allLayers(),
