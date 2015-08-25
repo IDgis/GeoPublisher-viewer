@@ -1,9 +1,9 @@
 @(services: List[Service])
 
-@main("GeoPublisher-viewer", "Viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
+@main("GeoPublisher-viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
 	
 	<div id="layer-control-container" class="col-lg-3">
-		<div id="svr-layer-control">
+		<div id="srv-layer-control">
 			<div class="list-group groupTree pull-left" id="js-layers-nl">
 				<ul id="js-ul-services">
 					@for(service <- services) {
@@ -17,13 +17,19 @@
 				</ul>
 			</div>
 		</div>
+		<button id="uncheck-all" class="btn btn-default btn-xs col-lg-12 col-xs-12">Deselecteer alle lagen</button>
 	</div>
-	<div id="views-container" class="col-lg-9">
-		<div id="svr-layer-view">
+	<div id="viewer-container" class="col-lg-9">
+		<div id="srv-layer-view">
 			<div id="map" class="olMap"></div>
+			<button id="map-full-view" class="btn btn-default btn-xs disabled">
+				<span class="glyphicon glyphicon-resize-full"></span>
+			</button>
 		</div>
 		<div id="info-container" class="col-lg-12">
-			<div id="info"></div>
+			<div id="info">
+				
+			</div>
 		</div>
 	</div>
 }

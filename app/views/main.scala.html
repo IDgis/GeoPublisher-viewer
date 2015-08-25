@@ -1,4 +1,4 @@
-@(title: String, header: String, jsMain: String)(content: Html)
+@(title: String, jsMain: String)(content: Html)
 
 <!DOCTYPE html>
 
@@ -12,55 +12,23 @@
         <title>@title</title>
         
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/openlayers/ol.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-
 		
     </head>
     <body>
-        <div class="wrapper">
+        <div id="wrapper">
 			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 				<div class="container-fluid">
 					<div class="navbar-header">
-						<button class="navbar-toggle" data-target=".sidebar-collapse" data-toggle="collapse" type="button">
-							<span class="sr-only">Toggle navigation</span>
-						</button>
 						<a class="navbar-brand" href="#">
-							<span class="glyphicon glyphicon-cloud"></span> Views
+							<span class="glyphicon glyphicon-cloud"></span> Viewer
 						</a>
 					</div>
-					<ul class="nav navbar-top-links navbar-right" id="event-bar">
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<span class="glyphicon glyphicon-user"></span> admin@@idgis.nl 
-								<b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="#">
-										<span class="glyphicon glyphicon-user"></span> Profiel
-									</a>
-								</li>
-								<li class="divider"></li>
-								<li>
-									<a href="#">
-										<span class="glyphicon glyphicon-off"></span> Afmelden
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="#" title="Help" data-toggle="modal" data-target="#help">
-								<span class="glyphicon glyphicon-question-sign"></span>
-							</a>
-						</li>
-					</ul>
 				</div>
 			</nav>
-			<div id="page-wrapper">
-				<div class="page-content">
-					<h1 class="page-header" id="js-page-header">@header</h1>
-					@content
-				</div>
+			<div id="page-content">
+				@content
 			</div>
 		</div>
 		

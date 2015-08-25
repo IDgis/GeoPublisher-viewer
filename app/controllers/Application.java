@@ -19,6 +19,7 @@ import nl.idgis.ogc.client.wms.WMSCapabilitiesParser.ParseException;
 import nl.idgis.ogc.wms.WMSCapabilities;
 import play.Logger;
 import play.Routes;
+import play.Configuration;
 import play.libs.F.Promise;
 import play.libs.F.PromiseTimeoutException;
 import play.libs.ws.WSAuthScheme;
@@ -31,48 +32,73 @@ import views.html.emptylayermessage;
 import views.html.index;
 import views.html.layers;
 
+/**
+ * The main controller of the application.
+ * 
+ * @author Sandro
+ *
+ */
 public class Application extends Controller {
 	private @Inject WSClient ws;
+	private @Inject Configuration conf;
 	
+	/**
+	 * Fetches the names and titles of the workspaces and make a service for each workspace.
+	 * 
+	 * @return the promise of the list of services.
+	 */
 	public Promise<List<Service>> getServicesList() {
-		String url = "http://staging-services.geodataoverijssel.nl/geoserver/";
+		String environment = conf.getString("viewer.environmenturl");
+		String username = conf.getString("viewer.username");
+		String password = conf.getString("viewer.password");
+		
+		String url = environment;
 		String workspacesSummary = url + "rest/workspaces.xml";
 		String version = "1.3.0";
 		
-		WSRequest request = ws.url(workspacesSummary).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
-		return request.get().flatMap(response -> {
-			Document body = response.asXml();
-			NodeList names = body.getElementsByTagName("name");
+		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth(username, password, WSAuthScheme.BASIC);
+		return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
+			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
+			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
 			
 			List<Promise<Service>> unsortedServicesList = new ArrayList<>();
 			for(int i = 0; i < names.getLength(); i++) {
 				String name = names.item(i).getTextContent();
 				String workspaceSettings = url + "rest/services/wms/workspaces/" + name + "/settings.xml";
 				
-				WSRequest request2 = ws.url(workspaceSettings).setAuth("admin", "ijMonRic8", WSAuthScheme.BASIC);
-				unsortedServicesList.add(request2.get().map(response2 -> {
-					Document body2 = response2.asXml();
-					NodeList titles = body2.getElementsByTagName("title");
+				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth(username, password, WSAuthScheme.BASIC);
+				unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
+					Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
+					NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
 					
-					if(titles.getLength() > 0) {
-						String title = titles.item(0).getTextContent();
-
-						return new Service(name, title, url + name + "/wms?", version);
-					} else {					
-						return new Service(name, name, url + name + "/wms?", version);
+					for(int j = 0; j < titles.getLength(); j++) {
+						if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
+							String title = titles.item(0).getTextContent();
+							return new Service(name, title, url + name + "/wms?", version);
+						}
 					}
+					
+					return new Service(name, name, url + name + "/wms?", version);
 				}));
 			}
 			
+			unsortedServicesList.add(Promise.pure(new Service("test", "test", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.3.0")));
+			
 			return Promise.sequence(unsortedServicesList).map(servicesList -> {
-				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareTo(s2.getServiceName()));
+				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareToIgnoreCase(s2.getServiceName()));
 				
 				return servicesList;
 			});
 		});
 	}
 	
-	public Promise<InputStream> getWMSCapabilitiesBody(String url) {
+	/**
+	 * Fetches content from an url.
+	 * 
+	 * @param url - the url to fetch.
+	 * @return the inputstream.
+	 */
+	public Promise<InputStream> getInputStream(String url) {
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
 		
 		Map<String, String[]> colStr = request().queryString();
@@ -88,29 +114,46 @@ public class Application extends Controller {
 		});
 	}
     
+	/**
+	 * Parses the WMS capabilities for a service.
+	 * 
+	 * @param service - the service to parse.
+	 * @return the promise of WMSCapabilities.
+	 */
     public Promise<WMSCapabilities> getWMSCapabilities(Service service) {
-    	Promise<InputStream> capabilities = getWMSCapabilitiesBody(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
+    	Promise<InputStream> capabilities = getInputStream(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
     	
     	return capabilities.map(capabilitiesBody -> {
     		try {
         		return WMSCapabilitiesParser.parseCapabilities(capabilitiesBody);
         	} catch(ParseException e) {
-        		Logger.error("An exception occured during parsing of a capabilities document: ", e);
+        		Logger.error("An exception occured during parsing of the capabilities document from service " + service.getServiceId() + ": ", e);
         		throw e;
         	} finally {
         		try {
         			capabilitiesBody.close();
         		} catch(IOException io) {
-        			Logger.error("An exception occured during closing of the capabilities stream.", io);
+        			Logger.error("An exception occured during closing of the capabilities stream from service " + service.getServiceId() + ": ", io);
         		}
         	}
     	});
     }
     
+    /**
+     * Renders the index page.
+     * 
+     * @return the promise of the result.
+     */
     public Promise<Result> index() {
     	return getServicesList().map(servicesList -> ok(index.render(servicesList)));
     }
     
+    /**
+     * Fetches the immediate layers of a service.
+     * 
+     * @param serviceId - the service id from the service whose immediate layers to fetch.
+     * @return the promise of the result of the HTML response.
+     */
 	public Promise<Result> allLayers(String serviceId) {
 		return getServicesList().flatMap(servicesList -> {
     		for(Service service : servicesList) {
@@ -137,7 +180,14 @@ public class Application extends Controller {
     		return Promise.pure(notFound());
     	}).recover(this::getErrorWarning);
     }
-
+	
+	/**
+	 * Fetches the immediate layers of a layer.
+	 * 
+	 * @param serviceId - the service id from the service to select.
+	 * @param layerId - the layer id from the layer whose immediate layers to fetch.
+	 * @return the promise of the result of the HTML response.
+	 */
 	public Promise<Result> layers(String serviceId, String layerId) {
     	return getServicesList().flatMap(servicesList -> {
     		for(Service service : servicesList) {
@@ -162,6 +212,13 @@ public class Application extends Controller {
     	}).recover(this::getErrorWarning);
     }
 	
+	/**
+	 * Handles parse- and promisetimeoutexceptions.
+	 * 
+	 * @param t - an exception.
+	 * @return the result.
+	 * @throws Throwable an exception.
+	 */
 	private Result getErrorWarning(Throwable t) throws Throwable {
 		if(t instanceof ParseException) {
 			return getErrorWarning("De lagen op dit niveau konden niet worden opgehaald."); 
@@ -172,14 +229,32 @@ public class Application extends Controller {
 		}
 	}
 	
+	/**
+	 * Fetches an error message.
+	 * 
+	 * @param capWarning - the text to show in the error message.
+	 * @return the result.
+	 */
 	public Result getErrorWarning(String capWarning) {
     	return ok(capabilitieswarning.render(capWarning));
     }
 	
+	/**
+	 * Fetches an info message when a root layer is empty.
+	 * 
+	 * @param message - the text to show in the info message.
+	 * @return the result.
+	 */
 	public Result getEmptyLayerMessage(String message) {
     	return ok(emptylayermessage.render(message));
     }
     
+	/**
+	 * Checks if a layer has the CRS of EPSG:28992 and removes the layer if that's not the case.
+	 * 
+	 * @param layerList - the list of layers to check.
+	 * @return the new list of layers after checking.
+	 */
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
     	for(WMSCapabilities.Layer layer : layerList) {
     		if(!layer.supportsCRS("EPSG:28992")) {
@@ -190,11 +265,16 @@ public class Application extends Controller {
     	return layerList;
     }
     
+    /**
+     * Makes specific controller methods available to use in JavaScript.
+     * 
+     * @return the result.
+     */
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
             controllers.routes.javascript.Application.allLayers(),
             controllers.routes.javascript.Application.layers(),
-            controllers.routes.javascript.Proxy.proxy()
+            controllers.routes.javascript.GetFeatureInfoProxy.proxy()
         )).as ("text/javascript");
     }
 }

@@ -16,13 +16,25 @@ import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.emptyfeatureinfomessage;
 
-public class Proxy extends Controller {
+/**
+ * The controller to get the feature info.
+ * 
+ * @author Sandro
+ *
+ */
+public class GetFeatureInfoProxy extends Controller {
 	
-	private static final ALogger logger = Logger.of(Proxy.class);
+	private static final ALogger logger = Logger.of(GetFeatureInfoProxy.class);
 	
 	@Inject WSClient ws;
-	
+	/**
+	 * Fetches the html response of the get feature info call.
+	 * 
+	 * @param url - the url to fetch.
+	 * @return the promise of the result of the HTML response.
+	 */
 	public Promise<Result> proxy(String url) {
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
 		
@@ -51,7 +63,7 @@ public class Proxy extends Controller {
 				response().setContentType("text/html; charset=utf-8");
 				
 				if(doc.body().html().isEmpty()) {
-					return status(statusCode, "<div></div>", "UTF-8");
+					return getEmptyFeatureInfo("Niets gevonden.");
 				} else {
 					return status(statusCode, doc.body().html(), "UTF-8");
 				}
@@ -70,4 +82,14 @@ public class Proxy extends Controller {
 		
 		return recoveredPromise;
 	}
+	
+	/**
+	 * Fetches an info message when a get feature info return is empty.
+	 * 
+	 * @param message - the text to show in the info message.
+	 * @return the result.
+	 */
+	public Result getEmptyFeatureInfo(String message) {
+    	return ok(emptyfeatureinfomessage.render(message));
+    }
 }
