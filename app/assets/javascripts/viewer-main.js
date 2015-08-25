@@ -87,7 +87,6 @@ require([
 		});
 	    
 	    var achtergrond = new ol.layer.Tile({
-    		overlay: false,
     		opacity: 0.8,
     		extent: extent,
         	source : new ol.source.WMTS({
@@ -97,7 +96,7 @@ require([
         		matrixSet: crs,
         		format: 'image/png',
         		tileGrid: tileGrid0,
-        		style: 'default',
+        		style: 'default'
         	}),
         	visible: true
         });
@@ -127,10 +126,13 @@ require([
         
         iconFeature.setStyle(iconStyle);
 	    
+        var zoomControl = new ol.control.Zoom();
+        
 		map = new ol.Map({
 			layers: [
 		    	achtergrond
 			],
+			control: zoomControl,
 			target: 'map',
 			view: view
 		});
