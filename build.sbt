@@ -10,6 +10,48 @@ resolvers += "idgis-public" at "http://nexus.idgis.eu/content/groups/public/"
 
 resolvers += "idgis-restricted" at "http://nexus.idgis.eu/content/groups/restricted/"
 
+val publishDist = TaskKey[sbt.File]("publish-dist", "publish the dist artifact")
+
+publishArtifact in (Compile, packageDoc) := false
+
+publishArtifact in (Compile, packageSrc) := false
+
+publishArtifact in (Compile, packageBin) := false
+
+publishArtifact in Test := false
+
+publish <<= (publish) dependsOn dist
+
+publishLocal <<= (publishLocal) dependsOn dist
+
+artifact in publishDist ~= {
+	(art: Artifact) => art.copy(`type` = "zip", extension = "zip")
+}
+
+// disable using the Scala version in output paths and artifacts
+crossPaths := false
+
+// publish to Artifactory
+organization := "nl.idgis"
+
+publishMavenStyle := true
+
+pomIncludeRepository := {
+	x => false
+}
+
+val distHackSettings = Seq[Setting[_]](
+publishDist <<= (target in Universal, normalizedName, version) map { (targetDir, id, version) =>
+	val packageName = "%s-%s" format(id, version)
+	targetDir / (packageName + ".zip")
+},
+publishTo := {      
+	Some ("idgis-snapshots" at "http://nexus.idgis.eu/content/repositories/snapshots")
+}
+) ++ Seq(addArtifact(artifact in publishDist, publishDist).settings: _*)
+
+seq(distHackSettings: _*)
+
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
