@@ -82,8 +82,6 @@ public class Application extends Controller {
 				}));
 			}
 			
-			unsortedServicesList.add(Promise.pure(new Service("test", "test", "http://acc-staging-services.geodataoverijssel.nl/geoserver/OV_B0/wms?", "1.3.0")));
-			
 			return Promise.sequence(unsortedServicesList).map(servicesList -> {
 				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareToIgnoreCase(s2.getServiceName()));
 				
