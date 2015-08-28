@@ -41,13 +41,17 @@ pomIncludeRepository := {
 }
 
 val distHackSettings = Seq[Setting[_]](
-publishDist <<= (target in Universal, normalizedName, version) map { (targetDir, id, version) =>
-	val packageName = "%s-%s" format(id, version)
-	targetDir / (packageName + ".zip")
-},
-publishTo := {      
-	Some ("idgis-snapshots" at "http://nexus.idgis.eu/content/repositories/snapshots")
-}
+	publishDist <<= (target in Universal, normalizedName, version) map { (targetDir, id, version) =>
+		val packageName = "%s-%s" format(id, version)
+		targetDir / (packageName + ".zip")
+	},
+	publishTo := {      
+		val nexus = "http://nexus.idgis.eu/content/repositories/"
+		if (isSnapshot.value)
+			Some ("idgis-snapshots" at nexus + "snapshots")
+		else
+			Some ("idgis-releases" at nexus + "releases")
+	}
 ) ++ Seq(addArtifact(artifact in publishDist, publishDist).settings: _*)
 
 seq(distHackSettings: _*)
