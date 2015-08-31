@@ -43,25 +43,46 @@ public class Application extends Controller {
 	private @Inject Configuration conf;
 	
 	/**
-	 * Fetches the names and titles of the workspaces and make a service for each workspace.
+	 * Fetches the names and titles of the workspaces and makes a service for each workspace. It retrieves the names 
+	 * of all workspaces and then retrieves the titles (if available) of every workspace. Then returns a service with
+	 * the title as the name of the service. If the title isn't available it inserts the name of the workspace as the
+	 * name of the service.
 	 * 
-	 * @return the promise of the list of services.
+	 * @return The promise of the list of services.
 	 */
 	public Promise<List<Service>> getServicesList() {
+		/* Retrieves data from configuration parameters. */
 		String environment = conf.getString("viewer.environmenturl");
 		String username = conf.getString("viewer.username");
 		String password = conf.getString("viewer.password");
 		
+		/* Sets up URL prefix, complete URL for XML document and version for services. */
 		String url = environment;
 		String workspacesSummary = url + "rest/workspaces.xml";
 		String version = "1.3.0";
 		
+		/* Sets up the request to the workspaces XML document with authorization settings. */
 		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth(username, password, WSAuthScheme.BASIC);
+		
 		return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
+			/* Gets the response as an XML object. */
 			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
+			
+			/* Gets every name in XML document as a nodelist. */
 			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
 			
+			/* Makes a list of promises of a service. */
 			List<Promise<Service>> unsortedServicesList = new ArrayList<>();
+			
+			/* 
+			 * Retrieves for every name in previously mentioned nodelist the content of the name tag
+			 * and sets up an URL with that name that points to the settings of the workspace. It sets up a request 
+			 * with authorization settings and gets the response as an XML object. It retrieves the titles
+			 * of that object as a nodelist and checks for every title if the parent equals to 'wms'. If that's
+			 * the case it retrieves the content of that node and inserts that as a name in a service. If no title
+			 * is found with a parent that equals to 'wms' it returns the previously mentioned name as the name in 
+			 * the service.
+			 */
 			for(int i = 0; i < names.getLength(); i++) {
 				String name = names.item(i).getTextContent();
 				String workspaceSettings = url + "rest/services/wms/workspaces/" + name + "/settings.xml";
@@ -82,6 +103,10 @@ public class Application extends Controller {
 				}));
 			}
 			
+			/*
+			 * Converts a list of promises of a service into a promise of a list of services. It
+			 * orders the list of services alphabetically and returns the list of services.
+			 */
 			return Promise.sequence(unsortedServicesList).map(servicesList -> {
 				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareToIgnoreCase(s2.getServiceName()));
 				
