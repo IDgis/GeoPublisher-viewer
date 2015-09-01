@@ -27,6 +27,9 @@ import org.apache.zookeeper.ZooKeeper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * This class is responsible for registering the application in ZooKeeper.
+ */
 @Singleton
 public class Zookeeper {
 	private ZooKeeper zooKeeper;
@@ -87,6 +90,10 @@ public class Zookeeper {
 		}
 	}
 	
+	/**
+	  * Determine the external ip adress of the application instance.
+	  * @return the ip.
+	  */
 	private String getPublicIp () {
 		try {
 			final Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces ();
@@ -119,6 +126,12 @@ public class Zookeeper {
 		}
 	}
 
+	/**
+	  * Processes incoming ZooKeeper events.
+	  * @param event the event
+	  * @param applicationDomain the domain name to register the application to.
+	  * @param configuration the configuration string containing the http mapping information.
+	  */
 	private void handleZooKeeperEvent (final WatchedEvent event, final String applicationDomain, final String configuration) {
 		switch (event.getState ()) {
 		case AuthFailed:
@@ -140,6 +153,11 @@ public class Zookeeper {
 
 	}
 
+	/**
+	  * Performs the actual registeration of the application to the connected ZooKeeper.
+	  * @param applicationDomain the domain name to register the application to.
+	  * @param configuration the configuration string containing the http mapping information.
+	  */
 	private void registerApplication (final String applicationDomain, final String configuration) {
 
 		if (!zooKeeperRegistered.compareAndSet (false, true)) {
@@ -161,6 +179,10 @@ public class Zookeeper {
 		}
 	}
 
+	/**
+	  * Creates a ZooKeeper node.
+	  * @param path the path to create a node on.
+	  */
 	private void createPublicPath (final String path) throws InterruptedException, KeeperException {
 		try {
 			if (zooKeeper.exists (path, null) == null) {
