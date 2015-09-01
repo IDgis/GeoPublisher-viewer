@@ -60,10 +60,12 @@ public class Zookeeper {
 				final ArrayNode proxy = configuration.putArray ("proxy");
 				final ObjectNode proxyLine = proxy.addObject ();
 
+				final String context = conf.getString ("play.http.context", "/");
+
 				proxyLine.put ("type", "http");
-				proxyLine.put ("path", "/viewer");
+				proxyLine.put ("path", context);
 				proxyLine.put ("domain", applicationDomain);
-				proxyLine.put ("destination", "http://" + destinationIp + ":" + httpPort + "/");
+				proxyLine.put ("destination", "http://" + destinationIp + ":" + httpPort + context);
 
 				final String zooKeeperConfiguration = Json.stringify (configuration);
 
