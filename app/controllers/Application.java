@@ -43,9 +43,12 @@ public class Application extends Controller {
 	private @Inject Configuration conf;
 	
 	/**
-	 * Fetches the names and titles of the workspaces and make a service for each workspace.
+	 * Fetches the names and titles of the workspaces and makes a service for each workspace. It retrieves the names 
+	 * of all workspaces and then retrieves the titles (if available) of every workspace. Then returns a service with
+	 * the title as the name of the service. If the title isn't available it inserts the name of the workspace as the
+	 * name of the service.
 	 * 
-	 * @return the promise of the list of services.
+	 * @return The promise of the list of services.
 	 */
 	public Promise<List<Service>> getServicesList() {
 		String environment = conf.getString("viewer.environmenturl");
@@ -57,24 +60,25 @@ public class Application extends Controller {
 		String version = "1.3.0";
 		
 		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth(username, password, WSAuthScheme.BASIC);
+		
 		return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
 			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
 			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
-			
 			List<Promise<Service>> unsortedServicesList = new ArrayList<>();
+			
 			for(int i = 0; i < names.getLength(); i++) {
 				String name = names.item(i).getTextContent();
 				String workspaceSettings = url + "rest/services/wms/workspaces/" + name + "/settings.xml";
-				
 				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth(username, password, WSAuthScheme.BASIC);
+				
 				unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
 					Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
 					NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
 					
 					for(int j = 0; j < titles.getLength(); j++) {
+						/* Parent has to be 'wms' to pick the right 'title' node. */
 						if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
-							String title = titles.item(0).getTextContent();
-							return new Service(name, title, url + name + "/wms?", version);
+							return new Service(name, titles.item(0).getTextContent(), url + name + "/wms?", version);
 						}
 					}
 					
@@ -91,36 +95,38 @@ public class Application extends Controller {
 	}
 	
 	/**
-	 * Fetches content from an url.
+	 * Fetches content from an url as an inputstream.
 	 * 
-	 * @param url - the url to fetch.
-	 * @return the inputstream.
+	 * @param url the url to fetch
+	 * @return The inputstream.
 	 */
 	public Promise<InputStream> getInputStream(String url) {
+		// sets up request and parameters
 		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
-		
 		Map<String, String[]> colStr = request().queryString();
-		
 		for (Map.Entry<String, String[]> entry: colStr.entrySet()) {
 			for(String entryValue: entry.getValue()) {
 				request = request.setQueryParameter(entry.getKey(), entryValue);
 			}
 		}
 		
+		// returns response as inputstream
 		return request.get().map(response -> {
 			return response.getBodyAsStream();
 		});
 	}
     
 	/**
-	 * Parses the WMS capabilities for a service.
+	 * Parses the WMS capabilities of a service.
 	 * 
-	 * @param service - the service to parse.
-	 * @return the promise of WMSCapabilities.
+	 * @param service the service to parse
+	 * @return The promise of WMSCapabilities.
 	 */
     public Promise<WMSCapabilities> getWMSCapabilities(Service service) {
+    	// gets the inputstream
     	Promise<InputStream> capabilities = getInputStream(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
     	
+    	// parses the capabilities
     	return capabilities.map(capabilitiesBody -> {
     		try {
         		return WMSCapabilitiesParser.parseCapabilities(capabilitiesBody);
@@ -147,25 +153,29 @@ public class Application extends Controller {
     }
     
     /**
-     * Fetches the immediate layers of a service.
+     * Fetches the immediate layers of a service who have a CRS of EPSG:28992.
      * 
-     * @param serviceId - the service id from the service whose immediate layers to fetch.
-     * @return the promise of the result of the HTML response.
+     * @param serviceId the service id from the service whose immediate layers to fetch
+     * @return The promise of the result of the response.
      */
 	public Promise<Result> allLayers(String serviceId) {
 		return getServicesList().flatMap(servicesList -> {
     		for(Service service : servicesList) {
     			if(serviceId.equals(service.getServiceId())) {					
 					return getWMSCapabilities(service).map(capabilities -> {
+						// gets the rootlayer
 						Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
 						
+						// loops through layers in rootlayer and adds them to a list
 						List<WMSCapabilities.Layer> layerList = new ArrayList<>();
 						for(WMSCapabilities.Layer layer : collectionLayers) {
         	    			layerList.addAll(layer.layers());
         	    		}
 						
+						// checks if each layer contains the EPSG:28992 CRS
 						layerList = crsCheck(layerList);
 						
+						// sends response
 						if(layerList.isEmpty()) {
 							return getEmptyLayerMessage("Geen lagen");
 						} else {
@@ -180,23 +190,28 @@ public class Application extends Controller {
     }
 	
 	/**
-	 * Fetches the immediate layers of a layer.
+	 * Fetches the immediate layers of a layer who have a CRS of EPSG:28992.
 	 * 
-	 * @param serviceId - the service id from the service to select.
-	 * @param layerId - the layer id from the layer whose immediate layers to fetch.
-	 * @return the promise of the result of the HTML response.
+	 * @param serviceId the service id from the service to select
+	 * @param layerId the layer id from the layer whose immediate layers to fetch
+	 * @return The promise of the result of the response.
 	 */
 	public Promise<Result> layers(String serviceId, String layerId) {
     	return getServicesList().flatMap(servicesList -> {
     		for(Service service : servicesList) {
     			if(serviceId.equals(service.getServiceId())) {
     				return getWMSCapabilities(service).map(capabilities -> {
+    					// gets a specific layer
     					WMSCapabilities.Layer layer = capabilities.layer(layerId);
     					
+    					// adds all layers of the layer to a list
     					List<WMSCapabilities.Layer> layerList = new ArrayList<>();
 						layerList = layer.layers();
+						
+						// checks if each layer contains the EPSG:28992 CRS
 						layerList = crsCheck(layerList);
 						
+						// sends response
 						if(layerList.isEmpty()) {
 							return getEmptyLayerMessage("Geen lagen");
 						} else {
@@ -211,11 +226,11 @@ public class Application extends Controller {
     }
 	
 	/**
-	 * Handles parse- and promisetimeoutexceptions.
+	 * Handles parse- and promisetimeoutexceptions. If another exception is thrown throws it again.
 	 * 
-	 * @param t - an exception.
-	 * @return the result.
-	 * @throws Throwable an exception.
+	 * @param t an exception
+	 * @return The result.
+	 * @throws Throwable
 	 */
 	private Result getErrorWarning(Throwable t) throws Throwable {
 		if(t instanceof ParseException) {
@@ -228,30 +243,30 @@ public class Application extends Controller {
 	}
 	
 	/**
-	 * Fetches an error message.
+	 * Renders an error message.
 	 * 
-	 * @param capWarning - the text to show in the error message.
-	 * @return the result.
+	 * @param capWarning the text to show in the error message
+	 * @return The result.
 	 */
 	public Result getErrorWarning(String capWarning) {
     	return ok(capabilitieswarning.render(capWarning));
     }
 	
 	/**
-	 * Fetches an info message when a root layer is empty.
+	 * Renders an info message.
 	 * 
-	 * @param message - the text to show in the info message.
-	 * @return the result.
+	 * @param message the text to show in the info message
+	 * @return The result.
 	 */
 	public Result getEmptyLayerMessage(String message) {
     	return ok(emptylayermessage.render(message));
     }
     
 	/**
-	 * Checks if a layer has the CRS of EPSG:28992 and removes the layer if that's not the case.
+	 * Checks if a layer has the CRS of EPSG:28992 and removes the layer from the list if that's not the case.
 	 * 
-	 * @param layerList - the list of layers to check.
-	 * @return the new list of layers after checking.
+	 * @param layerList the list of layers to check
+	 * @return The new list of layers after checking.
 	 */
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
     	for(WMSCapabilities.Layer layer : layerList) {
@@ -266,7 +281,7 @@ public class Application extends Controller {
     /**
      * Makes specific controller methods available to use in JavaScript.
      * 
-     * @return the result.
+     * @return The result.
      */
     public Result jsRoutes() {
 		return ok (Routes.javascriptRouter ("jsRoutes",
