@@ -67,7 +67,9 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "2.1.4",
   "nl.idgis.geoide" % "geoide-ogc-client" % "0.1.8-SNAPSHOT" exclude ("java3d", "vecmath"),
   "java3d" % "vecmath" % "1.5.2" classifier "",
-  "org.jsoup" % "jsoup" % "1.8.3"
+  "org.jsoup" % "jsoup" % "1.8.3",
+  "org.pegdown" % "pegdown" % "1.5.0",
+  "org.apache.zookeeper" % "zookeeper" % "3.4.5" exclude("javax.jms", "jms") exclude("com.sun.jdmk", "jmxtools") exclude("com.sun.jmx", "jmxri")
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

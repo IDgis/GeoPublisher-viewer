@@ -39,6 +39,7 @@ import views.html.layers;
  *
  */
 public class Application extends Controller {
+	private @Inject Zookeeper zk; // force Zookeeper initialization
 	private @Inject WSClient ws;
 	private @Inject Configuration conf;
 	
