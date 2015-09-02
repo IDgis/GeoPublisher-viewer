@@ -91,7 +91,7 @@ require([
     		extent: extent,
         	source : new ol.source.WMTS({
         		attributions: [],
-        		url: 'http://geodata.nationaalgeoregister.nl/wmts',
+        		url: '//geodata.nationaalgeoregister.nl/wmts',
         		layer: 'brtachtergrondkaartpastel',
         		matrixSet: crs,
         		format: 'image/png',
