@@ -52,9 +52,9 @@ public class Application extends Controller {
 	 * @return The promise of the list of services.
 	 */
 	public Promise<List<Service>> getServicesList() {
-		String environment = "http://staging-services.geodataoverijssel.nl/geoserver/";
-		String username = "admin";
-		String password = "ijMonRic8";
+		String environment = conf.getString("viewer.environmenturl");
+		String username = conf.getString("viewer.username");
+		String password = conf.getString("viewer.password");
 		
 		String url = environment;
 		String workspacesSummary = url + "rest/workspaces.xml";
