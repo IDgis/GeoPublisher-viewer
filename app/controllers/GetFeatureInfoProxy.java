@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import play.Configuration;
 import play.Logger;
 import play.Logger.ALogger;
 import play.libs.F.Promise;
@@ -27,7 +28,9 @@ public class GetFeatureInfoProxy extends Controller {
 	
 	private static final ALogger logger = Logger.of(GetFeatureInfoProxy.class);
 	
-	@Inject WSClient ws;
+	private @Inject WSClient ws;
+	
+	private @Inject Configuration conf;
 	
 	/**
 	 * Fetches the html response of the get feature info call. It filters the HTML from the body tags of the response 
@@ -38,7 +41,11 @@ public class GetFeatureInfoProxy extends Controller {
 	 * @return The promise of the result of the response.
 	 */
 	public Promise<Result> proxy(String url) {
-		WSRequest request = ws.url(url).setFollowRedirects(true).setRequestTimeout(10000);
+		// add protocol to request url
+		String environment = conf.getString("viewer.environmenturl");
+		String protocol = environment.substring(0, environment.indexOf("://") + 1);
+		
+		WSRequest request = ws.url(protocol + url).setFollowRedirects(true).setRequestTimeout(10000);
 		Map<String, String[]> requestParams = request().queryString();
 		for (Map.Entry<String, String[]> entry: requestParams.entrySet()) {
 			for(String entryValue: entry.getValue()) {

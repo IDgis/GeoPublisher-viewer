@@ -56,8 +56,11 @@ public class Application extends Controller {
 		String username = conf.getString("viewer.username");
 		String password = conf.getString("viewer.password");
 		
-		String url = environment;
-		String workspacesSummary = url + "rest/workspaces.xml";
+		// The protocol is omitted from the service urls to ensure that the 
+		// client is using the same protocol to access the services as is used 
+		// to retrieve this application.
+		String url = environment.replaceFirst("(.*)//", "//");
+		String workspacesSummary = environment + "rest/workspaces.xml";
 		String version = "1.3.0";
 		
 		WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth(username, password, WSAuthScheme.BASIC);
@@ -69,7 +72,7 @@ public class Application extends Controller {
 			
 			for(int i = 0; i < names.getLength(); i++) {
 				String name = names.item(i).getTextContent();
-				String workspaceSettings = url + "rest/services/wms/workspaces/" + name + "/settings.xml";
+				String workspaceSettings = environment + "rest/services/wms/workspaces/" + name + "/settings.xml";
 				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth(username, password, WSAuthScheme.BASIC);
 				
 				unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
@@ -124,8 +127,13 @@ public class Application extends Controller {
 	 * @return The promise of WMSCapabilities.
 	 */
     public Promise<WMSCapabilities> getWMSCapabilities(Service service) {
+    	// create request url
+    	String environment = conf.getString("viewer.environmenturl");
+    	String protocol = environment.substring(0, environment.indexOf("://") + 1);
+    	String request = protocol + service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities";
+    	
     	// gets the inputstream
-    	Promise<InputStream> capabilities = getInputStream(service.getEndpoint() + "version=" + service.getVersion() + "&service=wms&request=GetCapabilities");
+    	Promise<InputStream> capabilities = getInputStream(request);
     	
     	// parses the capabilities
     	return capabilities.map(capabilitiesBody -> {
