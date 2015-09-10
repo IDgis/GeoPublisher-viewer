@@ -65,7 +65,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "dojo" % "1.10.4",
   "org.webjars" % "bootstrap" % "3.3.5",
   "org.webjars" % "jquery" % "2.1.4",
-  "nl.idgis.geoide" % "geoide-ogc-client" % "0.1.8-SNAPSHOT" exclude ("java3d", "vecmath"),
+  "nl.idgis.geoide" % "geoide-ogc-client" % "0.1.8" exclude ("java3d", "vecmath"),
   "java3d" % "vecmath" % "1.5.2" classifier "",
   "org.jsoup" % "jsoup" % "1.8.3",
   "org.pegdown" % "pegdown" % "1.5.0",
