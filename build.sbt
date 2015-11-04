@@ -1,6 +1,6 @@
-name := """GeoPublisher-viewer"""
+import ReleaseTransformations._
 
-version := "1.0-SNAPSHOT"
+name := """GeoPublisher-viewer"""
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
@@ -78,3 +78,15 @@ routesGenerator := InjectedRoutesGenerator
 
 // Compile the project before generating Eclipse files, so that generated .scala or .class files for views and routes are present
 EclipseKeys.preTasks := Seq(compile in Compile)
+
+// Release settings	
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,              // : ReleaseStep
+  inquireVersions,                        // : ReleaseStep
+  runTest,                                // : ReleaseStep
+  setReleaseVersion,                      // : ReleaseStep
+  commitReleaseVersion,                   // : ReleaseStep, performs the initial git checks
+  tagRelease,                             // : ReleaseStep
+  setNextVersion,                         // : ReleaseStep
+  commitNextVersion                       // : ReleaseStep
+)
