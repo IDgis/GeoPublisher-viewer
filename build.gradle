@@ -172,3 +172,5 @@ dependencies {
 		exclude group: 'org.jboss.netty', module: 'netty'
 	}
 }
+
+defaultTasks 'clean', 'buildImage'
