@@ -1,0 +1,74 @@
+plugins {
+	id 'play'
+}
+
+repositories {
+	jcenter()
+	maven {
+		name "typesafe-maven-release"
+		url "https://repo.typesafe.com/typesafe/maven-releases"
+	}
+	ivy {
+		name "typesafe-ivy-release"
+		url "https://repo.typesafe.com/typesafe/ivy-releases"
+		layout "ivy"
+	}
+	maven {
+		name "idgis-public"
+		url "http://nexus.idgis.eu/content/groups/public/"
+		credentials {
+			username nexusUser 
+			password nexusPassword
+		}
+	}
+	maven {
+		name "idgis-restricted"
+		url "http://nexus.idgis.eu/content/groups/restricted/"
+		credentials {
+			username nexusUser 
+			password nexusPassword
+		}
+	}
+}
+
+def scalaVersion = '2.11'
+def playVersion = '2.4.6'
+
+model {
+	components {
+		play {
+			platform play: playVersion, scala: scalaVersion, java: '1.8'
+			injectedRoutesGenerator = true
+			
+			sources {
+				twirlTemplates {
+					defaultImports = TwirlImports.JAVA
+				}
+			}
+		}
+	}
+}
+
+dependencies {
+	play "com.typesafe.play:play-java-ws_${scalaVersion}:${playVersion}"
+
+	play('nl.idgis.geoide:geoide-ogc-client:0.1.8') {
+		exclude group: 'java3d', module: 'vecmath'
+	}
+	
+	play "org.webjars:webjars-play_${scalaVersion}:2.4.0-1"
+	play 'org.webjars:openlayers:3.5.0'
+	play 'org.webjars:dojo:1.10.4'
+	play 'org.webjars:bootstrap:3.3.5'
+	play 'org.webjars:jquery:2.1.4'
+	play 'java3d:vecmath:1.5.2'
+	play 'org.jsoup:jsoup:1.8.3'
+	play 'org.pegdown:pegdown:1.5.0'
+	
+	play('org.apache.zookeeper:zookeeper:3.4.5') {
+		exclude group: 'javax.jms', module: 'jms'
+		exclude group: 'com.sun.jdmk', module: 'jmxtools'
+		exclude group: 'com.sun.jmx', module: 'jmxri'
+		exclude group: 'org.jboss.netty', module: 'netty'
+	}
+}
