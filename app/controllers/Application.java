@@ -42,6 +42,7 @@ public class Application extends Controller {
 	private @Inject Zookeeper zk; // force Zookeeper initialization
 	private @Inject WSClient ws;
 	private @Inject Configuration conf;
+	private @Inject WebJarAssets webJarAssets;
 	
 	/**
 	 * Fetches the names and titles of the workspaces and makes a service for each workspace. It retrieves the names 
@@ -158,7 +159,7 @@ public class Application extends Controller {
      * @return the promise of the result.
      */
     public Promise<Result> index() {
-    	return getServicesList().map(servicesList -> ok(index.render(servicesList)));
+    	return getServicesList().map(servicesList -> ok(index.render(webJarAssets, servicesList)));
     }
     
     /**
