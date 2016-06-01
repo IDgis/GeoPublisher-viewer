@@ -1,4 +1,4 @@
-@(title: String, jsMain: String)(content: Html)
+@(webJarAssets: WebJarAssets, title: String, jsMain: String)(content: Html)
 
 <!DOCTYPE html>
 
@@ -8,13 +8,13 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-transluscent">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-        
+
         <title>@title</title>
-        
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/openlayers/ol.css")">
+
+        <link rel="stylesheet" media="screen" href="@routes.WebJarAssets.at(webJarAssets.locate("css/bootstrap.css"))">
+        <link rel="stylesheet" media="screen" href="@routes.WebJarAssets.at(webJarAssets.locate("ol.css"))">
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-		
+
     </head>
     <body>
         <div id="wrapper">
@@ -31,12 +31,12 @@
 				@content
 			</div>
 		</div>
-		
-		<script src="@routes.Assets.versioned("lib/jquery/jquery.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.versioned("lib/bootstrap/js/bootstrap.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.versioned("lib/openlayers/ol.js")" type="text/javascript"></script>
-		<script src="@routes.Assets.versioned("lib/dojo/dojo/dojo.js")" type="text/javascript"></script>
+
+		<script src="@routes.WebJarAssets.at(webJarAssets.locate("jquery.js"))" type="text/javascript"></script>
+        <script src="@routes.WebJarAssets.at(webJarAssets.locate("js/bootstrap.js"))" type="text/javascript"></script>
+        <script src="@routes.WebJarAssets.at(webJarAssets.locate("ol.js"))" type="text/javascript"></script>
+		<script src="@routes.WebJarAssets.at(webJarAssets.locate("dojo/dojo.js"))" type="text/javascript"></script>
 		<script src="@routes.Application.jsRoutes()" type="text/javascript"></script>
 		<script src="@jsMain" type="text/javascript"></script>
-    </body>    
+    </body>
 </html>
