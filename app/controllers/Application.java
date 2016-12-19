@@ -52,7 +52,7 @@ public class Application extends Controller {
 	 * 
 	 * @return The promise of the list of services.
 	 */
-	public Promise<List<Service>> getServicesList() {
+	public Promise<List<Service>> getServicesList(String service) {
 		String environment = conf.getString("viewer.environmenturl");
 		String username = conf.getString("viewer.username");
 		String password = conf.getString("viewer.password");
@@ -76,19 +76,23 @@ public class Application extends Controller {
 				String workspaceSettings = environment + "rest/services/wms/workspaces/" + name + "/settings.xml";
 				WSRequest workspaceSettingsRequest = ws.url(workspaceSettings).setAuth(username, password, WSAuthScheme.BASIC);
 				
-				unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
-					Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
-					NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
-					
-					for(int j = 0; j < titles.getLength(); j++) {
-						/* Parent has to be 'wms' to pick the right 'title' node. */
-						if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
-							return new Service(name, titles.item(0).getTextContent(), url + name + "/wms?", version);
-						}
+				if(!"".equals(service)) {
+					if(service.equals(name)) {
+						unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
+							Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
+							NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
+							
+							return getService(titles, url, name, version);
+						}));
 					}
-					
-					return new Service(name, name, url + name + "/wms?", version);
-				}));
+				} else {
+					unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
+						Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
+						NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
+						
+						return getService(titles, url, name, version);
+					}));
+				}
 			}
 			
 			return Promise.sequence(unsortedServicesList).map(servicesList -> {
@@ -97,6 +101,26 @@ public class Application extends Controller {
 				return servicesList;
 			});
 		});
+	}
+	
+	/**
+	 * 
+	 * @param titles list of titles of service
+	 * @param url url of environment services
+	 * @param name name of service
+	 * @param version version of WMS
+	 * @return
+	 */
+	public Service getService(NodeList titles, String url, String name, String version) {
+		
+		for(int j = 0; j < titles.getLength(); j++) {
+			/* Parent has to be 'wms' to pick the right 'title' node. */
+			if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
+				return new Service(name, titles.item(0).getTextContent(), url + name + "/wms?", version);
+			}
+		}
+		
+		return new Service(name, name, url + name + "/wms?", version);
 	}
 	
 	/**
@@ -158,8 +182,8 @@ public class Application extends Controller {
      * 
      * @return the promise of the result.
      */
-    public Promise<Result> index() {
-    	return getServicesList().map(servicesList -> ok(index.render(webJarAssets, servicesList)));
+    public Promise<Result> index(String service) {
+    	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList)));
     }
     
     /**
@@ -169,7 +193,7 @@ public class Application extends Controller {
      * @return The promise of the result of the response.
      */
 	public Promise<Result> allLayers(String serviceId) {
-		return getServicesList().flatMap(servicesList -> {
+		return getServicesList("").flatMap(servicesList -> {
     		for(Service service : servicesList) {
     			if(serviceId.equals(service.getServiceId())) {					
 					return getWMSCapabilities(service).map(capabilities -> {
@@ -207,7 +231,7 @@ public class Application extends Controller {
 	 * @return The promise of the result of the response.
 	 */
 	public Promise<Result> layers(String serviceId, String layerId) {
-    	return getServicesList().flatMap(servicesList -> {
+    	return getServicesList("").flatMap(servicesList -> {
     		for(Service service : servicesList) {
     			if(serviceId.equals(service.getServiceId())) {
     				return getWMSCapabilities(service).map(capabilities -> {

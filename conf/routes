@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /												controllers.Application.index()
+GET     /												controllers.Application.index(service: String ?= "")
 GET		/layersall/:serviceId							controllers.Application.allLayers(serviceId: String)
 GET		/layer/:serviceId/:layerId						controllers.Application.layers(serviceId: String, layerId: String)
 GET		/routes.js										controllers.Application.jsRoutes()
