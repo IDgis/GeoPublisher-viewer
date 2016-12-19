@@ -10,4 +10,4 @@ target
 /.cache-main
 /.cache-tests
 .gradle/
-build/ 
+build
