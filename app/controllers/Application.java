@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import play.mvc.Result;
 import views.html.capabilitieswarning;
 import views.html.emptylayermessage;
 import views.html.index;
+import views.html.servicelayer;
 import views.html.layers;
 
 /**
@@ -184,6 +186,40 @@ public class Application extends Controller {
      */
     public Promise<Result> index(String service) {
     	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList)));
+    }
+    
+    /**
+     * Renders the view for displaying a specific layer
+     * 
+     * @param service the service of the WMS
+     * @param layer the layer to display
+     * @return the result of the html
+     */
+    public Promise<Result> renderLayer(String service, String layer) {
+    	String url = conf.getString("viewer.environmenturl").replaceFirst("(.*)//", "//");
+    	Service s = new Service(service, service, url + service + "/wms?", "1.3.0");
+    	
+    	return getWMSCapabilities(s).map(capabilities -> {
+    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
+    		List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+			for(WMSCapabilities.Layer wmsLayer : collectionLayers) {
+				layerList.addAll(wmsLayer.layers());
+    		}
+
+			Iterator<WMSCapabilities.Layer> i = layerList.iterator();
+			while(i.hasNext()) {
+				WMSCapabilities.Layer wmsLayer = i.next();
+				if(!layer.equals(wmsLayer.name())) {
+					i.remove();
+				}
+			}
+			
+			if(layerList.size() < 1) {
+				return notFound();
+			}
+    		
+    		return ok(servicelayer.render(webJarAssets, service, layer));
+    	});
     }
     
     /**
