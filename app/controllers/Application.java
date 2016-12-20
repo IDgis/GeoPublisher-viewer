@@ -30,6 +30,7 @@ import play.mvc.Result;
 import views.html.capabilitieswarning;
 import views.html.emptylayermessage;
 import views.html.index;
+import views.html.servicelayer;
 import views.html.layers;
 
 /**
@@ -184,6 +185,17 @@ public class Application extends Controller {
      */
     public Promise<Result> index(String service) {
     	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList)));
+    }
+    
+    /**
+     * Renders the view for displaying a specific layer
+     * 
+     * @param service the service of the WMS
+     * @param layer the layer to display
+     * @return the result of the html
+     */
+    public Result renderLayer(String service, String layer) {
+    	return ok(servicelayer.render(webJarAssets, service, layer));
     }
     
     /**
