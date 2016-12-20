@@ -4,18 +4,22 @@
 
 	<div id="layer-control-container" class="col-lg-3 col-xs-3">
 		<div id="srv-layer-control">
-			<div class="list-group groupTree pull-left" id="js-layers-nl">
-				<ul id="js-ul-services">
-					@for(service <- services) {
-					<li class="js-service-id" data-service-id="@service.getServiceId()">
-						<span class="js-service-link" data-service-status="none">
-							<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
-							<span class="js-link-label"> @service.getServiceName()</span>
-						</span>
-					</li>
-					}
-				</ul>
-			</div>
+			@if(services.size().equals(0)) {
+				@views.html.noservicemessage("Geen service")
+			} else {
+				<div class="list-group groupTree pull-left" id="js-layers-nl">
+					<ul id="js-ul-services">
+						@for(service <- services) {
+						<li class="js-service-id" data-service-id="@service.getServiceId()">
+							<span class="js-service-link" data-service-status="none">
+								<span class="glyphicon glyphicon-plus-sign js-link-icon"></span>
+								<span class="js-link-label"> @service.getServiceName()</span>
+							</span>
+						</li>
+						}
+					</ul>
+				</div>
+			}
 		</div>
 		<button id="uncheck-all" class="btn btn-default btn-xs col-lg-12 col-xs-12">Deselecteer alle lagen</button>
 	</div>
