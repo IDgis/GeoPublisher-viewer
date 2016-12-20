@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -194,8 +195,31 @@ public class Application extends Controller {
      * @param layer the layer to display
      * @return the result of the html
      */
-    public Result renderLayer(String service, String layer) {
-    	return ok(servicelayer.render(webJarAssets, service, layer));
+    public Promise<Result> renderLayer(String service, String layer) {
+    	String url = conf.getString("viewer.environmenturl").replaceFirst("(.*)//", "//");
+    	Service s = new Service(service, service, url + service + "/wms?", "1.3.0");
+    	
+    	return getWMSCapabilities(s).map(capabilities -> {
+    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
+    		List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+			for(WMSCapabilities.Layer wmsLayer : collectionLayers) {
+				layerList.addAll(wmsLayer.layers());
+    		}
+
+			Iterator<WMSCapabilities.Layer> i = layerList.iterator();
+			while(i.hasNext()) {
+				WMSCapabilities.Layer wmsLayer = i.next();
+				if(!layer.equals(wmsLayer.name())) {
+					i.remove();
+				}
+			}
+			
+			if(layerList.size() < 1) {
+				return notFound();
+			}
+    		
+    		return ok(servicelayer.render(webJarAssets, service, layer));
+    	});
     }
     
     /**
