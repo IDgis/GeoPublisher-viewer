@@ -206,7 +206,10 @@ public class Application extends Controller {
 				layerList.addAll(wmsLayer.layers());
     		}
 
-			Iterator<WMSCapabilities.Layer> i = layerList.iterator();
+			List<WMSCapabilities.Layer> finalLayerList = new ArrayList<>();
+			recursiveLayerCheck(layerList, finalLayerList);
+			
+			Iterator<WMSCapabilities.Layer> i = finalLayerList.iterator();
 			while(i.hasNext()) {
 				WMSCapabilities.Layer wmsLayer = i.next();
 				if(!layer.equals(wmsLayer.name())) {
@@ -214,12 +217,23 @@ public class Application extends Controller {
 				}
 			}
 			
-			if(layerList.size() < 1) {
+			if(finalLayerList.size() < 1) {
 				return notFound();
 			}
     		
     		return ok(servicelayer.render(webJarAssets, service, layer));
     	});
+    }
+    
+    public void recursiveLayerCheck(List<WMSCapabilities.Layer> layers, 
+    		List<WMSCapabilities.Layer> list) {
+    	for(WMSCapabilities.Layer layer : layers) {
+    		if(layer.layers().isEmpty()) {
+    			list.add(layer);
+    		} else {
+    			recursiveLayerCheck(layer.layers(), list);
+    		}
+    	}
     }
     
     /**
