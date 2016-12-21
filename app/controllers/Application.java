@@ -196,32 +196,57 @@ public class Application extends Controller {
      * @return the result of the html
      */
     public Promise<Result> renderLayer(String service, String layer) {
-    	String url = conf.getString("viewer.environmenturl").replaceFirst("(.*)//", "//");
+    	String environment = conf.getString("viewer.environmenturl");
+    	String username = conf.getString("viewer.username");
+		String password = conf.getString("viewer.password");
+    	
+		String url = environment.replaceFirst("(.*)//", "//");
+    	String workspacesSummary = environment + "rest/workspaces.xml";
+    	
+    	WSRequest workspacesSummaryRequest = ws.url(workspacesSummary).setAuth(username, password, WSAuthScheme.BASIC);
+    	
     	Service s = new Service(service, service, url + service + "/wms?", "1.3.0");
     	
-    	return getWMSCapabilities(s).map(capabilities -> {
-    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
-    		List<WMSCapabilities.Layer> layerList = new ArrayList<>();
-			for(WMSCapabilities.Layer wmsLayer : collectionLayers) {
-				layerList.addAll(wmsLayer.layers());
-    		}
-
-			List<WMSCapabilities.Layer> finalLayerList = new ArrayList<>();
-			recursiveLayerCheck(layerList, finalLayerList);
+    	return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
+			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
+			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
 			
-			Iterator<WMSCapabilities.Layer> i = finalLayerList.iterator();
-			while(i.hasNext()) {
-				WMSCapabilities.Layer wmsLayer = i.next();
-				if(!layer.equals(wmsLayer.name())) {
-					i.remove();
+			int foundService = 0;
+			for(int i = 0; i < names.getLength(); i++) {
+				String name = names.item(i).getTextContent();
+				if(service.equals(name)) {
+					foundService++;
 				}
 			}
 			
-			if(finalLayerList.size() < 1) {
-				return notFound();
+			if(foundService < 1) {
+				return Promise.pure(notFound());
 			}
-    		
-    		return ok(servicelayer.render(webJarAssets, service, layer));
+			
+			return getWMSCapabilities(s).map(capabilities -> {
+	    		Collection<WMSCapabilities.Layer> collectionLayers = capabilities.layers();
+	    		List<WMSCapabilities.Layer> layerList = new ArrayList<>();
+				for(WMSCapabilities.Layer wmsLayer : collectionLayers) {
+					layerList.addAll(wmsLayer.layers());
+	    		}
+
+				List<WMSCapabilities.Layer> finalLayerList = new ArrayList<>();
+				recursiveLayerCheck(layerList, finalLayerList);
+				
+				Iterator<WMSCapabilities.Layer> i = finalLayerList.iterator();
+				while(i.hasNext()) {
+					WMSCapabilities.Layer wmsLayer = i.next();
+					if(!layer.equals(wmsLayer.name())) {
+						i.remove();
+					}
+				}
+				
+				if(finalLayerList.size() < 1) {
+					return notFound();
+				}
+	    		
+	    		return ok(servicelayer.render(webJarAssets, service, layer));
+	    	});
     	});
     }
     
