@@ -207,6 +207,9 @@ public class Application extends Controller {
     	
     	Service s = new Service(service, service, url + service + "/wms?", "1.3.0");
     	
+    	String servicePrefix = service + ":";
+    	int servicePrefixLength = servicePrefix.length();
+    	
     	return workspacesSummaryRequest.get().flatMap(responseWorkspacesSummary -> {
 			Document bodyWorkspacesSummary = responseWorkspacesSummary.asXml();
 			NodeList names = bodyWorkspacesSummary.getElementsByTagName("name");
@@ -231,12 +234,22 @@ public class Application extends Controller {
 	    		}
 
 				List<WMSCapabilities.Layer> finalLayerList = new ArrayList<>();
-				recursiveLayerCheck(layerList, finalLayerList);
+				recursiveLayerListing(layerList, finalLayerList);
 				
 				Iterator<WMSCapabilities.Layer> i = finalLayerList.iterator();
 				while(i.hasNext()) {
 					WMSCapabilities.Layer wmsLayer = i.next();
-					if(!layer.equals(wmsLayer.name())) {
+					String wmsLayerName = wmsLayer.name();
+					String wmsLayerNameWithoutPrefix = null;
+					String servicePrefixCheck = wmsLayerName.substring(0, servicePrefixLength);
+					
+					if(servicePrefix.equals(servicePrefixCheck)) {
+						wmsLayerNameWithoutPrefix = wmsLayerName.substring(servicePrefixLength);
+					} else {
+						// do nothing
+					}
+					
+					if(!layer.equals(wmsLayerName) && !layer.equals(wmsLayerNameWithoutPrefix)) {
 						i.remove();
 					}
 				}
@@ -250,13 +263,13 @@ public class Application extends Controller {
     	});
     }
     
-    public void recursiveLayerCheck(List<WMSCapabilities.Layer> layers, 
+    public void recursiveLayerListing(List<WMSCapabilities.Layer> layers, 
     		List<WMSCapabilities.Layer> list) {
     	for(WMSCapabilities.Layer layer : layers) {
     		if(layer.layers().isEmpty()) {
     			list.add(layer);
     		} else {
-    			recursiveLayerCheck(layer.layers(), list);
+    			recursiveLayerListing(layer.layers(), list);
     		}
     	}
     }
