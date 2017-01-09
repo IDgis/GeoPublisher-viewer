@@ -1,6 +1,6 @@
 @(webJarAssets: WebJarAssets, services: List[Service])
 
-@main(webJarAssets, "GeoPublisher-viewer", routes.Assets.versioned("javascripts/viewer-main.js").url) {
+@main(webJarAssets, "GeoPublisher-viewer", null, null, routes.Assets.versioned("javascripts/viewer-main.js").url) {
 
 	<div id="layer-control-container" class="col-lg-3 col-xs-3">
 		<div id="srv-layer-control">
