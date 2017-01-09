@@ -1,4 +1,4 @@
-@(webJarAssets: WebJarAssets, title: String, jsMain: String)(content: Html)
+@(webJarAssets: WebJarAssets, title: String, serviceName: String, layerName: String, jsMain: String)(content: Html)
 
 <!DOCTYPE html>
 
@@ -21,9 +21,16 @@
 			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 				<div class="container-fluid">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="#">
-							<span class="glyphicon glyphicon-cloud"></span> Viewer
-						</a>
+						<ol class="breadcrumb" id="navbar-publisher-viewer-content">
+							<li><span class="glyphicon glyphicon-cloud"></span> Viewer</li>
+							@if(serviceName != null) {
+								<li>@serviceName</li>
+							}
+							
+							@if(layerName != null) {
+								<li>@layerName</li>
+							}
+						</ol>
 					</div>
 				</div>
 			</nav>

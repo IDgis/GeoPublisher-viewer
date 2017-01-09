@@ -1,6 +1,6 @@
 @(webJarAssets: WebJarAssets, service: String, layer: String)
 
-@main(webJarAssets, "GeoPublisher-viewer", routes.Assets.versioned("javascripts/service-layer.js").url) {
+@main(webJarAssets, "GeoPublisher-viewer", service, layer, routes.Assets.versioned("javascripts/service-layer.js").url) {
 
 	<div id="viewer-container" class="col-lg-12 col-xs-12">
 		<div id="srv-layer-view">

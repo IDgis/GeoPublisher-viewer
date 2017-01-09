@@ -185,7 +185,7 @@ public class Application extends Controller {
      * @return the promise of the result.
      */
     public Promise<Result> index(String service) {
-    	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList)));
+    	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList, service)));
     }
     
     /**
@@ -241,7 +241,13 @@ public class Application extends Controller {
 					WMSCapabilities.Layer wmsLayer = i.next();
 					String wmsLayerName = wmsLayer.name();
 					String wmsLayerNameWithoutPrefix = null;
-					String servicePrefixCheck = wmsLayerName.substring(0, servicePrefixLength);
+					
+					String servicePrefixCheck;
+					if(servicePrefixLength > wmsLayerName.length()) {
+						servicePrefixCheck = null;
+					} else {
+						servicePrefixCheck = wmsLayerName.substring(0, servicePrefixLength);
+					}
 					
 					if(servicePrefix.equals(servicePrefixCheck)) {
 						wmsLayerNameWithoutPrefix = wmsLayerName.substring(servicePrefixLength);
