@@ -185,7 +185,7 @@ public class Application extends Controller {
      * @return the promise of the result.
      */
     public Promise<Result> index(String service) {
-    	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList)));
+    	return getServicesList(service).map(servicesList -> ok(index.render(webJarAssets, servicesList, service)));
     }
     
     /**

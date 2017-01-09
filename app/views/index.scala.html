@@ -1,4 +1,4 @@
-@(webJarAssets: WebJarAssets, services: List[Service])
+@(webJarAssets: WebJarAssets, services: List[Service], service: String)
 
 @main(webJarAssets, "GeoPublisher-viewer", null, null, routes.Assets.versioned("javascripts/viewer-main.js").url) {
 
@@ -36,4 +36,6 @@
 			</div>
 		</div>
 	</div>
+	
+	<input type="hidden" id="js-service-param-exist" value="@service">
 }
