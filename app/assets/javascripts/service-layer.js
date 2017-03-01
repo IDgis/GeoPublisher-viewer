@@ -26,6 +26,13 @@ require([
 		
 		var setWrapperHeight = domStyle.set(wrapper, 'height', window.innerHeight-130 + 'px');
 		var setViewCntHeight = domStyle.set(divViewCnt, 'height', window.innerHeight-130 + 'px');
+	    
+	    var centerString = domAttr.get(dom.byId('js-app-centers'), 'value');
+	    var centers = centerString.split(',');
+	    
+	    for(var centerInt = 0; centerInt < centers.length; centerInt++) {
+	    	centers[centerInt] = parseInt(centers[centerInt], 10);
+	    }
 		
 		var origin = [-285401.920, 903401.920];
 		var resolutions = [3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42, 0.21];
@@ -51,12 +58,12 @@ require([
 	    
 	    var projection = new ol.proj.Projection({
 	    	code: 'EPSG:28992',
-	    	extent: [-285401.92, 22598.08, 595401.9199999999, 903401.9199999999]
+	    	extent: extent
 	    });
 	    
 	    var view = new ol.View({
 			projection: projection,
-			center: [220000, 499000],
+			center: centers,
 			zoom: 5
 		});
 	    
