@@ -38,7 +38,9 @@
 				@content
 			</div>
 		</div>
-
+		
+		<input id="js-app-centers" type="hidden" value="@play.Play.application().configuration().getString("viewer.centers")">
+		
 		<script src="@routes.WebJarAssets.at(webJarAssets.locate("jquery.js"))" type="text/javascript"></script>
         <script src="@routes.WebJarAssets.at(webJarAssets.locate("js/bootstrap.js"))" type="text/javascript"></script>
         <script src="@routes.WebJarAssets.at(webJarAssets.locate("ol.js"))" type="text/javascript"></script>
