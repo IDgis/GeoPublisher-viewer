@@ -211,6 +211,16 @@ require([
 					}
 				});
         	});
+			
+			var checkedInputs = query('.js-layer-check:checked');
+			array.forEach(checkedInputs, function(checkedInput) {
+				var countVectorLayers = map.getLayers().getLength() - 1;
+				var checkedInputIndex = parseInt(domAttr.get(checkedInput, 'data-layer-index'), 10);
+				
+				if(countVectorLayers === checkedInputIndex) {
+					domAttr.set(checkedInput, 'data-layer-index', domAttr.get(checkedInput, 'data-layer-index') - 1);
+				}
+			});
 		});
 		
 		
@@ -303,6 +313,7 @@ require([
        						})
        					})	
        			);
+       			
        			domAttr.set(this, 'data-layer-index', map.getLayers().getLength() - 1);
    			} else {
 				var indexElement = domAttr.get(this, 'data-layer-index');
