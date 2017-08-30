@@ -22,6 +22,7 @@ import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import org.gradle.plugins.ide.eclipse.model.SourceFolder
 import org.ajoberstar.grgit.Grgit
 
+apply plugin: 'eclipse'
 apply plugin: 'org.ajoberstar.grgit'
 
 def repo = Grgit.open(project.file('.'))
