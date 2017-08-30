@@ -45,7 +45,7 @@ public class GetFeatureInfoProxy extends Controller {
 		String environment = conf.getString("viewer.environmenturl");
 		String protocol = environment.substring(0, environment.indexOf("://") + 1);
 		
-		WSRequest request = ws.url(protocol + "//" + url).setFollowRedirects(true).setRequestTimeout(10000);
+		WSRequest request = ws.url(protocol + url).setFollowRedirects(true).setRequestTimeout(10000);
 		Map<String, String[]> requestParams = request().queryString();
 		for (Map.Entry<String, String[]> entry: requestParams.entrySet()) {
 			for(String entryValue: entry.getValue()) {
