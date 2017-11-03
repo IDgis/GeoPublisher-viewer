@@ -351,6 +351,7 @@ require([
 		
 		var uncheckAllNode = dom.byId('uncheck-all');
 		var uncheckAll = on(uncheckAllNode, 'click', function(e) {
+			domConstruct.empty(dom.byId('info'));
 			map.getLayers().clear();
 			map.addLayer(achtergrond);
 			
