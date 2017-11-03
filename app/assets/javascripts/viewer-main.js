@@ -114,7 +114,8 @@ require([
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
                 opacity: 0.75,
-                src: jsRoutes.controllers.Assets.versioned('images/location.svg').url
+                src: jsRoutes.controllers.Assets.versioned('images/location.svg').url,
+                size: [32, 32]
             }))
         });
 	    
