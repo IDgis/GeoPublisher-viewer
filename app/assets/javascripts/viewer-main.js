@@ -322,6 +322,14 @@ require([
    				map.removeLayer(map.getLayers().removeAt(indexElement));
 				domAttr.set(this, 'data-layer-index', '');
 				
+				var tableCaptions = query('#info table caption');
+				array.forEach(tableCaptions, function(tableCaption) {
+					if(layerName === tableCaption.innerText) {
+						var table = query(tableCaption).parent()[0];
+						domConstruct.destroy(table);
+					}
+				});
+				
 				var checkedInputs = query('.js-layer-check:checked');
 				array.forEach(checkedInputs, function(checkedInput) {
 					if(domAttr.get(checkedInput, 'data-layer-index') > indexElement) {
