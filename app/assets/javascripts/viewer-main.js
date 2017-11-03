@@ -211,15 +211,18 @@ require([
 						domConstruct.place(data, info);
 					}
 				});
-        	});
+			});
+			
+			var previousMarkerIndex = domAttr.get(dom.byId('marker-index'), 'data-marker-index');
+			
+			domAttr.set(dom.byId('marker-index'), 'data-marker-index', map.getLayers().getLength() -1);
 			
 			var checkedInputs = query('.js-layer-check:checked');
 			array.forEach(checkedInputs, function(checkedInput) {
-				var countVectorLayers = map.getLayers().getLength() - 1;
-				var checkedInputIndex = parseInt(domAttr.get(checkedInput, 'data-layer-index'), 10);
+				var checkedInputIndex = domAttr.get(checkedInput, 'data-layer-index');
 				
-				if(countVectorLayers === checkedInputIndex) {
-					domAttr.set(checkedInput, 'data-layer-index', domAttr.get(checkedInput, 'data-layer-index') - 1);
+				if(checkedInputIndex > previousMarkerIndex && previousMarkerIndex !== '') {
+					domAttr.set(checkedInput, 'data-layer-index', checkedInputIndex - 1);
 				}
 			});
 		});
@@ -330,6 +333,13 @@ require([
 					}
 				});
 				
+				var markerIndexElement = dom.byId('marker-index');
+				var previousMarkerIndex = domAttr.get(markerIndexElement, 'data-marker-index');
+				
+				if(previousMarkerIndex > indexElement) {
+					domAttr.set(markerIndexElement, 'data-marker-index', previousMarkerIndex -1);
+				}
+				
 				var checkedInputs = query('.js-layer-check:checked');
 				array.forEach(checkedInputs, function(checkedInput) {
 					if(domAttr.get(checkedInput, 'data-layer-index') > indexElement) {
@@ -343,6 +353,8 @@ require([
 		var uncheckAll = on(uncheckAllNode, 'click', function(e) {
 			map.getLayers().clear();
 			map.addLayer(achtergrond);
+			
+			domAttr.set(dom.byId('marker-index'), 'data-marker-index', '');
 			
 			var checkedInputs = query('.js-layer-check:checked');
 			array.forEach(checkedInputs, function(checkedInput) {
