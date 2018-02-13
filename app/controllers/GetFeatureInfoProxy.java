@@ -41,11 +41,17 @@ public class GetFeatureInfoProxy extends Controller {
 	 * @return The promise of the result of the response.
 	 */
 	public Promise<Result> proxy(String url) {
+		String correctedUrl;
+		if(url.startsWith("//")) {
+			correctedUrl = url.substring(2);
+		} else {
+			correctedUrl = url;
+		}
 		// add protocol to request url
 		String environment = conf.getString("viewer.environmenturl");
-		String protocol = environment.substring(0, environment.indexOf("://") + 1);
+		String protocol = environment.substring(0, environment.indexOf("://") + 3);
 		
-		WSRequest request = ws.url(protocol + url).setFollowRedirects(true).setRequestTimeout(10000);
+		WSRequest request = ws.url(protocol + correctedUrl).setFollowRedirects(true).setRequestTimeout(10000);
 		Map<String, String[]> requestParams = request().queryString();
 		for (Map.Entry<String, String[]> entry: requestParams.entrySet()) {
 			for(String entryValue: entry.getValue()) {
