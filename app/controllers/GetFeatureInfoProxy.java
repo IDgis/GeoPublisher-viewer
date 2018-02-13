@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -41,17 +43,17 @@ public class GetFeatureInfoProxy extends Controller {
 	 * @return The promise of the result of the response.
 	 */
 	public Promise<Result> proxy(String url) {
-		String correctedUrl;
-		if(url.startsWith("//")) {
-			correctedUrl = url.substring(2);
-		} else {
-			correctedUrl = url;
-		}
+		// Check if url start with any slash character and remove them all
+		String regex = "^/+";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(url);
+		String adjustedUrl = matcher.replaceAll("");
+		
 		// add protocol to request url
 		String environment = conf.getString("viewer.environmenturl");
-		String protocol = environment.substring(0, environment.indexOf("://") + 3);
+		String protocol = environment.substring(0, environment.indexOf("://") + "://".length());
 		
-		WSRequest request = ws.url(protocol + correctedUrl).setFollowRedirects(true).setRequestTimeout(10000);
+		WSRequest request = ws.url(protocol + adjustedUrl).setFollowRedirects(true).setRequestTimeout(10000);
 		Map<String, String[]> requestParams = request().queryString();
 		for (Map.Entry<String, String[]> entry: requestParams.entrySet()) {
 			for(String entryValue: entry.getValue()) {
