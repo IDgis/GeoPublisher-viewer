@@ -136,7 +136,7 @@ model {
 
 		createDockerfile(Dockerfile) {
 			destFile = project.file('build/docker/Dockerfile')
-			from 'java:8'
+			from 'azul/zulu-openjdk:8'
 			copyFile 'playBinary', '/opt'
 			runCommand 'chmod u+x /opt/bin/playBinary'
 			exposePort 9000
@@ -144,7 +144,7 @@ model {
 		}
 		
 		pullBaseImage(DockerPullImage) {
-			repository 'java'
+			repository 'azul/zulu-openjdk'
 			tag '8'
 		}
 
