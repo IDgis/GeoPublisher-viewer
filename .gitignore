@@ -11,3 +11,5 @@ target
 /.cache-tests
 .gradle/
 build
+
+docker/*.crt
