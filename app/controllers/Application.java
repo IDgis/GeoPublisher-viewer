@@ -2,12 +2,14 @@ package controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.RuntimeException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,7 @@ import play.libs.F.PromiseTimeoutException;
 import play.libs.ws.WSAuthScheme;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
+import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.capabilitieswarning;
@@ -80,27 +83,25 @@ public class Application extends Controller {
 				
 				if(!"".equals(service)) {
 					if(service.equals(name)) {
-						unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
-							Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
-							NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
-							
-							return getService(titles, url, name, version);
-						}));
+						unsortedServicesList.add(workspaceSettingsRequest.get()
+								.map(responseWorkspaceSettings -> 
+									getService(responseWorkspaceSettings, url, name, version)));
 					}
 				} else {
-					unsortedServicesList.add(workspaceSettingsRequest.get().map(responseWorkspaceSettings -> {
-						Document bodyWorkspaceSettings = responseWorkspaceSettings.asXml();
-						NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
-						
-						return getService(titles, url, name, version);
-					}));
+					unsortedServicesList.add(workspaceSettingsRequest.get()
+							.map(responseWorkspaceSettings -> 
+								getService(responseWorkspaceSettings, url, name, version)));
 				}
 			}
 			
 			return Promise.sequence(unsortedServicesList).map(servicesList -> {
-				Collections.sort(servicesList, (Service s1, Service s2) -> s1.getServiceName().compareToIgnoreCase(s2.getServiceName()));
+				List<Service> filteredServicesList = servicesList.stream()
+					.filter(s -> s != null)
+					.collect(Collectors.toList());
 				
-				return servicesList;
+				Collections.sort(filteredServicesList, (Service s1, Service s2) -> s1.getServiceName().compareToIgnoreCase(s2.getServiceName()));
+				
+				return filteredServicesList;
 			});
 		});
 	}
@@ -113,13 +114,20 @@ public class Application extends Controller {
 	 * @param version version of WMS
 	 * @return
 	 */
-	public Service getService(NodeList titles, String url, String name, String version) {
-		
-		for(int j = 0; j < titles.getLength(); j++) {
-			/* Parent has to be 'wms' to pick the right 'title' node. */
-			if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
-				return new Service(name, titles.item(0).getTextContent(), url + name + "/wms?", version);
+	public Service getService(WSResponse response, String url, String name, String version) {
+		try {
+			Document bodyWorkspaceSettings = response.asXml();
+			NodeList titles = bodyWorkspaceSettings.getElementsByTagName("title");
+			
+			for(int j = 0; j < titles.getLength(); j++) {
+				/* Parent has to be 'wms' to pick the right 'title' node. */
+				if(titles.item(j).getParentNode().getNodeName().equals("wms")) {
+					return new Service(name, titles.item(0).getTextContent(), url + name + "/wms?", version);
+				}
 			}
+		} catch(RuntimeException re) {
+			Logger.error("Didn't receive valid xml while rendering the service list during handling of service " + name, re);
+			return null;
 		}
 		
 		return new Service(name, name, url + name + "/wms?", version);

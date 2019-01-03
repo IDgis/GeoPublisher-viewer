@@ -11,20 +11,18 @@ buildscript {
 	}
 }
 
-plugins {
-	id 'play'
-}
-
 import com.github.houbie.gradle.lesscss.LesscTask
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerPullImage
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import org.gradle.plugins.ide.eclipse.model.SourceFolder
 import org.ajoberstar.grgit.Grgit
+import nl.idgis.gradle.play.PlayJavaPlugin
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.ajoberstar.grgit'
+apply plugin: PlayJavaPlugin
 
 def repo = Grgit.open(project.file('.'))
 def describe = repo.describe()
