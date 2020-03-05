@@ -50,7 +50,7 @@ public class GetFeatureInfoProxy extends Controller {
 		String adjustedUrl = matcher.replaceAll("");
 		
 		// add protocol to request url
-		String environment = conf.getString("viewer.environmenturl");
+		String environment = conf.getString("viewer.environmentUrl");
 		String protocol = environment.substring(0, environment.indexOf("://") + "://".length());
 		
 		WSRequest request = ws.url(protocol + adjustedUrl).setFollowRedirects(true).setRequestTimeout(10000);
