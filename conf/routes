@@ -3,14 +3,14 @@
 # ~~~~
 
 # Home page
-GET     /												controllers.Application.index(service: String ?= "")
-GET		/layer/:service/:layer								controllers.Application.renderLayer(service: String, layer: String)
-GET		/layersall/:serviceId							controllers.Application.allLayers(serviceId: String)
-GET		/servicelayer/:serviceId/:layerId						controllers.Application.layers(serviceId: String, layerId: String)
-GET		/routes.js										controllers.Application.jsRoutes()
+GET		/											controllers.Application.index(service: String ?= "")
+GET		/layer/:serviceName/:layerName				controllers.Application.renderLayer(serviceName: String, layerName: String)
+GET		/layersall/:serviceId						controllers.Application.allLayers(serviceId: String)
+GET		/servicelayer/:serviceId/:layerId			controllers.Application.layers(serviceId: String, layerId: String)
+GET		/routes.js									controllers.Application.jsRoutes()
 
-GET		/proxy/*url										controllers.GetFeatureInfoProxy.proxy(url: String)
+GET		/proxy/*url									controllers.GetFeatureInfoProxy.proxy(url: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               					controllers.Assets.versioned(path="/public", file: Asset)
-GET		/webjars/*file					controllers.WebJarAssets.at(file)
+GET		/assets/*file								controllers.Assets.versioned(path="/public", file: Asset)
+GET		/webjars/*file								controllers.WebJarAssets.at(file)
