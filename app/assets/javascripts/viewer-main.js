@@ -98,8 +98,8 @@ require([
     		extent: extent,
         	source : new ol.source.WMTS({
         		attributions: [],
-        		url: '//geodata.nationaalgeoregister.nl/wmts',
-        		layer: 'brtachtergrondkaartpastel',
+        		url: '//geodata.nationaalgeoregister.nl/tiles/service/wmts',
+        		layer: 'opentopoachtergrondkaart',
         		matrixSet: crs,
         		format: 'image/png',
         		tileGrid: tileGrid0,
