@@ -67,22 +67,6 @@ repositories {
 		url "https://repo.typesafe.com/typesafe/ivy-releases"
 		layout "ivy"
 	}
-	maven {
-		name "idgis-public"
-		url "http://nexus.idgis.eu/content/groups/public/"
-		credentials {
-			username nexusUser 
-			password nexusPassword
-		}
-	}
-	maven {
-		name "idgis-restricted"
-		url "http://nexus.idgis.eu/content/groups/restricted/"
-		credentials {
-			username nexusUser 
-			password nexusPassword
-		}
-	}
 }
 
 def scalaVersion = '2.11'
