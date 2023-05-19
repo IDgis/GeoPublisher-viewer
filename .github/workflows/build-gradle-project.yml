@@ -20,4 +20,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - name: Run build with Gradle Wrapper
       run: ./gradlew clean build
+      env:
+        GITHUB_USER: "github"
+        GITHUB_TOKEN: ${{ github.token }}
       
