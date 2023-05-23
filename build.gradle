@@ -50,12 +50,13 @@ docker {
 			certPath = file "$env.DOCKER_CERT_PATH"
 		}
 	} else {
-		url = "http://${dockerHost}:2375"
+		if (project.properties.containsKey("dockerHost")) {
+			url = "http://${dockerHost}:2375"
+		}
 	}
 }
 
 repositories {
-	jcenter()
 	maven {
 		name "typesafe-maven-release"
 		url "https://repo.typesafe.com/typesafe/maven-releases"
@@ -66,21 +67,19 @@ repositories {
 		layout "ivy"
 	}
 	maven {
-		name "idgis-public"
-		url "http://nexus.idgis.eu/content/groups/public/"
-		credentials {
-			username nexusUser 
-			password nexusPassword
-		}
+		url "https://repo.deegree.org/content/repositories/public"
 	}
 	maven {
-		name "idgis-restricted"
-		url "http://nexus.idgis.eu/content/groups/restricted/"
+		url "https://repo.deegree.org/content/repositories/releases"
+	}
+	maven {
+		url = "https://maven.pkg.github.com/IDgis/geoide-commons"
 		credentials {
-			username nexusUser 
-			password nexusPassword
+			username = System.getenv("GITHUB_USER") ?: ghUser
+			password = System.getenv("GITHUB_TOKEN") ?: ghKey
 		}
 	}
+	mavenCentral()
 }
 
 def scalaVersion = '2.11'
@@ -169,18 +168,16 @@ model {
 dependencies {
 	play "com.typesafe.play:play-java-ws_${scalaVersion}:${playVersion}"
 
-	play('nl.idgis.geoide:geoide-ogc-client:0.1.8') {
-		exclude group: 'java3d', module: 'vecmath'
-	}
+	play 'nl.idgis.geoide.commons:geoide-ogc-client:1.2.2'
 	
 	play "org.webjars:webjars-play_${scalaVersion}:2.4.0-1"
 	play 'org.webjars:openlayers:3.5.0'
 	play 'org.webjars:dojo:1.10.4'
 	play 'org.webjars:bootstrap:3.3.5'
 	play 'org.webjars:jquery:2.1.4'
-	play 'java3d:vecmath:1.5.2'
 	play 'org.jsoup:jsoup:1.8.3'
 	play 'org.pegdown:pegdown:1.5.0'
+	play 'org.deegree:deegree-core-base:3.4.33'
 	
 	play('org.apache.zookeeper:zookeeper:3.4.5') {
 		exclude group: 'javax.jms', module: 'jms'
