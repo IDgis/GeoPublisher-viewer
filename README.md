@@ -1,1 +1,3 @@
 # GeoPublisher-viewer
+
+.
