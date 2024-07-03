@@ -3,8 +3,6 @@ name: Build Gradle project
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build-gradle-project:
