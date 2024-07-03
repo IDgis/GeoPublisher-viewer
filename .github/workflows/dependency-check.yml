@@ -32,13 +32,13 @@ jobs:
       run: |
         git config --global user.email "github@users.noreply.github.com"
         git config --global user.name "github"
-        git clone --single-branch --branch master https://${GITHUB_TOKEN}@github.com/${{ github.repository }}.git repo
+        git clone --single-branch --branch gh-pages https://${GITHUB_TOKEN}@github.com/${{ github.repository }}.git repo
         mkdir -p repo/docs
         cp build/reports/dependency-check-report.html repo/docs/.
         cd repo
         git add .
         git commit -m "Update dependency check report"
-        git push origin master
+        git push origin gh-pages
       env:
         GITHUB_USER: "github"
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
