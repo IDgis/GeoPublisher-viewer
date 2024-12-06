@@ -405,13 +405,15 @@ public class Application extends Controller {
 	 * @return The new list of layers after checking.
 	 */
     public List<WMSCapabilities.Layer> crsCheck(List<WMSCapabilities.Layer> layerList) {
+    	List<WMSCapabilities.Layer> newList = new ArrayList<>();
+    	
     	for(WMSCapabilities.Layer layer : layerList) {
-    		if(!layer.supportsCRS("EPSG:28992")) {
-				layerList.remove(layer);
+    		if(layer.supportsCRS("EPSG:28992")) {
+    			newList.add(layer);
 			}
 		}
     	
-    	return layerList;
+    	return newList;
     }
     
     /**

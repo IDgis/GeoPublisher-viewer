@@ -13,3 +13,5 @@ target
 build
 
 docker/*.crt
+
+wsl-gradle-build.sh
