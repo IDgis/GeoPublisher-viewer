@@ -2,7 +2,7 @@ name: Dependency Submission
 
 on:
   push:
-    branches: [ 'master' ]
+    branches: [ 'feat/dependency-check' ]
   schedule:
     - cron: '0 5 * * 1'
 

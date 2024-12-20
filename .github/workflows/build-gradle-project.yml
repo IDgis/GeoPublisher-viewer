@@ -3,7 +3,7 @@ name: Build Gradle project
 on:
   pull_request:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
