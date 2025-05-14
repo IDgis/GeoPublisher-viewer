@@ -14,4 +14,4 @@ build
 
 docker/*.crt
 
-wsl-gradle-build.sh
+gradle-build.sh
