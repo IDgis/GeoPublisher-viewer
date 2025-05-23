@@ -1,6 +1,9 @@
 name: Build Gradle project
 
 on:
+  push:
+    branches:
+      - ci/github-actions
   pull_request:
     branches:
       - master
@@ -19,9 +22,6 @@ jobs:
           distribution: zulu
           java-version: 8
           
-      - name: Run build
-        run: ./gradlew clean build
-        env:
-          GITHUB_USER: "github"
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Build
+        run: ./gradlew build
       
