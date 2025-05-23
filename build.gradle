@@ -36,28 +36,6 @@ if(describe && describe.startsWith('v')) {
 
 apply plugin: 'com.bmuschko.docker-remote-api'
 
-docker {
-	def env = System.env
-	
-	if(env.containsKey('DOCKER_HOST')) {
-		url = "$env.DOCKER_HOST"
-		
-		if(env.containsKey('DOCKER_TLS_VERIFY')) {
-			url = url.replace('tcp', 'https')
-		} else {
-			url = url.replace('tcp', 'http')
-		}
-		
-		if(env.containsKey('DOCKER_CERT_PATH')) {
-			certPath = file "$env.DOCKER_CERT_PATH"
-		}
-	} else {
-		if (project.properties.containsKey("dockerHost")) {
-			url = "http://${dockerHost}:2375"
-		}
-	}
-}
-
 repositories {
 	maven {
 		name "typesafe-maven-release"
@@ -76,10 +54,6 @@ repositories {
 	}
 	maven {
 		url = "https://maven.pkg.github.com/IDgis/geoide-commons"
-		credentials {
-			username = System.getenv("GITHUB_USER") ?: ghUser
-			password = System.getenv("GITHUB_TOKEN") ?: ghKey
-		}
 	}
 	mavenCentral()
 }
@@ -133,20 +107,11 @@ model {
 			into "${project.buildDir}/docker"
 		}
 		
-		copyRootCA(Copy) {
-			from 'docker/rootCA.crt'
-			into "${project.buildDir}/docker"
-		}
-		
 		createDockerfile(Dockerfile) {
 			destFile = project.file('build/docker/Dockerfile')
 			from 'azul/zulu-openjdk:8'
 			copyFile 'playBinary', '/opt'
 			runCommand 'chmod u+x /opt/bin/playBinary'
-			if(project.hasProperty('importRootCA')) {
-				copyFile 'rootCA.crt', '/opt'
-				runCommand 'keytool -import -alias server -keystore /usr/lib/jvm/zulu8-ca-amd64/jre/lib/security/cacerts -file /opt/rootCA.crt -storepass changeit -noprompt'
-			}
 			exposePort 9000
 			defaultCommand "/opt/bin/playBinary"
 		}
@@ -158,9 +123,6 @@ model {
 		
 		buildImage(DockerBuildImage) {
 			dependsOn unpackTar, createDockerfile, pullBaseImage
-			if(project.hasProperty('importRootCA')) {
-				dependsOn copyRootCA
-			}
 			inputDir = project.file('build/docker')
 			tag = "idgis/geopublisher_viewer:${project.version}"
 		}
