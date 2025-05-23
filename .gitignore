@@ -13,3 +13,5 @@ target
 build
 
 docker/*.crt
+
+gradle-build.sh
