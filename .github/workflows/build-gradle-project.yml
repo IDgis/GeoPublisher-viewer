@@ -1,9 +1,6 @@
 name: Build Gradle project
 
 on:
-  push:
-    branches:
-      - ci/github-actions
   pull_request:
     branches:
       - master
