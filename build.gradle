@@ -138,7 +138,7 @@ dependencies {
 
 	play 'nl.idgis.geoide.commons:geoide-ogc-client:1.2.2'
 	
-	play "org.webjars:webjars-play_${scalaVersion}:2.4.0-1"
+	play "org.webjars:webjars-play_${scalaVersion}:2.7.3"
 	play 'org.webjars:openlayers:3.5.0'
 	play 'org.webjars:dojo:1.10.4'
 	play 'org.webjars:bootstrap:3.3.5'
