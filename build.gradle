@@ -145,7 +145,7 @@ dependencies {
 	play 'org.webjars:jquery:2.1.4'
 	play 'org.jsoup:jsoup:1.8.3'
 	play 'org.pegdown:pegdown:1.5.0'
-	play 'org.deegree:deegree-core-base:3.4.33'
+	play 'org.deegree:deegree-core-base:3.5.13'
 	
 	play('org.apache.zookeeper:zookeeper:3.4.5') {
 		exclude group: 'javax.jms', module: 'jms'
