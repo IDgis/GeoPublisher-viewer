@@ -141,7 +141,7 @@ dependencies {
 	play "org.webjars:webjars-play_${scalaVersion}:2.4.0-1"
 	play 'org.webjars:openlayers:3.5.0'
 	play 'org.webjars:dojo:1.10.4'
-	play 'org.webjars:bootstrap:3.3.5'
+	play 'org.webjars:bootstrap:5.3.7'
 	play 'org.webjars:jquery:2.1.4'
 	play 'org.jsoup:jsoup:1.8.3'
 	play 'org.pegdown:pegdown:1.5.0'
