@@ -1,5 +1,9 @@
 @(webJarAssets: WebJarAssets, title: String, serviceName: String, layerName: String, jsMain: String)(content: Html)
 
+@displayStatsAnalytics() = @{
+	play.Play.application().configuration().getString("viewer.display.stats.analytics") == "true"
+}
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -46,5 +50,9 @@
 		<script src="@routes.WebJarAssets.at(webJarAssets.locate("dojo/dojo.js"))" type="text/javascript"></script>
 		<script src="@routes.Application.jsRoutes()" type="text/javascript"></script>
 		<script src="@jsMain" type="text/javascript"></script>
+		
+		@if(displayStatsAnalytics()) {
+			<script async src=”https://siteimproveanalytics.com/js/siteanalyze_6011273.js”></script>
+		}
 	</body>
 </html>
