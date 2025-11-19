@@ -54,10 +54,6 @@ repositories {
 	}
 	maven {
 		url = "https://maven.pkg.github.com/IDgis/geoide-commons"
-		credentials {
-			username = System.getenv("GITHUB_USER") ?: ghUser
-			password = System.getenv("GITHUB_TOKEN") ?: ghKey
-		}
 	}
 	mavenCentral()
 }
